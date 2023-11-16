@@ -1,0 +1,598 @@
+<?php
+
+namespace App\Http\Controllers\Frontend\Student;
+
+use App\Http\Controllers\Controller;
+use App\Models\Credit;
+use App\Models\Group;
+use App\Models\Score;
+use App\Models\Section;
+use App\Models\Semester;
+use App\Models\Student;
+use App\Models\Subject;
+use Carbon\Carbon;
+use DateTime;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+class UserController extends Controller
+{
+    public function login(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        
+        $student = Student::where('email',$email)->first();
+
+        if($student && Hash::check($password,$student->password)){
+            if(session('teacher_id')){
+                session()->forget('teacher_id');
+            }
+            $request->session()->put('student_id',$student->id);
+            return redirect()->back();
+        }else{
+            return redirect()->back();
+        }
+    }
+
+    public function logout()
+    {
+        if(session('student_id')){
+            session()->forget('student_id');
+        }
+        if(session('teacher_id')){
+            session()->forget('teacher_id');
+        }
+        return redirect()->route('index');
+    }
+
+    public function showProfile()
+    {
+        $student_id = session('student_id');
+        $student = Student::findOrFail($student_id);
+        return view('frontend.member.profile',compact('student'));
+    }
+
+    public function showRegistration()
+    {
+        $student_id = session('student_id');
+        $student = Student::findOrFail($student_id);
+        $credits = Credit::where('student_id',$student_id)->get();
+        $groups = Group::where('branch_id',$student->branch_id)->where('active',1)->get();
+        $results = [];
+        foreach($credits as $credit){
+            $monday = json_decode($credit->section->monday);
+            $tuesday = json_decode($credit->section->tuesday);
+            $wednesday = json_decode($credit->section->wednesday);
+            $thursday = json_decode($credit->section->thursday);
+            $friday = json_decode($credit->section->friday);
+            $saturday = json_decode($credit->section->saturday);
+            $sunday = json_decode($credit->section->sunday);
+            $output = '';
+            
+            if($monday){
+                $output .= "T.Hai ".$monday[0].'->'.$monday[count($monday)-1]."<br>";
+            }
+            if($tuesday){
+                $output .= "T.Ba ".$tuesday[0].'->'.$tuesday[count($tuesday)-1]."<br>";
+            }
+            if($wednesday){
+                $output .= "T.Tư ".$wednesday[0].'->'.$wednesday[count($wednesday)-1]."<br>";
+            }
+            if($thursday){
+                $output .= "T.Năm ".$thursday[0].'->'.$thursday[count($thursday)-1]."<br>";
+            }
+            if($friday){
+                $output .= "T.Sáu ".$friday[0].'->'.$friday[count($friday)-1]."<br>";
+            }
+            if($saturday){
+                $output .= "T.Bảy ".$saturday[0].'->'.$saturday[count($saturday)-1]."<br>";
+            }
+            if($sunday){
+                $output .= "C.Nhật ".$sunday[0].'->'.$sunday[count($sunday)-1]."<br>";
+            }
+
+            $results[] = [
+                'id' => $credit->id,
+                'code' => $credit->section->code,
+                'name' => $credit->section->name,
+                'credit' => $credit->section->subject->credits,
+                'teacher' => $credit->section->teacher->name,
+                'desc' => $output,
+                'week' => $credit->section->week,
+            ];
+        }
+        return view('frontend.section.register',compact('groups','results'));
+    }
+
+    public function getSection(string $id)
+    {
+        $student_id = session('student_id');
+        $credits = Credit::where('student_id',$student_id)->get();
+        
+        $sections = Section::where('id_group',$id)->get();
+        $result = [];
+        foreach($sections as $section){
+            $monday = json_decode($section['monday']);
+            $tuesday = json_decode($section['tuesday']);
+            $wednesday = json_decode($section['wednesday']);
+            $thursday = json_decode($section['thursday']);
+            $friday = json_decode($section['friday']);
+            $saturday = json_decode($section['saturday']);
+            $sunday = json_decode($section['sunday']);
+            $output = '';
+            $alert = '';
+            foreach($credits as $credit){
+                if($credit->section->subject->id == $section->subject->id){
+                    $alert = "<p id='danger'>Đã đăng kí</p>";
+                }
+            }
+            
+            if($monday){
+                $output .= "T.Hai ".$monday[0].'->'.$monday[count($monday)-1]."<br>";
+            }
+            if($tuesday){
+                $output .= "T.Ba ".$tuesday[0].'->'.$tuesday[count($tuesday)-1]."<br>";
+            }
+            if($wednesday){
+                $output .= "T.Tư ".$wednesday[0].'->'.$wednesday[count($wednesday)-1]."<br>";
+            }
+            if($thursday){
+                $output .= "T.Năm ".$thursday[0].'->'.$thursday[count($thursday)-1]."<br>";
+            }
+            if($friday){
+                $output .= "T.Sáu ".$friday[0].'->'.$friday[count($friday)-1]."<br>";
+            }
+            if($saturday){
+                $output .= "T.Bảy ".$saturday[0].'->'.$saturday[count($saturday)-1]."<br>";
+            }
+            if($sunday){
+                $output .= "C.Nhật ".$sunday[0].'->'.$sunday[count($sunday)-1]."<br>";
+            }
+            $result[] = [
+                'id' => $section->id,
+                'name' => $section->name,
+                'credits' => $section->subject->credits,
+                'register' => $section->register,
+                'count' => $section->count,
+                'week' => $section->week,
+                'teacher' => $section->teacher->name,
+                'desc' => $output,
+                'alert' => $alert
+            ];
+        }
+        return $result;
+    }
+
+    public function postRegistration(Request $request)
+    {
+        $student_id = session('student_id');
+        $time = date("h:i:s d-m-Y");
+        $sections = $request->section_id;
+        
+        foreach($sections as $section){
+            $credit = new Credit();
+            $credit->student_id = $student_id;
+            $credit->section_id = $section;
+            $credit->time = $time;
+            if($credit->save()){
+                $getSection = Section::findOrFail($section);
+                $score = new Score();
+                $score->id_student = $student_id;
+                $score->id_section = $section;
+                $score->id_semester = $getSection->subject->semester_id;
+                $score->session = 1;
+                $score->active = 0;
+                $score->save();
+            }
+        }
+        return redirect()->back();
+    }
+
+    public function registerCredits(string $id)
+    {
+        $student_id = session('student_id');
+        $time = date("h:i:s d-m-Y");
+        
+        $credit = new Credit();
+        $credit->student_id = $student_id;
+        $credit->section_id = $id;
+        $credit->time = $time;
+
+        if($credit->save()){
+            Section::where('id',$id)->increment('register');
+
+            $section = Section::findOrFail($id);
+            $score = new Score();
+            $score->id_student = $student_id;
+            $score->id_section = $id;
+            $score->id_semester = $section->subject->semester_id;
+            $score->session = 1;
+            $score->active = 0;
+            if($score->save()){
+                return redirect()->back();
+            };
+        }
+    }
+
+    public function destroyCredits(string $id)
+    {
+        $student_id = session('student_id');
+        $result = Credit::findOrFail($id);
+        if($result){
+            Section::where('id',$result->section_id)->decrement('register');
+            Score::where('id_section',$result->section_id)->where('id_student',$student_id)->delete();
+            $result->delete();
+            return redirect()->back();
+        }
+    }
+
+    public function showResult()
+    {
+        $student_id = session('student_id');
+        $scores = Score::where('id_student',$student_id)->get();
+        $semesters = Semester::all();
+        return view('frontend.member.result',compact('semesters','scores'));
+    }
+
+    public function showSchedule()
+    {
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $day = strtolower(date('l'));
+        $semester = session('semester_id');
+        $student_id = session('student_id');
+
+        $todays = Section::join('score','section.id','=','score.id_section')
+        ->join('teacher','section.id_teacher','=','teacher.id')
+        ->where('score.id_student',$student_id)
+        ->where('score.id_semester',$semester)
+        ->whereNotNull('section.'.$day)
+        ->select('section.name AS name',
+            'score.id AS id',
+            'teacher.name AS teacher',
+            'section.room AS room',
+            'section.week AS week',
+            'section.monday',
+            'section.tuesday',
+            'section.wednesday',
+            'section.thursday',
+            'section.friday',
+            'section.saturday',
+            'section.sunday')
+        ->get();
+        $results = [];
+        foreach($todays as $today){
+            $formatDay = [];
+            if(!is_null($today->monday)){
+                $formatDay[] = 'Hai / '.implode('->',json_decode($today->monday));
+            }
+            if(!is_null($today->tuesday)){
+                $formatDay[] = 'Ba / '.implode('->',json_decode($today->tuesday));
+            }
+            if(!is_null($today->wednesday)){
+                $formatDay[] = 'Tư / '.implode('->',json_decode($today->wednesday));
+            }
+            if(!is_null($today->thursday)){
+                $formatDay[] = 'Năm / '.implode('->',json_decode($today->thursday));
+            }
+            if(!is_null($today->friday)){
+                $formatDay[] = 'Sáu / '.implode('->',json_decode($today->friday));
+            }
+            if(!is_null($today->saturday)){
+                $formatDay[] = 'Bảy / '.implode('->',json_decode($today->saturday));
+            }
+            if(!is_null($today->sunday)){
+                $formatDay[] = 'Chủ nhật / '.implode('->',json_decode($today->sunday));
+            }
+            $result = [
+                'name' => $today->name,
+                'teacher' => $today->teacher,
+                'week' => $today->week,
+                'room' => $today->room,
+                'sections' => $formatDay
+            ];
+            $results[] = $result;
+        }
+
+        $today_id = $todays->pluck('id')->toArray();
+
+        $sections = Section::join('score','section.id','=','score.id_section')
+        ->join('teacher','section.id_teacher','=','teacher.id')
+        ->where('score.id_student',$student_id)
+        ->where('score.id_semester',$semester)
+        ->whereNotIn('score.id',$today_id)
+        ->select('section.name AS name',
+            'teacher.name AS teacher',
+            'section.room AS room',
+            'section.week AS week',
+            'section.monday',
+            'section.tuesday',
+            'section.wednesday',
+            'section.thursday',
+            'section.friday',
+            'section.saturday',
+            'section.sunday')
+        ->get();
+        $schedules = [];
+        foreach($sections as $section){
+            $formatDay = [];
+            if(!is_null($section->monday)){
+                $formatDay[] = 'Hai / '.implode('->',json_decode($section->monday));
+            }
+            if(!is_null($section->tuesday)){
+                $formatDay[] = 'Ba / '.implode('->',json_decode($section->tuesday));
+            }
+            if(!is_null($section->wednesday)){
+                $formatDay[] = 'Tư / '.implode('->',json_decode($section->wednesday));
+            }
+            if(!is_null($section->thursday)){
+                $formatDay[] = 'Năm / '.implode('->',json_decode($section->thursday));
+            }
+            if(!is_null($section->friday)){
+                $formatDay[] = 'Sáu / '.implode('->',json_decode($section->friday));
+            }
+            if(!is_null($section->saturday)){
+                $formatDay[] = 'Bảy / '.implode('->',json_decode($section->saturday));
+            }
+            if(!is_null($section->sunday)){
+                $formatDay[] = 'Chủ nhật / '.implode('->',json_decode($section->sunday));
+            }
+            $schedule = [
+                'name' => $section->name,
+                'teacher' => $section->teacher,
+                'week' => $section->week,
+                'room' => $section->room,
+                'sections' => $formatDay
+            ];
+            $schedules[] = $schedule;
+        }
+
+        return view('frontend.section.schedule',compact('results','schedules'));
+    }
+
+    public function showCalendar()
+    {
+        $date = date('N');
+        switch($date){
+            case 1:
+                $date = 'Thứ Hai';
+                break;
+            case 2:
+                $date = 'Thứ Ba';
+                break;
+            case 3:
+                $date = 'Thứ Tư';
+                break;
+            case 4:
+                $date = 'Thứ Năm';
+                break;
+            case 5:
+                $date = 'Thứ Sáu';
+                break;
+            case 6:
+                $date = 'Thứ Bảy';
+                break;
+            default:
+                $date = 'Chủ nhật';
+        }
+        $day = strtotime('this week');
+
+        $semester_id = session('semester_id');
+        $student_id = session('student_id');
+
+        $todays = Section::join('score','section.id','=','score.id_section')
+        ->where('score.id_student',$student_id)
+        ->where('score.id_semester',$semester_id)
+        ->select('section.name AS name',
+            'section.room AS room',
+            'section.week AS week',
+            'section.monday',
+            'section.tuesday',
+            'section.wednesday',
+            'section.thursday',
+            'section.friday',
+            'section.saturday',
+            'section.sunday')
+        ->get();
+        $calendars = [];
+        foreach($todays as $today){
+            $monday = [];
+            $tuesday = [];
+            $wednesday = [];
+            $thursday = [];
+            $friday = [];
+            $saturday = [];
+            $sunday = [];
+            if(!is_null($today->monday)){
+                $monday = json_decode($today->monday); 
+            }
+            if(!is_null($today->tuesday)){
+                $tuesday = json_decode($today->tuesday); 
+            }
+            if(!is_null($today->wednesday)){
+                $wednesday = json_decode($today->wednesday); 
+            }
+            if(!is_null($today->thursday)){
+                $thursday = json_decode($today->thursday); 
+            }
+            if(!is_null($today->friday)){
+                $friday = json_decode($today->friday); 
+            }
+            if(!is_null($today->saturday)){
+                $saturday = json_decode($today->saturday); 
+            }
+            if(!is_null($today->sunday)){
+                $sunday = json_decode($today->sunday); 
+            }
+            $calendar = [
+                'name' => $today->name,
+                'room' => $today->room,
+            ];
+            if(!is_null($today->monday)){
+                $calendar['monday'] = $monday;
+            }
+            if(!is_null($today->tuesday)){
+                $calendar['tuesday'] = $tuesday; 
+            }
+            if(!is_null($today->wednesday)){
+                $calendar['wednesday'] = $wednesday; 
+            }
+            if(!is_null($today->thursday)){
+                $calendar['thursday'] = $thursday; 
+            }
+            if(!is_null($today->friday)){
+                $calendar['friday'] = $friday; 
+            }
+            if(!is_null($today->saturday)){
+                $calendar['saturday'] = $saturday;
+            }
+            if(!is_null($today->sunday)){
+                $calendar['sunday'] = $sunday; 
+            }
+            $calendars[] = $calendar;
+        }
+        $semester = Semester::findOrFail($semester_id);
+        $start = DateTime::createFromFormat('Y-m-d',$semester->start);
+        $end = DateTime::createFromFormat('Y-m-d',$semester->end);
+        $at_moment = DateTime::createFromFormat('Y-m-d',date('Y-m-d'));
+        $long_date = $start->diff($at_moment);
+        $week = floor($long_date->days /7) + 1;
+        return view('frontend.section.calendar',compact('date','day','calendars','week'));
+    }
+
+    public function nextCalendar(string $tuan)
+    {
+        $date = date('N');
+        switch($date){
+            case 1:
+                $date = 'Thứ Hai';
+                break;
+            case 2:
+                $date = 'Thứ Ba';
+                break;
+            case 3:
+                $date = 'Thứ Tư';
+                break;
+            case 4:
+                $date = 'Thứ Năm';
+                break;
+            case 5:
+                $date = 'Thứ Sáu';
+                break;
+            case 6:
+                $date = 'Thứ Bảy';
+                break;
+            default:
+                $date = 'Chủ nhật';
+        }
+
+        $semester_id = session('semester_id');
+        $student_id = session('student_id');
+
+        $semester = Semester::findOrFail($semester_id);
+        $start = DateTime::createFromFormat('Y-m-d',$semester->start);
+        $end = DateTime::createFromFormat('Y-m-d',$semester->end);
+        $at_moment = DateTime::createFromFormat('Y-m-d',date('Y-m-d'));
+        $long_date = $start->diff($at_moment);
+        $week = floor($long_date->days /7) + 1;
+
+        $day = Carbon::now();
+        if($tuan > $week){
+            $day = $day->startOfWeek()->addWeeks($tuan-$week);
+            $day = strtotime($day);
+            
+        }elseif($tuan == $week){
+            $day = strtotime("this week");
+        }else{
+            $day = $day->startOfWeek()->subWeeks($week-$tuan);
+            $day = strtotime($day);
+        }
+        
+        $week = $tuan;
+
+        $todays = Section::join('score','section.id','=','score.id_section')
+        ->where('score.id_student',$student_id)
+        ->where('score.id_semester',$semester_id)
+        ->select('section.name AS name',
+            'section.room AS room',
+            'section.week AS week',
+            'section.monday',
+            'section.tuesday',
+            'section.wednesday',
+            'section.thursday',
+            'section.friday',
+            'section.saturday',
+            'section.sunday')
+        ->get();
+        $calendars = [];
+        foreach($todays as $today){
+            $monday = [];
+            $tuesday = [];
+            $wednesday = [];
+            $thursday = [];
+            $friday = [];
+            $saturday = [];
+            $sunday = [];
+            if(!is_null($today->monday)){
+                $monday = json_decode($today->monday); 
+            }
+            if(!is_null($today->tuesday)){
+                $tuesday = json_decode($today->tuesday); 
+            }
+            if(!is_null($today->wednesday)){
+                $wednesday = json_decode($today->wednesday); 
+            }
+            if(!is_null($today->thursday)){
+                $thursday = json_decode($today->thursday); 
+            }
+            if(!is_null($today->friday)){
+                $friday = json_decode($today->friday); 
+            }
+            if(!is_null($today->saturday)){
+                $saturday = json_decode($today->saturday); 
+            }
+            if(!is_null($today->sunday)){
+                $sunday = json_decode($today->sunday); 
+            }
+            $calendar = [
+                'name' => $today->name,
+                'room' => $today->room,
+            ];
+            if(!is_null($today->monday)){
+                $calendar['monday'] = $monday;
+            }
+            if(!is_null($today->tuesday)){
+                $calendar['tuesday'] = $tuesday; 
+            }
+            if(!is_null($today->wednesday)){
+                $calendar['wednesday'] = $wednesday; 
+            }
+            if(!is_null($today->thursday)){
+                $calendar['thursday'] = $thursday; 
+            }
+            if(!is_null($today->friday)){
+                $calendar['friday'] = $friday; 
+            }
+            if(!is_null($today->saturday)){
+                $calendar['saturday'] = $saturday;
+            }
+            if(!is_null($today->sunday)){
+                $calendar['sunday'] = $sunday; 
+            }
+            $calendars[] = $calendar;
+        }
+        
+        return view('frontend.section.calendar',compact('date','day','calendars','week'));
+    }
+
+    public function showTuition()
+    {
+        $semester_id = session('semester_id');
+        $student_id = session('student_id');
+
+        $sections = Score::where('id_student',$student_id)->where('id_semester',$semester_id)->get();
+        return view('frontend.member.tuition',compact('sections'));
+    }
+
+}
