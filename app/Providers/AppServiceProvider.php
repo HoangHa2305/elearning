@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
             $teacherId = session('teacher_id');
             $studentId = session('student_id');
             $semester = Semester::orderBy('id','desc')->get();
-            $semester_id = Semester::first();
+            $semester_id = Semester::orderBy('id','desc')->first();
             session()->put('semester_id',$semester_id->id);
 
             if($teacherId){
