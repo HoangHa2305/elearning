@@ -48,14 +48,16 @@
 											<img src="https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-40.jpg" class="avatar-teacher"/>
 										</div>
 									</td>
-									<td>
+									<td class="row-title">
 										<p>Trưởng nhóm đề tài</p>
-										<h4>XÂY DỰNG ỨNG DỤNG QUẢN LÍ ĐÀO TẠO ĐA NỀN TẢNG CHO TRƯỜNG ĐẠI HỌC</h4>
+										<p class="title">XÂY DỰNG ỨNG DỤNG QUẢN LÍ ĐÀO TẠO ĐA NỀN TẢNG CHO TRƯỜNG ĐẠI HỌC</p>
 										<b>Thành viên</b>
 										<p>Phạm Vương Anh Bảo (20IT414)</p>
 									</td>
 									<td>
-										<b>- Xác nhận đề cương chi tiết:  </b>
+										<p class="title">- Xác nhận đề cương chi tiết:  </p>
+										<p class="badge">23 - 10 - 2023</p>
+										<p class="title">- Nộp kết quả thực hiện đề tài: </p>
 									</td>
 								</tbody>
 							</table>								
@@ -75,6 +77,10 @@
 			tbody{
 				background-color: rgba(38,185,154,.07);
 			}
+			.row-title{
+				text-align: left;
+				width: 352.57px;
+			}
 			.bg-avatar{
 				margin-right: 22px;
 				width: 100px;
@@ -88,6 +94,18 @@
 				margin: 0px;
 				width: 67px;
 				height: 100px;
+			}
+			.title{
+				color: #008000;
+				font-weight: bold;
+			}
+			.badge{
+				background-color: #777;
+				color: white;
+				font-size: 12px;
+				font-weight: 700;
+				line-height: 1;
+				vertical-align: middle;
 			}
 		</style>
 @endsection
