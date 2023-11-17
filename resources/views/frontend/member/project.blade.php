@@ -29,7 +29,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="wm-plane-title">
-							<h4>Các lớp học phần đã đăng ký thành công</h4>							
+							<h4>Danh sách Đồ án\Đề án của tôi</h4>							
 						</div>
 						<div class="wm-student-dashboard-statement wm-dashboard-statement">
 							<table class="wm-article">
@@ -46,13 +46,17 @@
 									<td>
 										<div class="bg-avatar">
 											<img src="https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-40.jpg" class="avatar-teacher"/>
+											
 										</div>
+										<b class="name-teacher">TS.NGUYỄN VĂN BÌNH</b>
+										<p class="name-teacher">905551136</p>
+										<p class="name-teacher">nvbinh@vku.udn.vn</p>
 									</td>
 									<td class="row-title">
-										<p>Trưởng nhóm đề tài</p>
+										<p class="text">Trưởng nhóm đề tài</p>
 										<p class="title">XÂY DỰNG ỨNG DỤNG QUẢN LÍ ĐÀO TẠO ĐA NỀN TẢNG CHO TRƯỜNG ĐẠI HỌC</p>
-										<b>Thành viên</b>
-										<p>Phạm Vương Anh Bảo (20IT414)</p>
+										<b class="text">Thành viên</b>
+										<p class="text">Phạm Vương Anh Bảo (20IT414)</p>
 									</td>
 									<td>
 										<p class="title">- Xác nhận đề cương chi tiết:  </p>
@@ -67,8 +71,11 @@
 		</div>
 		<!--// Main Section \\-->
 		<style>
-			table thead tr th td{
+			table thead tr{
 				padding: 8px;
+			}
+			th{
+				font-size: 14px;
 			}
 			thead{
 				color: white;
@@ -95,9 +102,21 @@
 				width: 67px;
 				height: 100px;
 			}
+			.name-teacher{
+				font-size: 14px;
+				color: #73879C;
+			}
+			.border-right{
+				border-color: #46B8DA;
+			}
+			.text{
+				font-size: 14px;
+				color: #73879C;
+			}
 			.title{
 				color: #008000;
 				font-weight: bold;
+				font-size: 14px;
 			}
 			.badge{
 				background-color: #777;
