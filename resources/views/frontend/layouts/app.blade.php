@@ -336,7 +336,7 @@
     <!--// Main Wrapper \\-->
 
     <!-- ModalLogin Box -->
-    <div class="modal fade" id="ModalLogin" tabindex="-1" role="dialog">
+    <div class="modal fade" id="ModalLogin" tabindex="-1" role="dialog" style="padding-top: 80px;">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-body">
@@ -349,7 +349,9 @@
                         <li> <input type="password" name="password" placeholder="Mật khẩu" onblur="if(this.value == '') { this.value ='Mật khẩu'; }" onfocus="if(this.value =='Mật khẩu') { this.value = ''; }"> </li>
                         <li> <a href="#" class="wm-forgot-btn">Quên mật khẩu?</a> </li>
                         <input type="hidden" name="level" value="1"/>
-                        <li> <input type="submit" value="Đăng nhập"> </li>
+                        <div class="center">
+                            <li> <input type="submit" id="submit" value="Đăng nhập"> </li>
+                        </div>
                     </ul>
                     @csrf
                 </form>
@@ -359,7 +361,7 @@
                     <li class="wm-twitter-color"><a href="#"><i class="wmicon-social4"></i> twitter</a></li>
                     <li class="wm-googleplus-color"><a href="#"><i class="fa fa-google-plus-square"></i> Google+</a></li>
                 </ul> -->
-                <p>Đăng nhập giảng viên? <a href="#">Đăng nhập</a></p>
+                <p id="note">Đăng nhập giảng viên? <a href="#" id="role">Đăng nhập</a></p>
             </div>
             <div class="wm-modallogin-form wm-register-popup">
                 <span class="wm-color">Đăng nhập giảng viên</span>
@@ -368,7 +370,9 @@
                         <li> <input type="text" name="email" placeholder="Email" onblur="if(this.value == '') { this.value ='Email'; }" onfocus="if(this.value =='Email') { this.value = ''; }"> </li>
                         <li> <input type="password" name="password" placeholder="Mật khẩu" onblur="if(this.value == '') { this.value ='Mật khẩu'; }" onfocus="if(this.value =='Mật khẩu') { this.value = ''; }"> </li>
                         <li> <a href="#" class="wm-forgot-btn">Quên mật khẩu?</a> </li>
-                        <li> <input type="submit" value="Đăng nhập"> </li>
+                        <div class="center">
+                            <li> <input type="submit" id="submit" value="Đăng nhập"> </li>
+                        </div>
                     </ul>
                     @csrf
                 </form>
@@ -378,13 +382,13 @@
                     <li class="wm-twitter-color"><a href="#"><i class="wmicon-social4"></i> twitter</a></li>
                     <li class="wm-googleplus-color"><a href="#"><i class="fa fa-google-plus-square"></i> Google+</a></li>
                 </ul> -->
-                <p>Đăng nhập sinh viên? <a href="#">Đăng nhập</a></p>
+                <p id="note">Đăng nhập sinh viên? <a href="#" id="role">Đăng nhập</a></p>
             </div>
 
           </div>
         </div>
-      <div class="clearfix"></div>
-      </div>
+        <div class="clearfix"></div>
+        </div>
     </div>
     <!-- ModalLogin Box -->
 
@@ -441,6 +445,26 @@
         left: 0;
         width: 100%;
         z-index: 9999;
+    }
+    .center{
+        position: relative;
+    }
+    .center li{
+        display: flex;
+        justify-content: center;
+        align-items: center;  
+    }
+    .wm-forgot-btn{
+        color: #7F7F7F;
+    }
+    #note{
+        color: #7F7F7F;
+    }
+    #role{
+        color: #4FA0AB;
+    }
+    #submit{
+        background-color: #4FA0AB;
     }
     .content{
         padding-top: 100px;
