@@ -149,6 +149,7 @@ Route::prefix('sv')->group(function(){
     Route::get('tkb',[UserController::class,'showCalendar']);
     Route::get('tkb/tuan/{tuan}',[UserController::class,'nextCalendar']);
     Route::get('hoc-phi-sap-nop',[UserController::class,'showTuition']);
+    Route::post('thanh-toan-hoc-phi',[UserController::class,'payment_momo']);
     Route::get('do-an-cua-toi',[ProjectController::class,'showProject']);
 });
 Route::prefix('gv')->group(function(){
