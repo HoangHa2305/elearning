@@ -91,7 +91,11 @@
                                     <div>
                                         <button class="btn btn-danger" disabled>Bạn chưa nộp học phí</button>
                                         <div class="right">
-                                            <button class="btn btn-pink" >Thanh toán học phí trực tuyến</button>
+                                            <form method="POST" action="{{URL('sv\thanh-toan-hoc-phi')}}">
+                                                @csrf
+                                                <input type="hidden" name="total" value="{{$subtotal}}"/>
+                                                <button class="btn btn-pink" >Thanh toán học phí trực tuyến</button>
+                                            </form>
                                         </div>	
                                     </div>			
 								</div>
