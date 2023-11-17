@@ -90,7 +90,10 @@
                                     </table>	
                                     <div>
                                         <button class="btn btn-danger" disabled>Bạn chưa nộp học phí</button>
-                                    </div>				
+                                    </div>	
+                                    <div class="right">
+                                        <button class="btn btn-pink" >Thanh toán học phí trực tuyến</button>
+                                    </div>			
 								</div>
 							</div>
                         </div>
@@ -124,6 +127,16 @@
             }
 			#name{
                 text-align: left;
+            }
+            .right{
+                float: right;
+            }
+            .btn-pink {
+                background-color: #c1177c;
+                color: white;
+            }
+            .btn-pink:hover{
+                color: white;
             }
         </style>
 		<script>
