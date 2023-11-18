@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\YearStudyController;
 use App\Http\Controllers\Admin\YearTrainController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\Student\ProjectController;
+use App\Http\Controllers\Frontend\Student\ScheduleController;
 use App\Http\Controllers\Frontend\Student\UserController;
 use App\Http\Controllers\Frontend\Teacher\ScoreController;
 use App\Http\Controllers\Frontend\Teacher\TeacherController as FrontendTeacherController;
@@ -49,7 +50,7 @@ Route::prefix('admin')->group(function(){
     //Niên khóa đào tạo
     Route::get('year-train/add',[YearTrainController::class,'create']);
     Route::post('year-train/add',[YearTrainController::class,'store']);
-    Route::get('year-train',[YearTrainController::class,'index']);
+    // Route::get('year-train',[YearTrainController::class,'index']);
     Route::get('year-train/branch/{id}',[BranchController::class,'index']);
     //Lớp sinh hoạt
     Route::get('class/add',[ClassController::class,'create']);
@@ -145,11 +146,13 @@ Route::prefix('sv')->group(function(){
     Route::get('dang-ki-tin-chi/huy/mon/{id}',[UserController::class,'destroyCredits']);
     Route::get('hoso',[UserController::class,'showProfile']);
     Route::get('diem',[UserController::class,'showResult']);
-    Route::get('lich-hoc',[UserController::class,'showSchedule']);
+    Route::get('lich-hoc',[ScheduleController::class,'showSchedule']);
+    Route::get('lich-trinh-giang-day/{id}',[ScheduleController::class,'detailSchedule']);
     Route::get('tkb',[UserController::class,'showCalendar']);
     Route::get('tkb/tuan/{tuan}',[UserController::class,'nextCalendar']);
     Route::get('hoc-phi-sap-nop',[UserController::class,'showTuition']);
     Route::post('thanh-toan-hoc-phi',[UserController::class,'payment_momo']);
+    Route::get('thanh-toan-thanh-cong',[UserController::class,'payment_success']);
     Route::get('do-an-cua-toi',[ProjectController::class,'showProject']);
 });
 Route::prefix('gv')->group(function(){

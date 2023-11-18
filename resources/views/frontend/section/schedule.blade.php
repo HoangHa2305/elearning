@@ -61,7 +61,9 @@
                                         @endforeach
                                     </td>
                                     <td>
-                                        <button class="wm-register">Xem lịch trình</button>
+                                        <a href="lich-trinh-giang-day/{{$result['id']}}">
+                                            <button class="wm-register">Xem lịch trình</button>
+                                        </a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -98,7 +100,9 @@
                                         @endforeach
                                     </td>
                                     <td>
-                                        <button class="wm-register">Xem lịch trình</button>
+                                        <a href="lich-trinh-giang-day/{{$schedule['id']}}">
+                                            <button class="wm-register">Xem lịch trình</button>
+                                        </a>
                                     </td>
                                 </tr>
                                 @endforeach

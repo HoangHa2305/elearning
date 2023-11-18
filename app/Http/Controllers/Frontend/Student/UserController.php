@@ -236,121 +236,6 @@ class UserController extends Controller
         return view('frontend.member.result',compact('semesters','scores'));
     }
 
-    public function showSchedule()
-    {
-        date_default_timezone_set('Asia/Ho_Chi_Minh');
-        $day = strtolower(date('l'));
-        $semester = session('semester_id');
-        $student_id = session('student_id');
-
-        $todays = Section::join('score','section.id','=','score.id_section')
-        ->join('teacher','section.id_teacher','=','teacher.id')
-        ->where('score.id_student',$student_id)
-        ->where('score.id_semester',$semester)
-        ->whereNotNull('section.'.$day)
-        ->select('section.name AS name',
-            'score.id AS id',
-            'teacher.name AS teacher',
-            'section.room AS room',
-            'section.week AS week',
-            'section.monday',
-            'section.tuesday',
-            'section.wednesday',
-            'section.thursday',
-            'section.friday',
-            'section.saturday',
-            'section.sunday')
-        ->get();
-        $results = [];
-        foreach($todays as $today){
-            $formatDay = [];
-            if(!is_null($today->monday)){
-                $formatDay[] = 'Hai / '.implode('->',json_decode($today->monday));
-            }
-            if(!is_null($today->tuesday)){
-                $formatDay[] = 'Ba / '.implode('->',json_decode($today->tuesday));
-            }
-            if(!is_null($today->wednesday)){
-                $formatDay[] = 'Tư / '.implode('->',json_decode($today->wednesday));
-            }
-            if(!is_null($today->thursday)){
-                $formatDay[] = 'Năm / '.implode('->',json_decode($today->thursday));
-            }
-            if(!is_null($today->friday)){
-                $formatDay[] = 'Sáu / '.implode('->',json_decode($today->friday));
-            }
-            if(!is_null($today->saturday)){
-                $formatDay[] = 'Bảy / '.implode('->',json_decode($today->saturday));
-            }
-            if(!is_null($today->sunday)){
-                $formatDay[] = 'Chủ nhật / '.implode('->',json_decode($today->sunday));
-            }
-            $result = [
-                'name' => $today->name,
-                'teacher' => $today->teacher,
-                'week' => $today->week,
-                'room' => $today->room,
-                'sections' => $formatDay
-            ];
-            $results[] = $result;
-        }
-
-        $today_id = $todays->pluck('id')->toArray();
-
-        $sections = Section::join('score','section.id','=','score.id_section')
-        ->join('teacher','section.id_teacher','=','teacher.id')
-        ->where('score.id_student',$student_id)
-        ->where('score.id_semester',$semester)
-        ->whereNotIn('score.id',$today_id)
-        ->select('section.name AS name',
-            'teacher.name AS teacher',
-            'section.room AS room',
-            'section.week AS week',
-            'section.monday',
-            'section.tuesday',
-            'section.wednesday',
-            'section.thursday',
-            'section.friday',
-            'section.saturday',
-            'section.sunday')
-        ->get();
-        $schedules = [];
-        foreach($sections as $section){
-            $formatDay = [];
-            if(!is_null($section->monday)){
-                $formatDay[] = 'Hai / '.implode('->',json_decode($section->monday));
-            }
-            if(!is_null($section->tuesday)){
-                $formatDay[] = 'Ba / '.implode('->',json_decode($section->tuesday));
-            }
-            if(!is_null($section->wednesday)){
-                $formatDay[] = 'Tư / '.implode('->',json_decode($section->wednesday));
-            }
-            if(!is_null($section->thursday)){
-                $formatDay[] = 'Năm / '.implode('->',json_decode($section->thursday));
-            }
-            if(!is_null($section->friday)){
-                $formatDay[] = 'Sáu / '.implode('->',json_decode($section->friday));
-            }
-            if(!is_null($section->saturday)){
-                $formatDay[] = 'Bảy / '.implode('->',json_decode($section->saturday));
-            }
-            if(!is_null($section->sunday)){
-                $formatDay[] = 'Chủ nhật / '.implode('->',json_decode($section->sunday));
-            }
-            $schedule = [
-                'name' => $section->name,
-                'teacher' => $section->teacher,
-                'week' => $section->week,
-                'room' => $section->room,
-                'sections' => $formatDay
-            ];
-            $schedules[] = $schedule;
-        }
-
-        return view('frontend.section.schedule',compact('results','schedules'));
-    }
-
     public function showCalendar()
     {
         $date = date('N');
@@ -653,6 +538,11 @@ class UserController extends Controller
         //Just a example, please check more in there
         return redirect()->to($jsonResult['payUrl']);
         // header('Location: ' . $jsonResult['payUrl']);
+    }
+
+    public function payment_success()
+    {
+        return view('frontend.layouts.success');
     }
 
 }
