@@ -22,6 +22,9 @@
     <link href="{{asset('frontend/css/color-three.css')}}" rel="stylesheet">
     <link href="{{asset('frontend/css/color-four.css')}}" rel="stylesheet">
     <link href="{{asset('frontend/css/responsive.css')}}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -78,44 +81,44 @@
                             <!--// Navigation \\-->
                             <nav class="navbar navbar-default">
                                 <div class="navbar-header">
-                                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="true">
+                                  <!-- <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="true">
                                     <span class="sr-only">Toggle navigation</span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
-                                  </button>
+                                  </button> -->
                                 </div>
                                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
                                   <ul class="nav navbar-nav">
-                                    <li class="active"><a href="{{route('index')}}">Trang chủ</a></li>
+                                    <li class="active"><a href="{{route('index')}}" id="title">Trang chủ</a></li>
                                     @if(isset($student))
-                                    <li><a href="#">Sinh viên</a>
+                                    <li><a href="#" id="title">Sinh viên</a>
                                         <ul class="wm-dropdown-menu">
-                                            <li><a href="{{URL('sv/hoso')}}">Lý lịch sinh viên</a></li>
-                                            <li><a href="{{URL('sv/diem')}}">Kết quả học tập</a></li>
-                                            <li><a href="{{URL('sv/hoc-phi-sap-nop')}}">Học phí</a></li>
+                                            <li><a href="{{URL('sv/hoso')}}" id="title">Lý lịch sinh viên</a></li>
+                                            <li><a href="{{URL('sv/diem')}}" id="title">Kết quả học tập</a></li>
+                                            <li><a href="{{URL('sv/hoc-phi-sap-nop')}}" id="title">Học phí</a></li>
                                         </ul>
                                     </li>
-                                    <li ><a href="#">Đăng kí tín chỉ</a>
+                                    <li ><a href="#" id="title">Đăng kí tín chỉ</a>
                                         <ul class="wm-dropdown-menu">
-                                            <li><a href="{{URL('sv/dang-ki-tin-chi')}}">Đăng kí khối lượng</a></li>
-                                            <li><a href="student-dashboard-favourite.html">Tiến độ học tập</a></li>
-                                            <li><a href="{{URL('sv/do-an-cua-toi')}}">Lớp đồ án</a></li>
+                                            <li><a href="{{URL('sv/dang-ki-tin-chi')}}" id="title">Đăng kí khối lượng</a></li>
+                                            <li><a href="student-dashboard-favourite.html" id="title">Tiến độ học tập</a></li>
+                                            <li><a href="{{URL('sv/do-an-cua-toi')}}" id="title">Lớp đồ án</a></li>
                                         </ul>
                                     </li>
-                                    <li ><a href="#">Thời khóa biểu</a>
+                                    <li ><a href="#" id="title">Thời khóa biểu</a>
                                         <ul class="wm-dropdown-menu">
-                                            <li><a href="{{URL('sv/tkb')}}">Lịch học theo tuần</a></li>
-                                            <li><a href="{{URL('sv/lich-hoc')}}">Lịch học chi tiết</a></li>
+                                            <li><a href="{{URL('sv/tkb')}}" id="title">Lịch học theo tuần</a></li>
+                                            <li><a href="{{URL('sv/lich-hoc')}}" id="title">Lịch học chi tiết</a></li>
                                         </ul>
                                     </li>
                                     @endif
                                     @if(isset($teacher))
-                                    <li><a href="#">Lớp học phần</a>
+                                    <li><a href="#" id="title">Lớp học phần</a>
                                         <ul class="wm-dropdown-menu">
-                                            <li><a href="{{URL('gv/danh-sach-hoc-phan')}}">Danh sách lớp</a></li>
-                                            <li><a href="{{URL('gv/quan-ly-diem')}}">Quản lý điểm</a></li>
-                                            <li><a href="{{URL('#')}}">Quản lý đồ án</a></li>
+                                            <li><a href="{{URL('gv/danh-sach-hoc-phan')}}" id="title">Danh sách lớp</a></li>
+                                            <li><a href="{{URL('gv/quan-ly-diem')}}" id="title">Quản lý điểm</a></li>
+                                            <li><a href="{{URL('#')}}" id="title">Quản lý đồ án</a></li>
                                         </ul>
                                     </li>
                                     @endif
@@ -205,9 +208,9 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a>{{$student->name}}</a>
+                                        <a id="title">{{$student->name}}</a>
                                         <ul class="wm-dropdown-menu">
-                                            <li><a href="{{route('logout')}}">Đăng xuất</a></li>
+                                            <li><a href="{{route('logout')}}" id="title">Đăng xuất</a></li>
                                         </ul>
                                     </li>
                                     @endif
@@ -439,6 +442,9 @@
         padding: 0;
         overflow-x: hidden;
     }
+    body{
+        font-family: 'Inter', sans-serif;
+    }
     #wm-header{
         position: fixed;
         top: 0;
@@ -448,6 +454,15 @@
     }
     .center{
         position: relative;
+    }
+    #semester{
+        color: #4FA0AB;
+    }
+    #title{
+        color: #4FA0AB;
+    }
+    #code{
+        color: #4FA0AB;
     }
     .center li{
         display: flex;

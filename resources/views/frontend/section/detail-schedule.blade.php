@@ -29,10 +29,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="wm-student-dashboard-statement wm-dashboard-statement">
-                        <div class="success"></div>
+                        <div class="package"></div>
                         <hr>
                         <div class="success">
-                            <p id="schedule">Nội dung đã giảng dạy lớp học phần</p>
+                            <p id="schedule">Nội dung đã giảng dạy lớp học phần <b>{{$section->name}}</b></p>
                         </div>
                         <table class="wm-article-border">
                             <thead>
@@ -44,19 +44,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="td-content">Buổi 1</td>
-                                    <td class="td-content">Chapter 1. Introduction</td>
-                                    <td class="td-content">2023-08-14 07:46:08</td>
-                                    <td class="td-content">
-                                        SV vắng: 12<br>
-                                        - Trần Thị Huyền Diệu - Mã SV: 20IT799<br>
-                                        - Võ Thành Đạt - Mã SV: 20IT1021<br>
-                                        - Nguyễn Kết Đoàn - Mã SV: 20IT479<br>
-                                        - Nguyễn Việt Hoàng - Mã SV: 20IT100<br>
-                                        - Lê Đức Mạnh - Mã SV: 20CE008
-                                    </td>
-                                </tr>
+                                @if(isset($data))
+                                @php $i = 0; @endphp
+                                @foreach($data as $result)
+                                    @php $i++; @endphp
+                                    <tr>
+                                        <td class="td-content first-column">Buổi {{$i}}</td>
+                                        <td class="td-content">{{$result['content']}}</td>
+                                        <td class="td-content">{{$result['date']}} {{$result['time']}}</td>
+                                        <td class="td-content">
+                                            SV vắng: {{count($result['absent'])}}<br>
+                                            @foreach($result['absent'] as $absent)
+                                            - {{$absent}}<br>
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -72,6 +76,12 @@
         padding-bottom: 5px;
         margin-bottom: 15px;
     }
+    .package{
+        background-color: rgba(38,185,154,.88);
+        padding-top: 20px;
+        padding-bottom: 20px;
+        margin-bottom: 15px;
+    }
     .warnning{
         background-color: rgba(243,156,18,.88);
         padding-top: 10px;
@@ -85,7 +95,7 @@
         background-color: #F5FBFD;
     }
     .th-content{
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: "Inter, "Helvetica Neue",Roboto,Arial,sans-serif";
         color: #73879C;
         text-align: left;
         font-size: 14px;
@@ -95,11 +105,13 @@
         font-size: 14px;
         text-align: left;
     }
+    .first-column{
+        text-align: center;
+    }
     #schedule{
         font-size: 14px;
         margin-left: 20px;
-        color: whitesmoke;
-        font-family: Arial, Helvetica, sans-serif;
+        color: white;
     }
     #h4{
         font-size: 25px;
