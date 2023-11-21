@@ -43,7 +43,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ URL('admin/group/faculty') }}" aria-expanded="false">
                                 <i class="mdi mdi-numeric-0-box-multiple-outline"></i>
-                                <span class="hide-menu">Nhóm học phần</span>
+                                <span class="hide-menu">Quản lý học tập</span>
                             </a>
                         </li>
                         <li class="sidebar-item">

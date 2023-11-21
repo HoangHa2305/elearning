@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\GroupController;
+use App\Http\Controllers\Admin\GroupProjectController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\SemesterController;
 use App\Http\Controllers\Admin\StudentController;
@@ -115,6 +116,8 @@ Route::prefix('admin')->group(function(){
     Route::post('group/branch/{id}/year/{year}/semester/{semester}/add',[GroupController::class,'store']);
     Route::get('group/branch/{id}/year/{year}/semester/{semester}',[GroupController::class,'index']);
     Route::get('group/subject/{id}',[GroupController::class,'getSubject']);
+    Route::get('group/branch/{id}/semester/{semester}/project',[GroupProjectController::class,'index']);
+    Route::get('group/branch/{id}/semester/{semester}/project/add',[GroupProjectController::class,'create']);
     //Ajax
     Route::post('ajax/post/yeartrain',[StudentController::class,'postYearTrain']);
     Route::post('ajax/post/branch',[StudentController::class,'postBranch']);
