@@ -63,6 +63,8 @@
                                 @endif
                             </tbody>
                         </table>
+                        <p class="x_content">Lịch trình giảng dạy của học phần <b>{{$section->subject->name}}</b></p>
+                        <a class="btn btn-primary" id="back" href="{{URL::previous()}}">Quay về</a>
                     </div>
                 </div>
             </div>
@@ -95,10 +97,10 @@
         background-color: #F5FBFD;
     }
     .th-content{
-        font-family: "Inter, "Helvetica Neue",Roboto,Arial,sans-serif";
         color: #73879C;
         text-align: left;
         font-size: 14px;
+        font-weight: bold;
     }
     .td-content{
         color: #73879C;
@@ -133,5 +135,15 @@
         margin-bottom: 10px;
 		transition: background-color 0.3s ease;
 	}
+    .clearfix{
+        display: flex;
+    }
+    .x_content{
+        font-size: 18px;
+        font-weight: 400;
+    }
+    #back{
+        float: right;
+    }
 </style>
 @endsection

@@ -226,13 +226,13 @@
                                     <li>
                                         <a>{{$teacher->name}}</a>
                                         <ul class="wm-dropdown-menu">
-                                            <li><a href="{{route('logout')}}">Đăng xuất</a></li>
+                                            <li><a href="{{route('logout')}}" id="title">Đăng xuất</a></li>
                                         </ul>
                                     </li>
                                     @endif
                                 </ul>
                             @if(!isset($student) && !isset($teacher))
-                            <a href="#" data-toggle="modal" data-target="#ModalLogin" class="wm-header-btn">Đăng nhập</a>
+                            <a href="#" data-toggle="modal" data-target="#ModalLogin" id="title" class="wm-header-btn">Đăng nhập</a>
                             @endif
                         </div>
                     </div>
@@ -444,6 +444,8 @@
     }
     body{
         font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        color: #73879C;
     }
     #wm-header{
         position: fixed;
