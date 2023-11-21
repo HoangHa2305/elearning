@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Frontend\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
 use App\Models\Section;
+use App\Models\Student;
+use DateTime;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
@@ -129,6 +132,31 @@ class ScheduleController extends Controller
 
     public function detailSchedule(string $id)
     {
-        return view('frontend.section.detail-schedule');
+        $data = [];
+        $section = Section::findOrFail($id);
+        $attendances = Attendance::where('id_section',$id)->get();
+        foreach($attendances as $attendance){
+            $counts = json_decode($attendance->absent);
+            $result['content'] = $attendance->content;
+            $result['time'] = $attendance->time;
+            $result['date'] = DateTime::createFromFormat('d/m/Y',$attendance->date);
+            $result['date'] = $result['date']->format('Y-m-d');
+            $value = [];
+            if($counts){
+                $counts = is_array($counts) ? $counts : [$counts];
+                foreach($counts as $count){
+                    $students = Student::whereIn('id',[$count])
+                    ->select('name','code')
+                    ->get();
+                    foreach($students as $student){
+                        $value[] = $student->name." - Mã SV: ".$student->code;
+                    }
+                }
+            }
+            $result['absent'] = $value;
+
+            $data[] = $result;
+        }
+        return view('frontend.section.detail-schedule',compact('section','data'));
     }
 }
