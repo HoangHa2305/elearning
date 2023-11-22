@@ -21,4 +21,9 @@ class Branch extends Model
         'degree',
         'description'
     ];
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class,'faculty_id');
+    }
 }

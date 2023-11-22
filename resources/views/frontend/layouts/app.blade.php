@@ -24,7 +24,12 @@
     <link href="{{asset('frontend/css/responsive.css')}}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400&family=Oswald:wght@500&family=Roboto:wght@700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -334,7 +339,7 @@
 		</footer>
 		<!--// Footer \\-->
 
-	<div class="clearfix"></div>
+	    <div class="clearfix"></div>
     </div>
     <!--// Main Wrapper \\-->
 
@@ -436,6 +441,10 @@
 
   </body>
   <style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
     html {
         width: 100%;
         margin: 0;
@@ -444,6 +453,7 @@
     }
     body{
         font-family: 'Inter', sans-serif;
+        font-size: 14px;
         font-weight: 400;
         color: #73879C;
     }
@@ -462,6 +472,7 @@
     }
     #title{
         color: #4FA0AB;
+        font-family: 'Arial', sans-serif;
     }
     #code{
         color: #4FA0AB;

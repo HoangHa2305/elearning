@@ -2,17 +2,17 @@
 @section('content')
             <div class="page-breadcrumb">
                 <div class="row">
-                    <div class="col-5 align-self-center">
-                        <h4 class="page-title">Danh sách học kỳ</h4>
-                    </div>
                     <div class="col-7 align-self-center">
+                        <p class="page-title" id="title">Danh sách sinh viên thuộc nhóm {{$grouproject->title}}</p>
+                    </div>
+                    <div class="col-5 align-self-center">
                         <div class="d-flex align-items-center justify-content-end">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
                                         <a href="#">Trang chủ</a>
                                     </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Học kỳ</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Nhóm đồ án</li>
                                 </ol>
                             </nav>
                         </div>
@@ -35,27 +35,43 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th scope="col">ID</th>
-                                            <th scope="col">Mã học kỳ</th>
-                                            <th scope="col">Tên học kỳ</th>
-                                            <th scope="col">Năm</th>
-                                            <th scope="col">Quản lý nhóm học phần</th>
-                                            <th scope="col">Quản lý đồ án</th>
+                                            <th scope="col">Mã sinh viên</th>
+                                            <th scope="col">Tên sinh viên</th>
+                                            <th scope="col">Đề cương</th>
+                                            <th scope="col">Báo cáo</th>
+                                            <th scope="col">Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php $i = 0; @endphp
-                                        @foreach($semesters as $semester)
+                                        @foreach($reports as $report)
                                         @php $i++; @endphp
                                         <tr>
-                                            <th scope="row">{{$i}}</th>
-                                            <td>{{$semester->code}}</td>
-                                            <td>{{$semester->name}}</td>
-                                            <td>{{$semester->get_yearstudy->name}}</td>
+                                            <td>{{$i}}</td>
+                                            <td>{{$report->code_student}}</td>
+                                            <td>{{$report->student->name}}</td>
                                             <td>
-                                                <a href="{{URL('admin/group/branch/'.$id.'/year/'.$year.'/semester/'.$semester->id.'')}}">Xem danh sách</a>
+                                                @if(isset($report->topic))
+                                                <p>Đã nộp</p>
+                                                @else
+                                                <p>Chưa nộp</p>
+                                                @endif
                                             </td>
                                             <td>
-                                                <a href="{{URL('admin/type/branch/'.$id.'/semester/'.$semester->id.'/project')}}">Xem danh sách</a>
+                                                @if(isset($report->report))
+                                                <p>Đã nộp</p>   
+                                                @else
+                                                <p>Chưa nộp</p>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="#">
+                                                    <i class="fa-solid fa-pen-to-square"></i> Sửa
+                                                </a>
+                                                |
+                                                <a href="#">
+                                                    <i class="fa-solid fa-trash"></i> Xóa
+                                                </a>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -64,19 +80,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <a href="{{URL('admin/project/list/student/'.$grouproject->id.'/add')}}" class="btn btn-success" id="btn">Thêm sinh viên</a>
+                    </div>
                 </div>
             </div>
             <footer class="footer text-center">
                 All Rights Reserved by Nice admin. Designed and Developed by
                 <a href="https://wrappixel.com">WrapPixel</a>.
             </footer>
-            <style>
-                #btn {
-                    color: white;
-                }
-                .avatar {
-                    width: 50px;
-                    border-radius: 50%;
-                }
-            </style>
+    <style>
+        #btn {
+            color: white;
+        }
+        #title{
+            font-size: 16px;
+        }
+    </style>
 @endsection
