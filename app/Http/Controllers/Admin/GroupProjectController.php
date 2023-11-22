@@ -25,5 +25,6 @@ class GroupProjectController extends Controller
     {
         dd($request->all());
         $result = 2;
+        $result = 1;
     }
 }
