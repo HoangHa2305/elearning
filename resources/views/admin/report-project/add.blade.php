@@ -2,10 +2,10 @@
 @section('content')
 <div class="page-breadcrumb">
                 <div class="row">
-                    <div class="col-5 align-self-center">
-                        <h4 class="page-title">Thêm nhóm đồ án</h4>
-                    </div>
                     <div class="col-7 align-self-center">
+                        <p class="page-title" id="title">Thêm sinh viên vào nhóm {{$grouproject->title}}</p>
+                    </div>
+                    <div class="col-5 align-self-center">
                         <div class="d-flex align-items-center justify-content-end">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
@@ -13,12 +13,9 @@
                                         <a href="#">Trang chủ</a>
                                     </li>
                                     <li class="breadcrumb-item">
-                                        <a href="{{URL('admin/faculty')}}">Khoa</a>
+                                        <a href="{{URL('admin/faculty/detail/')}}">Nhóm đồ án</a>
                                     </li>
-                                    <li class="breadcrumb-item">
-                                        <a href="{{URL('admin/faculty/detail/')}}">Ngành đào tạo</a>
-                                    </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Thêm nhóm đồ án</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Thêm sinh viên</li>
                                 </ol>
                             </nav>
                         </div>
@@ -58,21 +55,17 @@
                                 </div>
                                 @endif
                                 <div class="form-group">
-                                    <label class="col-md-12">Tên nhóm đồ án</label>
-                                    <input type="text" name="title" class="form-control">
-                                    <input type="hidden" name="id_type" value="{{$id}}"/>
+                                    <label class="col-md-12">Giảng viên hướng dẫn</label>
+                                    <input type="text" class="form-control" value="{{$grouproject->teacher->name}}" readonly/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Giảng viên hướng dẫn</label>
-                                    <select name="id_teacher" class="form-control">
-                                        @foreach($teachers as $teacher)
-                                        <option value="{{$teacher->id}}">{{$teacher->name}}</option>
-                                        @endforeach
-                                    </select>
+                                    <label class="col-md-12">Mã sinh viên</label>
+                                    <input type="text" name="code_student" class="form-control">
+                                    <input type="hidden" name="id_group" value="{{$grouproject->id}}"/>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-success">Thêm nhóm đồ án</button>
+                                        <button type="submit" class="btn btn-success">Thêm sinh viên</button>
                                     </div>
                                 </div>
                                 @csrf
@@ -101,6 +94,11 @@
                 All Rights Reserved by Nice admin. Designed and Developed by
                 <a href="https://wrappixel.com">WrapPixel</a>.
             </footer>
+            <style>
+                #title{
+                    font-size: 16px;
+                }
+            </style>
             <script>
                 $(document).ready(function(){
                     $.ajaxSetup({ 

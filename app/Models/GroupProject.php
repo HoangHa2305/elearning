@@ -13,9 +13,13 @@ class GroupProject extends Model
 
     protected $fillable = [
         'id',
-        'id_branch',
-        'id_semester',
-        'id_teacher',
-        'name'
+        'title',
+        'id_type',
+        'id_teacher'
     ];
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class,'id_teacher');
+    }
 }

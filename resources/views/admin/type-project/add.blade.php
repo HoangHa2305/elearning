@@ -3,7 +3,7 @@
 <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-5 align-self-center">
-                        <h4 class="page-title">Thêm nhóm đồ án</h4>
+                        <h4 class="page-title">Thêm loại đồ án / đề án</h4>
                     </div>
                     <div class="col-7 align-self-center">
                         <div class="d-flex align-items-center justify-content-end">
@@ -18,7 +18,7 @@
                                     <li class="breadcrumb-item">
                                         <a href="{{URL('admin/faculty/detail/')}}">Ngành đào tạo</a>
                                     </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Thêm nhóm đồ án</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Thêm loại đồ án / đề án</li>
                                 </ol>
                             </nav>
                         </div>
@@ -58,21 +58,38 @@
                                 </div>
                                 @endif
                                 <div class="form-group">
-                                    <label class="col-md-12">Tên nhóm đồ án</label>
+                                    <label class="col-md-12">Tên đồ án /  đề án</label>
                                     <input type="text" name="title" class="form-control">
-                                    <input type="hidden" name="id_type" value="{{$id}}"/>
+                                    <input type="hidden" name="id_branch" value="{{$branch}}"/>
+                                    <input type="hidden" name="id_semester" value="{{$semester}}"/>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Giảng viên hướng dẫn</label>
-                                    <select name="id_teacher" class="form-control">
-                                        @foreach($teachers as $teacher)
-                                        <option value="{{$teacher->id}}">{{$teacher->name}}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="col-md-12">Ngày duyệt đề cương</label>
+                                            <input type="date" name="date_start" class="form-control"/>
+                                        </div>
+                                        <div class="col">
+                                            <label class="col-md-12">Giờ duyệt đề cương</label>
+                                            <input type="time" name="time_start" class="form-control"/>
+                                        </div>
+                                    </div>                                
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="col-md-12">Ngày duyệt báo cáo</label>
+                                            <input type="date" name="date_end" class="form-control"/>
+                                        </div>
+                                        <div class="col">
+                                            <label class="col-md-12">Giờ duyệt báo cáo</label>
+                                            <input type="time" name="time_end" class="form-control"/>
+                                        </div>
+                                    </div>                                
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-success">Thêm nhóm đồ án</button>
+                                        <button type="submit" class="btn btn-success">Thêm đồ án / đề án</button>
                                     </div>
                                 </div>
                                 @csrf

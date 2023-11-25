@@ -2,17 +2,17 @@
 @section('content')
             <div class="page-breadcrumb">
                 <div class="row">
-                    <div class="col-6 align-self-center">
-                        <h5 class="page-title">Nhóm đồ án thuộc {{$type->title}}</h5>
+                    <div class="col-5 align-self-center">
+                        <h4 class="page-title">Đồ án / Đề án</h4>
                     </div>
-                    <div class="col-6 align-self-center">
+                    <div class="col-7 align-self-center">
                         <div class="d-flex align-items-center justify-content-end">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item">
                                         <a href="#">Trang chủ</a>
                                     </li>
-                                    <li class="breadcrumb-item active" aria-current="page">Nhóm đồ án</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Đồ án / Đề án</li>
                                 </ol>
                             </nav>
                         </div>
@@ -35,22 +35,30 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th scope="col">ID</th>
-                                            <th scope="col">Tên nhóm đồ án</th>
-                                            <th scope="col">Giảng viên hướng dẫn</th>
-                                            <th scope="col">Danh sách sinh viên</th>
+                                            <th scope="col">Loại đồ án</th>
+                                            <th scope="col">Thời gian duyệt đề cương</th>
+                                            <th scope="col">Thời gian duyệt báo cáo</th>
+                                            <th scope="col">Nhóm đồ án</th>
                                             <th scope="col">Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php $i = 0; @endphp
-                                        @foreach($groups as $group)
+                                        @foreach($types as $type)
                                         @php $i++; @endphp
                                             <tr>
                                                 <td>{{$i}}</td>
-                                                <td>{{$group->title}}</td>
-                                                <td>{{$group->teacher->name}}</td>
+                                                <td>{{$type->title}}</td>
                                                 <td>
-                                                    <a href="{{URL('admin/project/list/student/'.$group->id.'')}}">Xem danh sách</a>
+                                                    {{$type->date_start}}
+                                                    {{$type->time_start}}
+                                                </td>
+                                                <td>
+                                                    {{$type->date_end}}
+                                                    {{$type->time_end}}
+                                                </td>
+                                                <td>
+                                                    <a href="{{URL('admin/group/project/'.$type->id.'')}}">Xem nhóm đồ án</a>
                                                 </td>
                                                 <td>
                                                     <a href="#">
@@ -69,7 +77,7 @@
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <a href="{{URL('admin/group/project/'.$id.'/add')}}" class="btn btn-success" id="btn">Thêm nhóm đồ án</a>
+                        <a href="{{URL('admin/type/branch/'.$branch.'/semester/'.$semester.'/project/add')}}" class="btn btn-success" id="btn">Thêm nhóm đồ án</a>
                     </div>
                 </div>
             </div>

@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('group_project', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_branch');
-            $table->integer('id_semester');
+            $table->string('title');
+            $table->integer('id_type');
             $table->integer('id_teacher');
-            $table->string('name');
             $table->timestamps();
         });
     }
