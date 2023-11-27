@@ -22,4 +22,9 @@ class GroupProject extends Model
     {
         return $this->belongsTo(Teacher::class,'id_teacher');
     }
+
+    public function type()
+    {
+        return $this->belongsTo(Typeproject::class,'id_type');
+    }
 }
