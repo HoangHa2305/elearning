@@ -32,4 +32,9 @@ class Report extends Model
     {
         return $this->belongsTo(Student::class,'id_student');
     }
+
+    public function group()
+    {
+        return $this->belongsTo(GroupProject::class,'id_group');
+    }
 }

@@ -81,16 +81,29 @@
 											</div>
 										</td>
 										<td class="row-title">
+											@if($report->parent==0)
 											<p class="text">Trưởng nhóm đề tài</p>
-											<p class="title">XÂY DỰNG ỨNG DỤNG QUẢN LÍ ĐÀO TẠO ĐA NỀN TẢNG CHO TRƯỜNG ĐẠI HỌC</p>
-											<b class="transform">Thành viên</b>
+											@endif
+											@if(isset($report->name))
+											<p class="title">{{$report->name}}</p>
+											@endif
+											@if($report->parent==0)
+											<div>
+												<b class="transform" id="inline">Thành viên</b>
+												<p id="inline">(không có)</p>
+											</div>
 											<p class="text">Phạm Vương Anh Bảo (20IT414)</p>
+											@endif
 										</td>
+										@php 
+											$date_start = date('d-m-Y',strtotime($report->date_start));
+											$date_end =  date('d-m-Y',strtotime($report->date_end));
+										@endphp
 										<td class="row-title">
 											<p class="title">- Xác nhận đề cương chi tiết:  </p>
-											<span class="time-note">23 - 10 - 2023 00:00 AM</span>
+											<span class="time-note">{{$date_start}} {{$report->time_start}} AM</span>
 											<p class="title">- Nộp kết quả thực hiện đề tài: </p>
-											<span class="time-note">23 - 10 - 2023 00:00 AM</span>
+											<span class="time-note">{{$date_end}} {{$report->time_end}} AM</span>
 										</td>
 									</tr>
 									<tr>
@@ -101,24 +114,54 @@
 											</div>
 											<p class="time">Phòng:_</p>
 										</td>
+										@if($report->topic)
 										<td class="row-title">
-											<a class="text" href="#">Xem lại đề cương chi tiết</a>
+											<a class="text" href="{{URL('dowload/topic/'.$report->topic)}}" target="_blank">
+												Xem lại đề cương chi tiết
+											</a>
 											<br>
-											<button class="btn btn-primary">Cập nhật đề cương đã sửa</button>
+											<a href="{{URL('sv/cap-nhat-do-an-cua-toi/'.$report->id.'')}}">
+												<button class="btn btn-primary">Cập nhật đề cương đã sửa</button>
+											</a>
+											<hr>
 											<button class="btn btn-success">Nộp kết quả thực hiện</button>
 										</td>
+										@else
+										<td class="row-title">
+											<a href="{{URL('sv/cap-nhat-do-an-cua-toi/'.$report->id.'')}}">
+												<button class="btn btn-success">Nộp đề cương</button>
+											</a>
+										</td>
+										@endif
 										<td class="row-title">
 											<div>
 											<p>- Nộp đề cương chi tiết:</p>
+											@if(isset($report->topic))
 											<span class="badage">Đã nộp</span>
-											<p>- GVHD xác nhận:</p>
-											<span class="badage">Đã Xác nhận</span>
-											<p>- Nộp kết quả thực hiện đề tài:</p>
-											<span class="badage">Đã nộp</span>
+											@else
 											<span class="danger">
 												<i class="icon fa fa-ban"></i>
 												Chưa nộp
 											</span>
+											@endif
+											<p>- GVHD xác nhận:</p>
+											@if($report->confirm)
+											<span class="badage">Đã Xác nhận</span>
+											@else
+											<span class="danger">
+												<i class="icon fa fa-ban"></i>
+												Chưa xác nhận
+											</span>
+											@endif
+											<p>- Nộp kết quả thực hiện đề tài:</p>
+											@if(isset($report->report))
+											<span class="badage">Đã nộp</span>
+											@else
+											<span class="danger">
+												<i class="icon fa fa-ban"></i>
+												Chưa nộp
+											</span>
+											@endif
 											</div>
 										</td>
 									</tr>
@@ -259,7 +302,7 @@
 			.time-note{
 				background-color: #777;
 				color: white;
-				font-size: 12px;
+				font-size: 12.1px;
 				padding-top: 2px;
 				padding-bottom: 2px;
 				padding-left: 6px;
@@ -289,6 +332,9 @@
 				font-size: 12px;
 				font-weight: 600;
 				border-radius: 8px;
+			}
+			#inline{
+				display: inline;
 			}
 		</style>
 @endsection

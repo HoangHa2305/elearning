@@ -147,6 +147,7 @@ Route::get('/set/semester',[HomeController::class,'setSemester']); //Ajax header
 Route::get('/',[HomeController::class,'index'])->name('index');
 Route::post('/login',[UserController::class,'login'])->name('loginStudent');
 Route::get('/logout',[UserController::class,'logout'])->name('logout');
+Route::get('dowload/topic/{name}',[HomeController::class,'dowloadTopic']);
 Route::prefix('gv')->group(function(){
     Route::post('login',[FrontendTeacherController::class,'login'])->name('loginTeacher');
 });
@@ -166,6 +167,8 @@ Route::prefix('sv')->group(function(){
     Route::post('thanh-toan-hoc-phi',[UserController::class,'payment_momo']);
     Route::get('thanh-toan-thanh-cong',[UserController::class,'payment_success']);
     Route::get('do-an-cua-toi',[ProjectController::class,'showProject']);
+    Route::get('cap-nhat-do-an-cua-toi/{id}',[ProjectController::class,'showAddTopic']);
+    Route::post('cap-nhat-do-an-cua-toi/{id}',[ProjectController::class,'postTopic']);
 });
 Route::prefix('gv')->group(function(){
     Route::get('danh-sach-hoc-phan',[FrontendTeacherController::class,'showListSection']);

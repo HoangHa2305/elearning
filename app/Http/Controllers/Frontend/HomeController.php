@@ -17,4 +17,11 @@ class HomeController extends Controller
     {
         
     }
+
+    public function dowloadTopic(string $name)
+    {
+        $path = storage_path('app/public/documents/'.$name);
+
+        return response()->download($path);
+    }
 }
