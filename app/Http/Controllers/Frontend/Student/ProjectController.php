@@ -38,8 +38,10 @@ class ProjectController extends Controller
 
     public function showAddTopic(string $id)
     {
+        $student_id = session('student_id');
         $report = Report::findOrFail($id);
-        return view('frontend.member.addtopic',compact('report'));
+        $leaders = Report::where('id_student','!=',$student_id)->with('student')->get(); 
+        return view('frontend.member.addtopic',compact('report','leaders'));
     }
 
     function translate_topic($data)
@@ -69,21 +71,29 @@ class ProjectController extends Controller
         $semester_id = session('semester_id');
         $student_id = session('student_id');
 
-        $student = Student::findOrFail($student_id);
-        $name = $this->custom_name($student->name);
-
-        $report = Report::find($id);
-
-        $type = $this->translate_topic($report->group->type->title);
-
         $data = $request->all();
-        $file = $request->file('topic');
-        if($file){
-            $file_name = time().'-'.$type.'-2023-'.$name.'.docx';
-            $data['topic'] = $file_name;
-        }
-        if($report->update($data)){
+        $report = Report::find($id);
+        if($data['parent']==0){
+            $student = Student::findOrFail($student_id);
+            $name = $this->custom_name($student->name);
+
+            $type = $this->translate_topic($report->group->type->title);
+   
+            $file = $request->file('topic');
             if($file){
+                $file_name = time().'-'.$type.'-2023-'.$name.'.docx';
+                $data['topic'] = $file_name;
+                $data['id_parent'] = null;
+                $data['confirm'] = 0;
+            }
+        }else if($data['parent']==1){
+            $data['title'] = null;
+            $data['topic'] = null;
+            $data['desc_topic'] = null;
+        }
+       
+        if($report->update($data)){
+            if(isset($file)){
                 $file->storeAs('documents',$file_name,'public');
             }
             return redirect()->back()->with('success','Nộp đề cương thành công');

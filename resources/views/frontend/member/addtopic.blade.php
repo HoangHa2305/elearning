@@ -56,32 +56,55 @@
                                 <br>
                                 <br>
                                 <div class="form-check">
-                                    <input type="radio"id="parent" name="parent" value="0" {{($report->parent == null) ? 'checked' : ''}} class="form-check-input"/>
-                                    <label class="form-check-label" id="parent" for="parent">Tôi là trưởng nhóm hoặc làm đề tài 1 mình</label>
+                                    <input type="radio" name="parent" value="0" {{($report->parent == 0) ? 'checked' : ''}} class="form-check-input parent-radio"/>
+                                    <label class="form-check-label parent-radio" for="parent">Tôi là trưởng nhóm hoặc làm đề tài 1 mình</label>
                                 </div>
                                 <div class="form-check">
-                                    <input type="radio" id="alone" name="parent" value="1" {{$report->parent != null ? 'checked' : ''}} class="form-check-input"/>
-                                    <label class="form-check-label" id="alone" for="alone">Tôi đã có nhóm rồi</label>
+                                    <input type="radio" name="parent" value="1" {{$report->parent == 1 ? 'checked' : ''}} class="form-check-input parent-radio"/>
+                                    <label class="form-check-label parent-radio" for="parent">Tôi đã có nhóm rồi</label>
                                 </div>
                                 <hr>
-                                <div class="form">
-                                    <label id="label">Tên đề tài</label>
-                                    @if(isset($report->title))
-                                    <input type="text" name="title" id="custom-input" value="{{$report->title}}" class="form-control"/>
-                                    @else
-                                    <input type="text" name="title" id="custom-input" class="form-control"/>
+                                <div class="content-layout">
+                                    @if($report->parent==0)
+                                    <div class="form">
+                                        <label id="label">Tên đề tài</label>
+                                        @if(isset($report->title))
+                                        <input type="text" name="title" id="custom-input" value="{{$report->title}}" class="form-control"/>
+                                        @else
+                                        <input type="text" name="title" id="custom-input" class="form-control"/>
+                                        @endif
+                                    </div>
+                                    <div class="form">
+                                        <label id="label">Kết quả dự kiến</label>
+                                        <textarea name="desc_topic" id="textarea" class="form-control">{{isset($report->desc_topic)==true ? $report->desc_topic : ''}}</textarea>
+                                    </div>
+                                    <div class="form">
+                                        <label id="label">Nộp file đề cương (*.doc, *.docx) (mẫu xem tại đây)</label>
+                                        <input type="file" name="topic" accept=".doc, .docx"/>
+                                    </div>
+                                    @elseif($report->parent==1)
+                                    <div class="form-select">
+                                        <label id="label">Nhóm</label>
+                                        <div class="form-option">
+                                            <select class="form-control" name="id_parent" size="5">
+                                                <option>Chọn nhóm</option>
+                                                @foreach($leaders as $leader)
+                                                <option value="{{$leader->id}}">
+                                                    (Trưởng nhóm: {{$leader->student->name}}) - {{isset($leader->title)==true ? $leader->title : 'Chưa đăng ký đề tài'}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="item-center">
+                                        <button class="btn btn-success">Cập nhật</button>
+                                    </div>
                                     @endif
                                 </div>
-                                <div class="form">
-                                    <label id="label">Kết quả dự kiến</label>
-                                    <textarea name="desc_topic" id="textarea" class="form-control">{{isset($report->desc_topic)==true ? $report->desc_topic : ''}}</textarea>
-                                </div>
-                                <div class="form">
-                                    <label id="label">Nộp file đề cương (*.doc, *.docx) (mẫu xem tại đây)</label>
-                                    <input type="file" name="topic" accept=".doc, .docx"/>
-                                </div>
-                                <div>
-                                    <button class="btn btn-success">Cập nhật</button>
+                                <div class="type-submit">
+                                @if($report->parent==0)
+                                <button class="btn btn-success">Cập nhật</button>
+                                @endif
                                 </div>
                             </div>
                             @csrf
@@ -99,7 +122,7 @@
 			}
             #textarea{
                 margin: 0;
-                padding: 0;
+                padding: 10px;
             }
             .package{
                 margin-top: 20px;
@@ -127,10 +150,7 @@
 			.question{
                 font-size: 18px;
             }
-            #parent{
-                display: inline;
-            }
-            #alone{
+            .parent-radio{
                 display: inline;
             }
             .btn-success{
@@ -146,10 +166,99 @@
                 margin-top: 20px;
                 margin-bottom: 20px;
             }
+            .form-select{
+                margin-top: 20px;
+                margin-bottom: 20px;
+                display: flex;
+            }
+            .form-option{
+                width: 50%;
+                margin-left: 40%;
+            }
             #label{
                 color: #73879C;
                 font-weight: 700;
                 margin-bottom: 10px;
             }
+            .item-center{
+                text-align: center;
+            }
 		</style>
-@endsection
+        <script>
+            $(document).ready(function(){
+                $.ajaxSetup({ 
+                    headers: { 
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                    } 
+                });
+
+                $("#textarea").each(function(){
+                    $(this).val($(this).val().trim());
+                });
+
+                var report = <?php echo json_encode($report) ?>;
+                var leaders = <?php echo json_encode($leaders) ?>;
+
+                $(".parent-radio").on('click',function(){
+                    var value = $("[name=parent]:checked").val();
+                    if(value==0){
+                        $(".content-layout").html(
+                            "<div class='form'>"
+                                +"<label id='label'>Tên đề tài</label>"
+                                +"<input type='text' name='title' id='custom-input' "+((report.title) ? "value='"+report.title+"'" : '')+" class='form-control'/>"
+                            +"</div>"
+                            +"<div class='form'>"
+                                +"<label id='label'>Kết quả dự kiến</label>"
+                                +"<textarea name='desc_topic' id='textarea' class='form-control'>"+((report.desc_topic)? report.desc_topic : '')+"</textarea>"
+                            +"</div>"
+                            +"<div class='form'>"
+                                +"<label id='label'>Nộp file đề cương (*.doc, *.docx) (mẫu xem tại đây)</label>"
+                                +"<input type='file' name='topic' accept='.doc, .docx'/>"
+                            +"</div>"
+                        );
+                        $(".type-submit").html(
+                            "<button class='btn btn-success'>Cập nhật</button>"
+                        )
+                    }else if(value==1){
+                        $(".content-layout").html(
+                            "<div class='form-select'>"
+                                +"<label id='label'>Nhóm</label>"
+                                +"<div class='form-option'>"
+                                    +"<select class='form-control' name='id_parent' size='5'>"
+                                        +"<option>Chọn nhóm</option>"
+                                        +leaders.map(function(item){
+                                            return "<option value="+item.id+">"
+                                                    +"(Trưởng nhóm: "+item.student.name+") - "+(item.title ? item.title : "Chưa đăng ký đề tài")
+                                                    +"</option>"
+                                        }).join('')
+                                    +"</select>"
+                                +"</div>"
+                            +"</div>"
+                            +"<div class='item-center'>"
+                                +"<button class='btn btn-success'>Cập nhật</button>"
+                            +"</div>"
+                        );
+                        $(".type-submit").empty();
+                    }
+                });
+            });
+        </script>
+@endsection   
+
+                                    
+                                        
+                                        
+                                            
+                                                
+                                                @foreach($leaders as $leader)
+                                                <option value="{{$leader->id}}">
+                                                    (Trưởng nhóm: {{$leader->student->name}}) - {{isset($leader->title)==true ? $leader->title : 'Chưa đăng ký đề tài'}}
+                                                </option>
+                                                @endforeach
+                                            
+                                        
+                                    
+
+                                    
+                                        
+                                    
