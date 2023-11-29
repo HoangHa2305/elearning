@@ -169,6 +169,8 @@ Route::prefix('sv')->group(function(){
     Route::get('do-an-cua-toi',[ProjectController::class,'showProject']);
     Route::get('cap-nhat-do-an-cua-toi/{id}',[ProjectController::class,'showAddTopic']);
     Route::post('cap-nhat-do-an-cua-toi/{id}',[ProjectController::class,'postTopic']);
+    Route::get('cap-nhat-ket-qua-cua-toi/{id}',[ProjectController::class,'showReport']);
+    Route::post('cap-nhat-ket-qua-cua-toi/{id}',[ProjectController::class,'postReport']);
 });
 Route::prefix('gv')->group(function(){
     Route::get('danh-sach-hoc-phan',[FrontendTeacherController::class,'showListSection']);

@@ -243,22 +243,5 @@
                 });
             });
         </script>
-@endsection   
-
-                                    
-                                        
-                                        
-                                            
-                                                
-                                                @foreach($leaders as $leader)
-                                                <option value="{{$leader->id}}">
-                                                    (Trưởng nhóm: {{$leader->student->name}}) - {{isset($leader->title)==true ? $leader->title : 'Chưa đăng ký đề tài'}}
-                                                </option>
-                                                @endforeach
-                                            
-                                        
-                                    
-
-                                    
-                                        
+@endsection                             
                                     
