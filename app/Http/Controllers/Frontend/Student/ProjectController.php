@@ -15,6 +15,7 @@ class ProjectController extends Controller
     {
         $semester_id = session('semester_id');
         $student_id = session('student_id');
+        $parents = Report::where('id_student','!=',$student_id)->get();
         $reports = Report::join('group_project','reports.id_group','=','group_project.id')
                 ->join('type_project','group_project.id_type','=','type_project.id')
                 ->join('teacher','group_project.id_teacher','=','teacher.id')
@@ -24,16 +25,20 @@ class ProjectController extends Controller
                         'type_project.date_end AS date_end',
                         'type_project.time_end AS time_end',
                         'teacher.name AS name_teacher',
+                        'teacher.avatar AS avatar',
+                        'teacher.phone AS phone',
+                        'teacher.email AS email',
                         'teacher.level AS level_teacher',
                         'reports.id as id',
                         'reports.parent AS parent',
                         'reports.title AS name',
-                        'reports.topic AS topic'
+                        'reports.topic AS topic',
+                        'reports.id_parent AS id_parent'
                         )
                 ->where('reports.id_student',$student_id)
                 ->where('type_project.id_semester',$semester_id)
                 ->get();
-        return view('frontend.member.project',compact('reports'));
+        return view('frontend.member.project',compact('reports','parents'));
     }
 
     public function showAddTopic(string $id)
@@ -70,6 +75,7 @@ class ProjectController extends Controller
     {
         $semester_id = session('semester_id');
         $student_id = session('student_id');
+        $year = date('Y');
 
         $data = $request->all();
         $report = Report::find($id);
@@ -81,7 +87,7 @@ class ProjectController extends Controller
    
             $file = $request->file('topic');
             if($file){
-                $file_name = time().'-'.$type.'-2023-'.$name.'.docx';
+                $file_name = time().'-'.$type.'-'.$year.'-'.$name.'.docx';
                 $data['topic'] = $file_name;
                 $data['id_parent'] = null;
                 $data['confirm'] = 0;
@@ -100,5 +106,21 @@ class ProjectController extends Controller
         }else{
             return redirect()->back()->withErrors('Nộp đề cương thất bại');
         }
+    }
+
+    public function showReport(string $id)
+    {
+        return view('frontend.member.addreport');
+    }
+
+    public function postReport(Request $request, string $id)
+    {
+        $student_id = session('student_id');
+        $report = Report::find($id);
+        $type = $this->translate_topic($report->group->type->title);
+        $title = $report->title;
+        $title = explode(' ',$title);
+        $content = implode(' ',array_slice($title,-6));
+        dd($content);
     }
 }

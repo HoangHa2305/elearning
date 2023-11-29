@@ -67,32 +67,45 @@
 										<td id="row-color">
 											<div>
 												<div class="bg-avatar">
-													<img src="https://noithatbinhminh.com.vn/wp-content/uploads/2022/08/anh-dep-40.jpg" class="avatar-teacher"/>											
+													<img src="{{asset('uploads/teacher/'.$report->avatar.'')}}" class="avatar-teacher"/>											
 												</div>
 												<p class="name-teacher">
 													{{$report->level_teacher == 'Thạc sĩ' ? 'TS' : 'Ths'}}
 													.{{$report->name_teacher}}
 												</p>
-												<p class="info-teacher">905551136</p>
-												<p class="info-teacher">nvbinh@vku.udn.vn</p>
+												<p class="info-teacher">{{$report->phone}}</p>
+												<p class="info-teacher">{{$report->email}}</p>
 											</div>
-											<div id="border-right">
-
-											</div>
+											<div id="border-right"></div>
 										</td>
 										<td class="row-title">
 											@if($report->parent==0)
-											<p class="text">Trưởng nhóm đề tài</p>
-											@endif
-											@if(isset($report->name))
-											<p class="title">{{$report->name}}</p>
-											@endif
-											@if($report->parent==0)
-											<div>
-												<b class="transform" id="inline">Thành viên</b>
-												<p id="inline">(không có)</p>
-											</div>
-											<p class="text">Phạm Vương Anh Bảo (20IT414)</p>
+												<p class="text">Trưởng nhóm đề tài</p>
+												@endif
+												@if(isset($report->name))
+												<p class="title">{{$report->name}}</p>
+												@endif
+												@if($report->parent==0)
+												<div>
+													<b class="transform" id="inline">Thành viên</b>
+													@if(!collect($parents)->contains('id_parent',$report->id))
+													<p id="inline">(không có)</p>
+													@endif
+												</div>
+												@if(isset($parents))
+												@foreach($parents as $parent)
+												@if($parent->id_parent == $report->id)
+												<p class="text">{{$parent->student->name}} (20IT414)</p>
+												@endif
+												@endforeach
+												@endif
+											@elseif($report->parent==1)
+												<p class="text">Bạn là thành viên của nhóm</p>
+												@foreach($parents as $parent)
+												@if($parent->id == $report->id_parent)
+												<p class="title_gray">{{$parent->title}}</p>
+												@endif
+												@endforeach
 											@endif
 										</td>
 										@php 
@@ -114,6 +127,7 @@
 											</div>
 											<p class="time">Phòng:_</p>
 										</td>
+										@if($report->parent==0)
 										@if($report->topic)
 										<td class="row-title">
 											<a class="text" href="{{URL('dowload/topic/'.$report->topic)}}" target="_blank">
@@ -124,7 +138,9 @@
 												<button class="btn btn-primary">Cập nhật đề cương đã sửa</button>
 											</a>
 											<hr>
-											<button class="btn btn-success">Nộp kết quả thực hiện</button>
+											<a href="{{URL('sv/cap-nhat-ket-qua-cua-toi/'.$report->id.'')}}">
+												<button class="btn btn-success">Nộp kết quả thực hiện</button>
+											</a>
 										</td>
 										@else
 										<td class="row-title">
@@ -133,8 +149,19 @@
 											</a>
 										</td>
 										@endif
+										@elseif($report->parent==1)
+										@foreach($parents as $parent)
+										@if($parent->id == $report->id_parent)
 										<td class="row-title">
-											<div>
+											<a class="text" href="{{URL('dowload/topic/'.$parent->topic)}}" target="_blank">
+													Xem lại đề cương chi tiết
+												</a>
+											</td>
+										@endif
+										@endforeach
+										@endif
+										<td class="row-title">
+											@if($report->parent==0)
 											<p>- Nộp đề cương chi tiết:</p>
 											@if(isset($report->topic))
 											<span class="badage">Đã nộp</span>
@@ -162,7 +189,39 @@
 												Chưa nộp
 											</span>
 											@endif
-											</div>
+											@elseif($report->parent==1)
+											@foreach($parents as $parent)
+											@if($parent->id == $report->id_parent)
+											<p>- Nộp đề cương chi tiết:</p>
+											@if(isset($parent->topic))
+											<span class="badage">Đã nộp</span>
+											@else
+											<span class="danger">
+												<i class="icon fa fa-ban"></i>
+												Chưa nộp
+											</span>
+											@endif
+											<p>- GVHD xác nhận:</p>
+											@if($parent->confirm)
+											<span class="badage">Đã Xác nhận</span>
+											@else
+											<span class="danger">
+												<i class="icon fa fa-ban"></i>
+												Chưa xác nhận
+											</span>
+											@endif
+											<p>- Nộp kết quả thực hiện đề tài:</p>
+											@if(isset($parent->report))
+											<span class="badage">Đã nộp</span>
+											@else
+											<span class="danger">
+												<i class="icon fa fa-ban"></i>
+												Chưa nộp
+											</span>
+											@endif
+											@endif
+											@endforeach
+											@endif
 										</td>
 									</tr>
 								</tbody>
@@ -199,6 +258,7 @@
 				border-collapse: collapse;
 			}
 			.th-title{
+				padding: 20px;
 				text-align: left;
 				width: 144.7px;
 				font-size: 14px;
@@ -285,6 +345,12 @@
 			}
 			.title{
 				color: #008000;
+				font-size: 14px;
+				text-align: left;
+				font-weight: 700;
+				font-family: 'Arial', sans-serif;
+			}
+			.title_gray{
 				font-size: 14px;
 				text-align: left;
 				font-weight: 700;
