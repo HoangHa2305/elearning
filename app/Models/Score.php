@@ -15,6 +15,7 @@ class Score extends Model
         'id',
         'id_student',
         'id_section',
+        'id_type',
         'id_semester',
         'session',
         'active',

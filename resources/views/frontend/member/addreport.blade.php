@@ -74,7 +74,7 @@
                                     </div>
                                 </div>
                                 <div class="type-submit">
-                                    <button class="btn btn-success">Cập nhật báo cáo</button>
+                                    <button type="submit" class="btn btn-success">Cập nhật báo cáo</button>
                                     <button class="btn btn-warning">Quay về</button>
                                 </div>
                             </div>

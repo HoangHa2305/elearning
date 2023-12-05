@@ -43,6 +43,7 @@
                                     </thead>
                                     <tbody>
                                         @php $i = 0; @endphp
+                                        @if(!empty($groups))
                                         @foreach($groups as $group)
                                         @php $i++; @endphp
                                             <tr>
@@ -63,6 +64,7 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

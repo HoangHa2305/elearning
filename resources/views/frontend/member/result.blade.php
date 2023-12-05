@@ -149,6 +149,15 @@
 											</tr>
 											@endif
 											@endforeach
+											@foreach($projects as $project)
+											@if($semester->id == $project->id_semester)
+											@php $i++; @endphp
+											<tr>
+												<td>{{$i}}</td>
+												<td>{{$project->title}}</td>
+											</tr>
+											@endif
+											@endforeach
                                             @endforeach
                                         </tbody>
                                     </table>							

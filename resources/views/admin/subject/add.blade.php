@@ -112,12 +112,26 @@
                                     
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Học kỳ</label>
-                                    <select name="semester_id" class="form-control">
-                                        @foreach($semesters as $semester)
-                                        <option value="{{$semester->id}}">{{$semester->code}}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="col-md-12">Học kỳ</label>
+                                            <select name="semester_id" class="form-control">
+                                                @foreach($semesters as $semester)
+                                                <option value="{{$semester->id}}">{{$semester->code}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label class="col-md-12">Học phần đồ án</label>
+                                            <div class="form-check">
+                                                <input type="radio" value="1" name="section_project"/>
+                                                <label class="form-check-label parent-radio" for="section_project">Có</label>
+                                                <br>
+                                                <input type="radio" value="0" name="section_project" checked/>
+                                                <label class="form-check-label parent-radio" for="section_project">Không</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Mô tả</label>
@@ -167,12 +181,6 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
                         } 
                     });
-                    var branch = $(
-                        "<label class='col-md-12'>Chuyên ngành</label>"
-                        +"<select name='branch_id' class='form-control'>"
-                            +"<option>---Chọn ngành---</option>"
-                        +"</select>"
-                    );
 
                     $("#year").empty();
                     $("#pre").hide();
@@ -229,7 +237,6 @@
                     });
 
                     $("#type").on('change',function(){
-                        $("#branch").empty();
                         var id = $("#yeartrain").val();
                         $.ajax({
                                 url:"{{URL('admin/ajax/post/branch')}}",
@@ -239,6 +246,13 @@
                                 },
                                 success:function(response){
                                     if(response.length>0){
+                                        $("#branch").empty();
+                                        var branch = $(
+                                            "<label class='col-md-12'>Chuyên ngành</label>"
+                                            +"<select name='branch_id' class='form-control'>"
+                                                +"<option>---Chọn ngành---</option>"
+                                            +"</select>"
+                                        );
                                         $("#branch").append(branch);
                                         response.forEach(function(item){
                                             $("#branch").find("select").append("<option value='"+item.id+"'>"+item.name+"</option>")

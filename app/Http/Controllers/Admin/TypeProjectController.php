@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subject;
 use App\Models\Typeproject;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,8 @@ class TypeProjectController extends Controller
      */
     public function create(string $branch, $semester)
     {
-        return view('admin.type-project.add',compact('branch','semester'));
+        $subjects = Subject::where('group',1)->where('semester_id',$semester)->get();
+        return view('admin.type-project.add',compact('branch','semester','subjects'));
     }
 
     /**

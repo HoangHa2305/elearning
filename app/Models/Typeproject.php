@@ -16,6 +16,7 @@ class Typeproject extends Model
         'title',
         'id_branch',
         'id_semester',
+        'id_subject',
         'date_start',
         'time_start',
         'date_end',
