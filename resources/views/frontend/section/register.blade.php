@@ -63,6 +63,7 @@
 										</thead>
 										<tbody>
 											@php $i = 0; @endphp
+											@if(isset($projects))
 											@foreach($projects as $project)
 											@php $i++; @endphp
 											<tr>
@@ -70,16 +71,26 @@
 												<td>{{$project->code}}</td>
 												<td>{{$project->name}}</td>
 												<td>{{$project->credit}}</td>
+												@if(!empty($datas))
+												@foreach($datas as $data)
+												@if($project->id == $data['type_id'])
+												<td></td>
+												<td>
+													<b>X</b>
+												</td>
+												@endif
+												@endforeach
+												@else
 												<td>
 													<a class="btn btn-success" id="showProject">
 														<i id="{{$project->id}}"></i>Xem
 													</a>
 												</td>
-												<td>
-													<b>X</b>
-												</td>
+												<td></td>
+												@endif
 											</tr>
 											@endforeach
+											@endif
 										</tbody>
 									</table>
 								</div>

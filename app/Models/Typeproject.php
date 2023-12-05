@@ -27,4 +27,9 @@ class Typeproject extends Model
     {
         return $this->belongsTo(Branch::class,'id_branch');
     }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class,'id_subject');
+    }
 }

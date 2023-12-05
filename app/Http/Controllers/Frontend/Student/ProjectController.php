@@ -87,7 +87,7 @@ class ProjectController extends Controller
             $student = Student::findOrFail($student_id);
             $name = $this->custom_name($student->name);
 
-            $type = $this->translate_topic($report->group->type->title);
+            $type = $this->translate_topic($report->group->type->subject->name);
    
             $file = $request->file('topic');
             if($file){

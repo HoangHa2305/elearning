@@ -33,6 +33,7 @@
 							<div class="wm-student-dashboard-statement wm-dashboard-statement">
 								<div class="wm-plane-title">
 									<h4>Điểm tổng kết</h4>
+									<hr>
 									<table class="wm-article">
 										<thead>
 											<th>#</th>
@@ -55,13 +56,17 @@
 												<td>17</td>
 												<td>17</td>
 												<td>
-													<code class="classification">3.06</code>
+													<b>
+														<code class="classification">3.06</code>
+													</b>
 												</td>
 												<td>7.8</td>
 												<td>7.8</td>
 												<td>17</td>
 												<td>
-													<code class="classification">Khá</code>
+													<b>
+														<code class="classification">Khá</code>
+													</b>
 												</td>
 												<td>3.06</td>
 												<td>7.8</td>
@@ -76,6 +81,7 @@
 										phải thực hiện đánh giá lớp học phần và sự cần thiết của học 
 										phần.
 									</p>
+									<hr>
                                     <table class="wm-article">
                                         <thead>
                                             <th>STT</th>
@@ -149,15 +155,47 @@
 											</tr>
 											@endif
 											@endforeach
+											@if(!empty($projects))
 											@foreach($projects as $project)
 											@if($semester->id == $project->id_semester)
 											@php $i++; @endphp
 											<tr>
 												<td>{{$i}}</td>
 												<td>{{$project->title}}</td>
+												<td>{{$project->credits}}</td>
+												<td>{{$project->session}}</td>
+												<td>
+													@if(!empty($project->diligence_score))
+														{{$project->diligence_score}}
+													@endif
+												</td>
+												<td></td>
+												<td></td>
+												<td>
+													@if(!empty($project->diligence_score))
+														{{$project->diligence_score}}
+													@endif
+												</td>
+												<td></td>
+												<td>
+													@if($project->sum_t10_score)
+														@if($project->sum_t10_score >= 8.5)
+														<b class="success_score">A</b>
+														@elseif($project->sum_t10_score >= 7 && $project->sum_t10_score <= 8.4)
+														<b class="primary_score">B</b>
+														@elseif($project->sum_t10_score >= 5.5 && $project->sum_t10_score <= 6.9)
+														<b class="basic_score">C</b>
+														@elseif($project->sum_t10_score >= 4 && $project->sum_t10_score <= 5.4)
+														<b class="warning_score">D</b>
+														@else
+														<b class="danger_score">F</b>
+														@endif
+													@endif
+												</td>
 											</tr>
 											@endif
 											@endforeach
+											@endif
                                             @endforeach
                                         </tbody>
                                     </table>							
@@ -189,7 +227,10 @@
 				color: #73879C;
 			}
 			.classification{
+				padding: 2px 4px;
 				color: #c7254e;
+				background-color: #f9f2f4;
+				border-radius: 4px;
 			}
 			.success_score{
 				color: #008000;

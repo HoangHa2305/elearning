@@ -68,6 +68,7 @@ class UserController extends Controller
         $types = Credit::join('type_project','credits.type_id','=','type_project.id')
                         ->join('subject','type_project.id_subject','=','subject.id')
                         ->select('type_project.title AS title',
+                                'credits.type_id AS type_id',
                                 'credits.id AS id',
                                 'subject.code AS code',
                                 'subject.teacher AS teacher',
@@ -86,6 +87,7 @@ class UserController extends Controller
                 'title' => $type->title,
                 'code' => $type->code,
                 'id' => $type->id,
+                'type_id' => $type->type_id,
                 'teacher' => $name->name,
                 'credit' => $type->credit
             ];
@@ -340,15 +342,18 @@ class UserController extends Controller
     {
         $semester_id = session('semester_id');
         $student_id = session('student_id');
-        $scores = Score::where('id_student',$student_id)->get();
+        $scores = Score::where('id_student',$student_id)->where('id_section','!=',null)->get();
         $semesters = Semester::all();
 
-        $projects = Report::join('group_project','reports.id_group','=','group_project.id')
-                    ->join('type_project','group_project.id_type','=','type_project.id')
+        $projects = Score::join('type_project','score.id_type','=','type_project.id')
+                    ->join('subject','subject.id','=','type_project.id_subject')
                     ->select('type_project.title AS title',
-                            'type_project.id_semester AS id_semester')
-                    ->where('reports.id_student',$student_id)
-                    ->where('type_project.id_semester',$semester_id)
+                            'score.id_semester AS id_semester',
+                            'score.session AS session',
+                            'score.diligence_score AS diligence_score',
+                            'subject.credits AS credits')
+                    ->where('score.id_student',$student_id)
+                    ->where('score.id_type','!=',null)
                     ->get();
         return view('frontend.member.result',compact('semesters','scores','projects'));
     }
