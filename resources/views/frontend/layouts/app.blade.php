@@ -208,7 +208,7 @@
                                         <a id="code"></a>
                                         <ul class="wm-dropdown-menu" id="semester">
                                             @foreach($semesters as $semester)
-                                            <li><a class="value" id="{{$semester->id}}">{{$semester->code}}</a></li>
+                                            <li><a class="value" id="{{$semester->id}}" style="color: #4FA0AB;">{{$semester->code}}</a></li>
                                             @endforeach
                                         </ul>
                                     </li>
@@ -229,7 +229,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a>{{$teacher->name}}</a>
+                                        <a id="title">{{$teacher->name}}</a>
                                         <ul class="wm-dropdown-menu">
                                             <li><a href="{{route('logout')}}" id="title">Đăng xuất</a></li>
                                         </ul>
@@ -469,8 +469,13 @@
     }
     #semester{
         color: #4FA0AB;
+        font-family: 'Arial', sans-serif;
     }
     #title{
+        color: #4FA0AB;
+        font-family: 'Arial', sans-serif;
+    }
+    .value{
         color: #4FA0AB;
         font-family: 'Arial', sans-serif;
     }
