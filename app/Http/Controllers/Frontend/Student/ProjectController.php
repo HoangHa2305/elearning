@@ -33,6 +33,7 @@ class ProjectController extends Controller
                         'reports.parent AS parent',
                         'reports.title AS name',
                         'reports.topic AS topic',
+                        'reports.report AS report',
                         'reports.id_parent AS id_parent'
                         )
                 ->where('reports.id_student',$student_id)
@@ -73,8 +74,11 @@ class ProjectController extends Controller
 
     public function postTopic(Request $request,string $id)
     {
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+
         $semester_id = session('semester_id');
         $student_id = session('student_id');
+        $date = date('h:i:sa d-m-Y');
         $year = date('Y');
 
         $data = $request->all();
@@ -89,13 +93,16 @@ class ProjectController extends Controller
             if($file){
                 $file_name = time().'-'.$type.'-'.$year.'-'.$name.'.docx';
                 $data['topic'] = $file_name;
-                $data['id_parent'] = null;
-                $data['confirm'] = 0;
             }
+            $data['id_parent'] = null;
+            $data['confirm'] = 0;
+            $data['date_topic'] = $date;
         }else if($data['parent']==1){
             $data['title'] = null;
             $data['topic'] = null;
             $data['desc_topic'] = null;
+            $data['date_topic'] = null;
+            $data['confirm'] = null;
         }
        
         if($report->update($data)){
@@ -115,12 +122,32 @@ class ProjectController extends Controller
 
     public function postReport(Request $request, string $id)
     {
-        $student_id = session('student_id');
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+
+        $data = $request->all();
         $report = Report::find($id);
         $type = $this->translate_topic($report->group->type->title);
         $title = $report->title;
         $title = explode(' ',$title);
         $content = implode(' ',array_slice($title,-6));
-        dd($content);
+        $content = strtolower($content);
+        $content = $this->custom_name($content);
+
+        $file = $request->file('report');
+        if($file){
+            $file_name = time().'-bao-cao-'.$type.'-'.$content.'.docx';
+            $data['report'] = $file_name;
+            $data['date_report'] = date('h:i:sa d-m-Y');
+            $data['status'] = 0;
+        }
+        
+        if($report->update($data)){
+            if(isset($file)){
+                $file->storeAs('documents',$file_name,'public');
+            }
+            return redirect()->back()->with('success','Nộp báo cáo thành công');
+        }else{
+            return redirect()->back()->withErrors('Nộp báo cáo thất bại');
+        }
     }
 }

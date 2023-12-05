@@ -153,10 +153,12 @@ Route::prefix('gv')->group(function(){
 });
 Route::prefix('sv')->group(function(){
     Route::get('dang-ki-tin-chi',[UserController::class,'showRegistration']);
-    Route::get('dang-ki-tin-chi/{id}',[UserController::class,'getSection']);    //Ajax
+    Route::post('dang-ki-tin-chi/mon-hoc',[UserController::class,'getSection']);    //Ajax
     Route::post('dang-ki-tin-chi',[UserController::class,'postRegistration']);
     Route::get('dang-ki-tin-chi/mon/{id}',[UserController::class,'registerCredits']);
     Route::get('dang-ki-tin-chi/huy/mon/{id}',[UserController::class,'destroyCredits']);
+    Route::get('dang-ki-tin-chi/mon/do-an/{id}',[UserController::class,'creditProject']);
+    Route::get('dang-ki-tin-chi/huy/mon/do-an/{id}',[UserController::class,'destroyCreditProject']);
     Route::get('hoso',[UserController::class,'showProfile']);
     Route::get('diem',[UserController::class,'showResult']);
     Route::get('lich-hoc',[ScheduleController::class,'showSchedule']);

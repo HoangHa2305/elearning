@@ -32,7 +32,7 @@
 						<div class="col-md-12">
 							<div class="wm-student-dashboard-statement wm-dashboard-statement">
 								<div class="wm-plane-title">
-									<h4>Danh sách các nhóm học phần</h4>							
+									<h4>B1. Chọn đăng ký các lớp học phần theo nhóm</h4>							
 								</div>
 								<div class="wm-article">
 									<ul>
@@ -44,6 +44,44 @@
 										</li>
 										@endforeach
 									</ul>
+									<p class="notice">Phòng Đào tạo khuyến cáo đăng ký theo nhóm để không bị trùng lịch TKB</p>
+								</div>
+							</div>	
+							<div class="wm-student-dashboard-statement wm-dashboard-statement">
+								<div class="wm-plane-title">
+									<h4>B2. Chọn đăng ký các học phần chọn riêng lẻ</h4>							
+								</div>
+								<div class="wm-article">
+									<table class="wm-article">
+										<thead>
+											<th>STT</th>
+											<th>Mã học phần</th>
+											<th width='600px'>Tên học phần</th>
+											<th>Số TC</th>
+											<th>Xem chi tiết các lớp học phần</th>
+											<th>Tình trạng đã đăng ký</th>
+										</thead>
+										<tbody>
+											@php $i = 0; @endphp
+											@foreach($projects as $project)
+											@php $i++; @endphp
+											<tr>
+												<td>{{$i}}</td>
+												<td>{{$project->code}}</td>
+												<td>{{$project->name}}</td>
+												<td>{{$project->credit}}</td>
+												<td>
+													<a class="btn btn-success" id="showProject">
+														<i id="{{$project->id}}"></i>Xem
+													</a>
+												</td>
+												<td>
+													<b>X</b>
+												</td>
+											</tr>
+											@endforeach
+										</tbody>
+									</table>
 								</div>
 							</div>	
 							<div class="wm-plane-title">
@@ -62,9 +100,12 @@
 										<th></th>
 									</thead>
 									<tbody>
+										@php $i = 0; @endphp
+										@if(isset($results))
 										@foreach($results as $result)
+										@php $i++; @endphp
 										<tr>
-											<td>1</td>
+											<td>{{$i}}</td>
 											<td>{{$result['code']}}</td>
 											<td>{{$result['name']}}</td>
 											<td>{{$result['credit']}}</td>
@@ -78,6 +119,26 @@
 											</td>
 										</tr>
 										@endforeach
+										@endif
+										@if(isset($datas))
+										@foreach($datas as $data)
+										@php $i++; @endphp
+										<tr>
+											<td>{{$i}}</td>
+											<td>{{$data['code']}}</td>
+											<td>{{$data['title']}}</td>
+											<td>{{$data['credit']}}</td>
+											<td>{{$data['teacher']}}</td>
+											<td>_</td>
+											<td>_</td>
+											<td>
+												<a class="wm-cancel" href="{{URL('sv/dang-ki-tin-chi/huy/mon/do-an/'.$data['id'].'')}}">
+													Hủy
+												</a>
+											</td>
+										</tr>
+										@endforeach
+										@endif
 									</tbody>
 								</table>								
 						</div>
@@ -94,13 +155,22 @@
 				display: none;
 				position: fixed;
 				width: 90%;
-				top: 30%;
+				top: 50%;
 				left: 50%;
 				transform: translate(-50%, -50%);
 				background-color: white;
 				border: 1px solid #ccc;
 				padding: 20px;
 				box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+			}
+			#show{
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				display: none;
 			}
 
 			.close-btn {
@@ -111,12 +181,32 @@
 				cursor: pointer;
 			}
 
-			#danger {
+			.custom-danger{
 				color: red;
+				margin-left: 20%;
 			}
-
+			.danger{
+				color: red;
+				margin-left: 10%;
+			}
+			#showAlertBtn{
+				background-color: #26B99A;
+				border: 1px solid #169F85;
+			}
+			.notice{
+				text-align: center;
+				font-style: italic;
+			}
+			.btn-success{
+				background-color: #26B99A;
+				border: 1px solid #169F85;
+			}
+			.btn-success:hover{
+				background-color: #26B99A;
+				border: 1px solid #169F85;
+			}
 			.wm-register{
-				background-color: #69ca87;
+				background-color: #26B99A;
 				color: #fff;
 				padding: 8px 16px;
 				border: none;
@@ -155,11 +245,16 @@
 					var id = $(this).find("i").attr('id');
 					
 					$.ajax({
-						url:"{{URL('sv/dang-ki-tin-chi')}}/"+id,
-						type:"GET",
+						url:"{{URL('sv/dang-ki-tin-chi/mon-hoc')}}",
+						type:"POST",
+						data:{
+							id:id,
+							type:0
+						},
 						success:function(response){
 							var html = $(
 								"<div id='customAlert' class='custom-alert'>"
+									+"<b>DANH SÁCH CÁC LỚP HỌC PHẦN</b>"
 									+"<span class='close-btn'>&times;</span>"
 									+"<form action='' method='POST'>"
 									+"<div class='wm-student-dashboard-statement wm-dashboard-statement'>"
@@ -187,7 +282,7 @@
 							let id = 0;
 							response.forEach(function(item){
 								id++;
-								var link = (item.register >= item.count) ? "<p id='danger'>Lớp đã đầy ("+item.count+"/"+item.count+")</p>" 
+								var link = (item.register >= item.count) ? "<div class='danger'><p>Lớp đã đầy ("+item.count+"/"+item.count+")</p></div>" 
 									: "<a class='wm-register' href='{{URL('sv/dang-ki-tin-chi/mon')}}/"
 										+item.id
 									+"'>Chọn</a>"
@@ -206,13 +301,77 @@
 									+"</tr>"
 								)
 							});
+							$("#show").fadeIn();
 							$("#customAlert").fadeIn();
 						}
 					});
 				});
 
+				$(document).on('click','#showProject',function(){
+					var id = $(this).find("i").attr('id');
+
+					$.ajax({
+						url:"{{URL('sv/dang-ki-tin-chi/mon-hoc')}}",
+						type:"POST",
+						data:{
+							id:id,
+							type:1		
+						},
+						success:function(response){
+							console.log(response);
+							var html = $(
+								"<div id='customProject' class='custom-alert'>"
+									+"<b>DANH SÁCH CÁC LỚP HỌC PHẦN</b>"
+									+"<span class='close-btn'>&times;</span>"
+									+"<form action='' method='POST'>"
+									+"<div class='wm-student-dashboard-statement wm-dashboard-statement'>"
+										+"<table class='wm-article'>"
+											+"<thead>"
+												+"<th>STT</th>"
+												+"<th width='500px'>Tên lớp học phần</th>"
+												+"<th>Sỉ số</th>"
+												+"<th>Số lượng đăng ký</th>"
+												+"<th>Giảng viên</th>"
+												+"<th>Thời khóa biểu</th>"
+												+"<th>Tuần học</th>"
+												+"<th>Tùy chọn</th>"
+											+"</thead>"
+											+"<tbody></tbody>"
+										+"</table>"
+										+"<input type='hidden' name='_token' value='{{ csrf_token() }}'/>"
+									+"</div>"
+									+"</form>"
+								+"</div>"
+							);
+							$("#show").html(html);
+							response.forEach(function(item){
+								$("#customProject").find("tbody").append(
+									"<tr>"
+										+"<td>1</td>"
+										+"<td>"+item.title+"</td>"
+										+"<td>_</td>"
+										+"<td>_</td>"
+										+"<td>"+item.teacher+"</td>"
+										+"<td>_</td>"
+										+"<td>_</td>"
+										+"<td>"
+											+"<a class='wm-register' href='{{URL('sv/dang-ki-tin-chi/mon/do-an')}}/"+item.id+"'>"
+												+"Chọn"
+											+"</a>"
+										+"</td>"
+									+"<tr>"
+								);
+							});
+							$("#show").fadeIn();
+							$("#customProject").fadeIn();
+						}
+					})
+				});
+
 				$(document).on("click",".close-btn",function() {
 					$('#customAlert').fadeOut();
+					$('#customProject').fadeOut();
+					$("#show").fadeOut();
 				});
 
 			});

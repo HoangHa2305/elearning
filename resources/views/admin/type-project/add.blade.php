@@ -64,6 +64,14 @@
                                     <input type="hidden" name="id_semester" value="{{$semester}}"/>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-md-12">Thuộc môn học</label>
+                                    <select name="id_subject" class="form-control">
+                                        @foreach($subjects as $subject)
+                                        <option value="{{$subject->id}}">{{$subject->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <div class="row">
                                         <div class="col">
                                             <label class="col-md-12">Ngày duyệt đề cương</label>

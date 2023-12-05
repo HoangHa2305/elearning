@@ -138,9 +138,19 @@
 												<button class="btn btn-primary">Cập nhật đề cương đã sửa</button>
 											</a>
 											<hr>
+											@if(isset($report->report))
+											<a class="text" href="{{URL('dowload/topic/'.$report->report)}}" target="_blank">
+												Xem lại báo cáo đề tài
+											</a>
+											<br>
+											<a href="{{URL('sv/cap-nhat-ket-qua-cua-toi/'.$report->id.'')}}">
+												<button class="btn btn-success">Nộp lại kết quả thực hiện</button>
+											</a>
+											@else
 											<a href="{{URL('sv/cap-nhat-ket-qua-cua-toi/'.$report->id.'')}}">
 												<button class="btn btn-success">Nộp kết quả thực hiện</button>
 											</a>
+											@endif
 										</td>
 										@else
 										<td class="row-title">
@@ -189,6 +199,10 @@
 												Chưa nộp
 											</span>
 											@endif
+											<p>- Được phép bảo vệ đề tài:</p>
+											<span class="badage">Đồng ý</span>
+											<p>- Điểm Hướng dẫn:</p>
+											<span class="badage">9</span>
 											@elseif($report->parent==1)
 											@foreach($parents as $parent)
 											@if($parent->id == $report->id_parent)
@@ -378,6 +392,10 @@
 				border-radius: 10px;
 			}
 			.btn-success{
+				background-color: #26B99A;
+				border: 1px solid #169F85;
+			}
+			.btn-success:hover{
 				background-color: #26B99A;
 				border: 1px solid #169F85;
 			}

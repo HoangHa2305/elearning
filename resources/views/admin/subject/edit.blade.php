@@ -113,7 +113,7 @@
                                     <label class="col-md-12">Học kỳ</label>
                                     <select name="semester_id" class="form-control">
                                         @foreach($semesters as $semester)
-                                        <option value="{{$semester->id}}">{{$semester->code}}</option>
+                                        <option value="{{$semester->id}}" {{$semester->id == $subject->semester_id ? 'selected' : ''}}>{{$semester->code}}</option>
                                         @endforeach
                                     </select>
                                 </div>

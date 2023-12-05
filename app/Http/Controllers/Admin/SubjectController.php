@@ -40,7 +40,11 @@ class SubjectController extends Controller
     {
         $data = $request->all();
         $data['teacher'] = json_encode($request->teacher);
+        $data['group'] = $request->section_project;
         if($request->type == 0){
+            $data['branch_id'] = 0;
+        }
+        if($request->section_project == 1){
             $data['branch_id'] = 0;
         }
         if(Subject::create($data)){

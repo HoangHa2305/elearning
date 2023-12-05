@@ -22,6 +22,7 @@ class Subject extends Model
         'yeartrain_id',
         'semester_id',
         'type',
+        'group',
         'branch_id',
         'description'
     ];
