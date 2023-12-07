@@ -36,8 +36,13 @@ class TeacherController extends Controller
     public function showListSection()
     {
         $teacher_id = session('teacher_id');
-        $semester = session('semester_id');
-        $sections = Section::where('id_teacher',$teacher_id)->get();
+        $semester_id = session('semester_id');
+        $sections = Section::join('subject','section.id_subject','=','subject.id')
+        ->select('section.name AS name',
+                'section.id AS id')
+        ->where('section.id_teacher',$teacher_id)
+        ->where('subject.semester_id',$semester_id)
+        ->get();
 
         return view('frontend.teacher.section',compact('sections'));
     }

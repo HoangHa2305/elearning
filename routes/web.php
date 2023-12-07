@@ -19,6 +19,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\Student\ProjectController;
 use App\Http\Controllers\Frontend\Student\ScheduleController;
 use App\Http\Controllers\Frontend\Student\UserController;
+use App\Http\Controllers\Frontend\Teacher\ProjectController as TeacherProjectController;
 use App\Http\Controllers\Frontend\Teacher\ScoreController;
 use App\Http\Controllers\Frontend\Teacher\TeacherController as FrontendTeacherController;
 use Illuminate\Support\Facades\Auth;
@@ -189,5 +190,9 @@ Route::prefix('gv')->group(function(){
     Route::get('quan-ly-diem',[ScoreController::class,'showListScore']);
     Route::get('quan-ly-diem/{id}',[ScoreController::class,'manageScore']);
     Route::post('quan-ly-diem/xac-nhan',[ScoreController::class,'postScore']);
-    Route::get('quan-ly-do-an',[]);
+    Route::get('quan-ly-do-an',[TeacherProjectController::class,'showManageProject']);
+    Route::get('quan-ly-do-an/bao-cao/{id}',[TeacherProjectController::class,'manageReport']);
+    Route::get('quan-ly-do-an/diem/{id}',[TeacherProjectController::class,'manageProjectScore']);
+    Route::get('chi-tiet-bao-cao/{id}',[TeacherProjectController::class,'detailReport']);
+    Route::post('xac-nhan-de-cuong',[TeacherProjectController::class,'confirmTopic']);
 });

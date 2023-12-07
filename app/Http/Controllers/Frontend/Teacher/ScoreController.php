@@ -14,7 +14,12 @@ class ScoreController extends Controller
     {
         $teacher_id = session('teacher_id');
         $semester_id = session('semester_id');
-        $sections = Section::where('id_teacher',$teacher_id)->get();
+        $sections = Section::join('subject','section.id_subject','=','subject.id')
+        ->select('section.name AS name',
+                'section.id AS id')
+        ->where('section.id_teacher',$teacher_id)
+        ->where('subject.semester_id',$semester_id)
+        ->get();
         return view('frontend.teacher.listscore',compact('sections'));
     }
 

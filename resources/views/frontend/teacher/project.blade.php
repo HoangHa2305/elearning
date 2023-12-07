@@ -37,13 +37,24 @@
 								<table class="wm-article">
 									<thead>
 										<th>STT</th>
-										<th>Lớp đồ án</th>
-										<th>Thời khóa biểu</th>
-										<th>Trạng thái</th>
+										<th>Lớp đồ án /  đề án</th>
+										<th>Loại đồ án</th>
 										<th>Quản lý lớp</th>
 									</thead>
 									<tbody>
-
+										@php $i = 0; @endphp
+										@foreach($projects as $project)
+										@php $i++; @endphp
+										<tr>
+											<td>{{$i}}</td>
+											<td>{{$project->title}}</td>
+											<td>{{$project->subject}}</td>
+											<td>
+												<a href="{{URL('gv/quan-ly-do-an/bao-cao/'.$project->group_id.'')}}" class="wm-cancel">Quản lí báo cáo</a>
+												<a class="wm-register">Quản lí điểm</a>
+											</td>
+										</tr>
+										@endforeach
 									</tbody>
 								</table>								
 						</div>
@@ -80,10 +91,10 @@
 			}
 
 			.wm-cancel{
-				background-color: #F1AF00;
+				background-color: #337ab7;
 				color: #fff;
 				padding: 8px 16px;
-				border: none;
+				border-color: #2e6da4;
 				border-radius: 4px;
 				font-size: 14px;
 				cursor: pointer;
