@@ -209,7 +209,7 @@
 				border-radius: 4px;
 				font-size: 14px;
 				cursor: pointer;
-				width: 120px;
+				width: 130px;
 				transition: background-color 0.3s ease;
 			}
 			.vm-danger{
@@ -221,7 +221,7 @@
 				border-radius: 4px;
 				font-size: 14px;
 				cursor: pointer;
-				width: 120px;
+				width: 130px;
 				transition: background-color 0.3s ease;
 			}
 			.vm-primary{
@@ -233,7 +233,7 @@
 				border-radius: 4px;
 				font-size: 14px;
 				cursor: pointer;
-				width: 120px;
+				width: 130px;
 				transition: background-color 0.3s ease;
 			}
 
@@ -252,11 +252,21 @@
 				font-weight: bold;
 			}
 
+			#show{
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				display: none;
+			}
+
 			.custom-alert {
 				display: none;
 				position: fixed;
 				width: 90%;
-				top: 40%;
+				top: 60%;
 				left: 50%;
 				transform: translate(-50%, -50%);
 				background-color: white;
@@ -329,6 +339,7 @@
 						+"</div>"
 					);
 					$("#show").html(html);
+					$("#show").fadeIn();
 					$("#customAlert").fadeIn();
 
 					$.ajax({
@@ -354,6 +365,7 @@
 
 				$(document).on('click','.close-btn',function(){
 					$("#customAlert").fadeOut();
+					$("#show").fadeOut();
 				});
 
 				$('button.wm-register').click(function(){
