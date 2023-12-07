@@ -147,10 +147,14 @@ Route::get('/set/semester',[HomeController::class,'setSemester']); //Ajax header
 Route::get('/',[HomeController::class,'index'])->name('index');
 Route::post('/login',[UserController::class,'login'])->name('loginStudent');
 Route::get('/logout',[UserController::class,'logout'])->name('logout');
+Route::get('quen-mat-khau/{type}',[HomeController::class,'forgotPassword']);
+Route::post('xac-minh-email',[HomeController::class,'confirmEmail']);  //ajax
+Route::post('kiem-tra-otp',[HomeController::class,'checkOtp']);        //ajax
+Route::get('mat-khau-moi',[HomeController::class,'newPassword']);
+Route::post('mat-khau-moi',[HomeController::class,'postNewPassword']);
 Route::get('dowload/topic/{name}',[HomeController::class,'dowloadTopic']);
-Route::prefix('gv')->group(function(){
-    Route::post('login',[FrontendTeacherController::class,'login'])->name('loginTeacher');
-});
+Route::post('gv/login',[FrontendTeacherController::class,'login'])->name('loginTeacher');
+
 Route::prefix('sv')->group(function(){
     Route::get('dang-ki-tin-chi',[UserController::class,'showRegistration']);
     Route::post('dang-ki-tin-chi/mon-hoc',[UserController::class,'getSection']);    //Ajax

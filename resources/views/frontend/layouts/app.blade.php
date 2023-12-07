@@ -123,82 +123,14 @@
                                         <ul class="wm-dropdown-menu">
                                             <li><a href="{{URL('gv/danh-sach-hoc-phan')}}" id="title">Danh sách lớp</a></li>
                                             <li><a href="{{URL('gv/quan-ly-diem')}}" id="title">Quản lý điểm</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#" id="title">Lớp đồ án</a>
+                                        <ul class="wm-dropdown-menu">
                                             <li><a href="{{URL('#')}}" id="title">Quản lý đồ án</a></li>
                                         </ul>
                                     </li>
                                     @endif
-                                    <!-- <li class="wm-megamenu-li"><a href="#">Pages</a>
-                                        <ul class="wm-megamenu">
-                                            <li class="row">
-                                                <div class="col-md-2">
-                                                    <h4>Link 1</h4>
-                                                    <ul class="wm-megalist">
-                                                        <li><a href="404-page.html">404 Error Page</a></li>
-                                                        <li><a href="about-us.html">About Us</a></li>
-                                                        <li><a href="blog-grid.html">Blog Grid</a></li>
-                                                        <li><a href="blog-list.html">Blog List</a></li>
-                                                        <li><a href="blog-detail.html">Blog Detail</a></li>
-                                                        <li><a href="faq-page.html">Faq Page</a></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <h4>Link 2</h4>
-                                                    <ul class="wm-megalist">
-                                                        <li><a href="ourprofessors.html">Our Professors</a></li>
-                                                        <li><a href="our-professsors-detail.html">Our Professsors Detail</a></li>
-                                                        <li><a href="typography-elements.html">Typography Elements</a></li>
-                                                        <li><a href="courses-list.html">Courses List</a></li>
-                                                        <li><a href="courses-grid.html">Courses Grid</a></li>
-                                                        <li><a href="gallery.html">Gallery</a></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <h4>Link 3</h4>
-                                                    <ul class="wm-megalist">
-                                                        <li><a href="courses-detail.html">Courses Detail</a></li>
-                                                        <li><a href="shop-list.html">Shop List</a></li>
-                                                        <li><a href="shop-grid.html">Shop Grid</a></li>
-                                                        <li><a href="shop-single-product.html">Shop Detail</a></li>
-                                                        <li><a href="contact-us.html">Contact Us</a></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <a href="#" class="wm-thumbnail">
-                                                        <img src="extra-images/megamenu-frame.jpg" alt="" />
-                                                    </a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="wm-megamenu-li"><a href="#">Liên hệ</a>
-                                        <ul class="wm-megamenu">
-                                            <li class="row">
-                                                <div class="col-md-2">
-                                                    <h4>Links 1</h4>
-                                                    <ul class="wm-megalist">
-                                                        <li><a href="contact-us.html">Contact Us</a></li>
-                                                        <li><a href="404-page.html">404 Error Page</a></li>
-                                                        <li><a href="shop-list.html">Shop List</a></li>
-                                                        <li><a href="shop-grid.html">Shop Grid</a></li>
-                                                        <li><a href="shop-single-product.html">Shop Detail</a></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <h4>Artists text</h4>
-                                                    <div class="wm-mega-text">
-                                                        <p>Your work is going to fill a large part of your life, and the only way to be truly satisfied is to do what you believe is great work. And the only way to do great work is to love.</p>
-                                                        <p>If you haven't found it yet, keep looking. Don't settle. As with all matters of the heart, you'll know when you find it.</p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-5">
-                                                    <h4>sub category widget</h4>
-                                                    <a href="#" class="wm-thumbnail">
-                                                        <img src="extra-images/mega-menuadd.jpg" alt="" />
-                                                    </a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </li> -->
                                   </ul>
                                 </div>
                             </nav>
@@ -353,9 +285,9 @@
                 <span class="wm-color">Đăng nhập sinh viên</span>
                 <form action="{{route('loginStudent')}}" method="POST">
                     <ul>
-                        <li> <input type="text" name="email" placeholder="Email" onblur="if(this.value == '') { this.value ='Email'; }" onfocus="if(this.value =='Email') { this.value = ''; }"> </li>
-                        <li> <input type="password" name="password" placeholder="Mật khẩu" onblur="if(this.value == '') { this.value ='Mật khẩu'; }" onfocus="if(this.value =='Mật khẩu') { this.value = ''; }"> </li>
-                        <li> <a href="#" class="wm-forgot-btn">Quên mật khẩu?</a> </li>
+                        <li> <input type="text" name="email" placeholder="Email" onblur="if(this.value == '') { this.value ='Email'; }" onfocus="if(this.value =='Email') { this.value = ''; }" id="input"> </li>
+                        <li> <input type="password" name="password" placeholder="Mật khẩu" onblur="if(this.value == '') { this.value ='Mật khẩu'; }" onfocus="if(this.value =='Mật khẩu') { this.value = ''; }" id="input"> </li>
+                        <li> <a href="{{URL('quen-mat-khau/1')}}" class="wm-forgot-btn">Quên mật khẩu?</a> </li>
                         <input type="hidden" name="level" value="1"/>
                         <div class="center">
                             <li> <input type="submit" id="submit" value="Đăng nhập"> </li>
@@ -375,9 +307,9 @@
                 <span class="wm-color">Đăng nhập giảng viên</span>
                 <form action="{{route('loginTeacher')}}" method="POST">
                     <ul>
-                        <li> <input type="text" name="email" placeholder="Email" onblur="if(this.value == '') { this.value ='Email'; }" onfocus="if(this.value =='Email') { this.value = ''; }"> </li>
-                        <li> <input type="password" name="password" placeholder="Mật khẩu" onblur="if(this.value == '') { this.value ='Mật khẩu'; }" onfocus="if(this.value =='Mật khẩu') { this.value = ''; }"> </li>
-                        <li> <a href="#" class="wm-forgot-btn">Quên mật khẩu?</a> </li>
+                        <li> <input type="text" name="email" placeholder="Email" onblur="if(this.value == '') { this.value ='Email'; }" onfocus="if(this.value =='Email') { this.value = ''; }" id="input"> </li>
+                        <li> <input type="password" name="password" placeholder="Mật khẩu" onblur="if(this.value == '') { this.value ='Mật khẩu'; }" onfocus="if(this.value =='Mật khẩu') { this.value = ''; }" id="input"> </li>
+                        <li> <a href="{{URL('quen-mat-khau/2')}}" class="wm-forgot-btn">Quên mật khẩu?</a> </li>
                         <div class="center">
                             <li> <input type="submit" id="submit" value="Đăng nhập"> </li>
                         </div>
@@ -470,6 +402,9 @@
     #semester{
         color: #4FA0AB;
         font-family: 'Arial', sans-serif;
+    }
+    #input{
+        font-style: normal;
     }
     #title{
         color: #4FA0AB;
