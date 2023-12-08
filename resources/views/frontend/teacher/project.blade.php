@@ -51,7 +51,7 @@
 											<td>{{$project->subject}}</td>
 											<td>
 												<a href="{{URL('gv/quan-ly-do-an/bao-cao/'.$project->group_id.'')}}" class="wm-cancel">Quản lí báo cáo</a>
-												<a class="wm-register">Quản lí điểm</a>
+												<a href="{{URL('gv/quan-ly-do-an/diem/'.$project->group_id.'')}}" class="wm-register">Quản lí điểm</a>
 											</td>
 										</tr>
 										@endforeach

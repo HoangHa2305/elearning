@@ -95,6 +95,7 @@ class ScoreController extends Controller
                 }else{
                     $score->sum_t10_score = 0;
                 }
+                $score->active = 1;
                 $score->save();
             }
         }

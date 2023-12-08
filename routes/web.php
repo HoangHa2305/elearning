@@ -193,6 +193,8 @@ Route::prefix('gv')->group(function(){
     Route::get('quan-ly-do-an',[TeacherProjectController::class,'showManageProject']);
     Route::get('quan-ly-do-an/bao-cao/{id}',[TeacherProjectController::class,'manageReport']);
     Route::get('quan-ly-do-an/diem/{id}',[TeacherProjectController::class,'manageProjectScore']);
+    Route::post('quan-ly-do-an/diem',[TeacherProjectController::class,'postScoreProject']); //Ajax
     Route::get('chi-tiet-bao-cao/{id}',[TeacherProjectController::class,'detailReport']);
-    Route::post('xac-nhan-de-cuong',[TeacherProjectController::class,'confirmTopic']);
+    Route::post('xac-nhan-de-cuong',[TeacherProjectController::class,'confirmTopic']); //Ajax
+    Route::post('xac-nhan-bao-cao',[TeacherProjectController::class,'confirmReport']); //Ajax
 });

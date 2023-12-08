@@ -35,7 +35,7 @@
 							<div class="wm-student-dashboard-statement wm-dashboard-statement">
                             <table>
                                 <tr>
-                                    <td>
+                                    <td class="title">
                                         <p>Tên đề tài:</p>
                                     </td>
                                     <td colspan="4">
@@ -47,30 +47,41 @@
                                         <p>Nhóm trưởng</p>
                                     </td>
                                     <td>
-                                        <p>{{$report->student->name}} - {{$report->student->code}}</p>
+                                        <p class="align-left">{{$report->student->name}} - {{$report->student->code}}</p>
                                     </td>
-                                    <td>
-                                        <p>Thông tin liên hệ:</p>
-                                        <p>{{$report->student->phone}}</p>
-                                        <p>{{$report->student->email}}</p>
+                                    <td class="info">
+                                        <p class="align-left">Thông tin liên hệ:</p>
+                                        <p class="align-left">{{$report->student->phone}}</p>
+                                        <p class="align-left">{{$report->student->email}}</p>
                                     </td>
                                     <td colspan="2">
-                                        <p>Thành viên: Không có</p>
+										<p class="align-left">Thành viên: 
+										@if(!collect($parents)->contains('id_parent',$report->id))
+											Không có
+										@else
+											@foreach($parents as $parent)
+											@if($parent->id_parent == $report->id)
+												{{$parent->student->name}} - {{$parent->student->code}}</p>
+											@endif
+											@endforeach
+										@endif
                                     </td>
                                 </tr>
                                 <tr id="{{$report->id}}">
                                     <td>
                                         <p>Đề cương chi tiết: </p>	
                                     </td>
-                                    <td>
+                                    <td class="topic">
                                         @if(!empty($report->topic))
-                                        <a class="view" href="{{URL('dowload/topic/'.$report->topic.'')}}">Xem đề cương chi tiết</a>
+										<p class="align-left">
+                                        	<a class="view" href="{{URL('dowload/topic/'.$report->topic.'')}}">Xem đề cương chi tiết</a>
+										</p>
                                         @else
                                         <p>Chưa nộp</p>
                                         @endif
                                     </td>
                                     <td>
-                                        <p>
+                                        <p class="align-left">
                                             Mô tả: 
                                             @if(!empty($report->desc_topic))
                                                 {{$report->desc_topic}}
@@ -78,7 +89,7 @@
                                         </p>
                                     </td>
                                     <td>
-                                        <p>
+                                        <p class="align-left">
                                             Ngày nộp:
                                             @if(!empty($report->date_topic))
                                                 {{$report->date_topic}}
@@ -86,36 +97,52 @@
                                         </p>
                                     </td>
                                     <td>
-                                        @if($report->confirm)
-                                        <button id="btn-confirm" class="wm-cancel">Hủy</button>
+										@if($report->topic!=null)
+                                        @if($report->confirm==1)
+                                        <button id="btn-cancel" class="wm-cancel">Hủy</button>
                                         @else
                                         <button id="btn-confirm" class="wm-register">Duyệt</button>
                                         @endif
+										@endif
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr id="{{$report->id}}">
                                     <td>
                                         <p>Kết quả thực hiện: </p>
                                     </td>
                                     <td>
                                         @if(!empty($report->report))
-
+										<p class="align-left">
+                                        	<a class="view" href="{{URL('dowload/topic/'.$report->report.'')}}">Xem báo cáo</a>
+										</p>
                                         @else
                                         <p>Chưa nộp</p>
                                         @endif
                                     </td>
                                     <td>
-                                        @if(!empty($report->desc_report))
-                                        <p>Đường dẫn mã nguồn:</p>
-                                        @else
-                                        <p>Đường dẫn mã nguồn:</p>
-                                        @endif
+                                        <p class="align-left">
+											Đường dẫn mã nguồn:
+											@if(!empty($report->desc_report))
+											{{$report->desc_report}}
+											@endif
+										</p>
                                     </td>
                                     <td>
-                                        <p>Ngày nộp:</p> 
+                                        <p class="align-left">
+											Ngày nộp:
+											@if(!empty($report->date_report))
+                                                {{$report->date_report}}
+                                            @endif
+										</p> 
                                     </td>
                                     <td>
-                                        <button class="wm-register">Duyệt</button>
+										@if(!empty($report->report))
+											@if($report->status==1)
+											<button id="btn-destroy" class="wm-cancel">Hủy</button>
+											@else
+											<button id="btn-status" class="wm-register">Duyệt</button>
+											@endif
+										@endif
                                     </td>
                                 </tr>
                             </table>				
@@ -128,6 +155,9 @@
 		<div id="show"></div>
 		<!--// Main Content \\-->
 		<style>
+            .align-left{
+                text-align: left;
+            }
 			#box{
 				display: flex;
 			}
@@ -139,6 +169,9 @@
 			}
 			.view {
 				color: #4FA0AB;
+			}
+			.info{
+				width: 300px;
 			}
 			#p{
 				margin-left: 20px;
@@ -195,6 +228,12 @@
 			}
 			.textarea{
 				width: 120px;
+			}
+			.title{
+				width: 150px;		
+			}
+			.topic{
+				width: 180px;
 			}
 			#note{
 				text-align: left;
@@ -292,19 +331,51 @@
 					} 
                 });
 
-                $("#btn-confirm").click(function(){
-                    $(this).attr('class','wm-cancel').text("Hủy");
+                $(document).on('click','#btn-confirm',function(){
+                    $(this).attr('class','wm-cancel').attr('id','btn-cancel').text("Hủy");
                     var id = $(this).closest("tr").attr("id");
                     $.ajax({
                         url:"{{URL('gv/xac-nhan-de-cuong')}}",
                         type:"POST",
                         data:{
-                            id:id
+                            id:id,
+                            type:1
                         },
-                        success:function(response){
-                            if(response.success){
-                                
-                            }
+                    });
+                });
+                $(document).on('click','#btn-cancel',function(){
+                    $(this).attr('class','wm-register').attr('id','btn-confirm').text("Duyệt");
+                    var id = $(this).closest("tr").attr("id");
+                    $.ajax({
+                        url:"{{URL('gv/xac-nhan-de-cuong')}}",
+                        type:"POST",
+                        data:{
+                            id:id,
+                            type:0
+                        },
+                    });
+                });
+                $(document).on('click','#btn-status',function(){
+                    $(this).attr('class','wm-cancel').attr('id','btn-destroy').text("Hủy");
+                    var id = $(this).closest("tr").attr("id");
+                    $.ajax({
+                        url:"{{URL('gv/xac-nhan-bao-cao')}}",
+                        type:"POST",
+                        data:{
+                            id:id,
+                            type:1
+                        }
+                    });
+                });
+                $(document).on('click','#btn-destroy',function(){
+                    $(this).attr('class','wm-register').attr('id','btn-status').text("Duyệt");
+                    var id = $(this).closest("tr").attr("id");
+                    $.ajax({
+                        url:"{{URL('gv/xac-nhan-bao-cao')}}",
+                        type:"POST",
+                        data:{
+                            id:id,
+                            type:0
                         }
                     });
                 });

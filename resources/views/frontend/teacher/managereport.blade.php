@@ -178,10 +178,6 @@
 				padding-bottom: 8px;
 				margin-top: 20px;
 			}
-			#center{
-				text-align: center;
-				align-items: center;
-			}
 			.wm-cancel{
 				background-color: #f0ad4e;
 				color: #fff;
