@@ -38,6 +38,8 @@ class ReportController extends Controller
         $student = Student::where('code',$request->code_student)->first();
         $data['id_student'] = $student->id;
         $data['parent'] = 0;
+        $data['confirm'] = 0;
+        $data['status'] = 0;
         if(Report::create($data)){
             return redirect()->back()->with('success','Thêm sinh viên nhóm đồ án thành công');
         }else{

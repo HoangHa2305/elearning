@@ -54,11 +54,11 @@
                                 <form action="" method="POST">
                                 <div class="layout-first">
                                     <label>Vui lòng nhập mật khẩu mới</label>
-                                    <input name="password" id="input" class="form-control"/>
+                                    <input name="password" type="password" id="input" class="form-control"/>
                                 </div>
                                 <div class="layout">
                                     <label>Nhập lại mật khẩu mới</label>
-                                    <input name="confirm_password" id="input" class="form-control"/>
+                                    <input name="confirm_password" type="password" id="input" class="form-control"/>
                                 </div>
                                 <div class="layout-submit">
                                     <button type="submit" class="wm-register">Xác minh</button>
@@ -156,7 +156,7 @@
 				cursor: pointer;
 			}
 			.wm-register{
-				background-color: #26B99A;
+				background-color: #4FA0AB;
 				color: #fff;
 				padding-left: 15px;
 				padding-top: 6px;

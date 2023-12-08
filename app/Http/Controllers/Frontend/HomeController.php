@@ -41,57 +41,61 @@ class HomeController extends Controller
         $type = $request->type;
         $email = $request->email;
 
-        if($type==1){
-            $student = Student::where('email',$email)->first();
-            if($student){
-                $code = substr($student->id*1000000+time(),-6);
-                $data = [
-                    'subject' => 'Đặt lại mật khẩu',
-                    'body' => 'Mã đặt lại mật khẩu của bạn là:',
-                    'code' => $code
-                ];
-                try{
-                    Mail::to($email)->send(new MailNotify($data));
+        if($email==""){
+            return response()->json(['errors'=>'Email không được bỏ trống']);
+        }else{
+            if($type==1){
+                $student = Student::where('email',$email)->first();
+                if($student){
+                    $code = substr($student->id*1000000+time(),-6);
+                    $data = [
+                        'subject' => 'Đặt lại mật khẩu',
+                        'body' => 'Mã đặt lại mật khẩu của bạn là:',
+                        'code' => $code
+                    ];
+                    try{
+                        Mail::to($email)->send(new MailNotify($data));
 
-                    $forgot = new ForgotPassword();
-                    $forgot->email = $email;
-                    $forgot->code = $code;
-                    $forgot->save();
+                        $forgot = new ForgotPassword();
+                        $forgot->email = $email;
+                        $forgot->code = $code;
+                        $forgot->save();
 
-                    session()->put('email',$email);
-                    session()->put('type',$type);
-                    return response()->json(['status'=>200]);
-                }catch(Exception $th){
-                    return response()->json(['errors'=>404]);
+                        session()->put('email',$email);
+                        session()->put('type',$type);
+                        return response()->json(['status'=>200]);
+                    }catch(Exception $th){
+                        return response()->json(['errors'=>404]);
+                    }
+                }else{
+                    return response()->json(['errors'=>'Email không tồn tại']);
                 }
-            }else{
-                return response()->json(['errors'=>'Email không tồn tại']);
-            }
-        }elseif($type==2){
-            $teacher = Teacher::where('email',$email)->first();
-            if($teacher){
-                $code = substr($teacher->id*1000000+time(),-6);
-                $data = [
-                    'subject' => 'Đặt lại mật khẩu',
-                    'body' => 'Mã đặt lại mật khẩu của bạn là:',
-                    'code' => $code
-                ];
-                try{
-                    Mail::to($email)->send(new MailNotify($data));
+            }elseif($type==2){
+                $teacher = Teacher::where('email',$email)->first();
+                if($teacher){
+                    $code = substr($teacher->id*1000000+time(),-6);
+                    $data = [
+                        'subject' => 'Đặt lại mật khẩu',
+                        'body' => 'Mã đặt lại mật khẩu của bạn là:',
+                        'code' => $code
+                    ];
+                    try{
+                        Mail::to($email)->send(new MailNotify($data));
 
-                    $forgot = new ForgotPassword();
-                    $forgot->email = $email;
-                    $forgot->code = $code;
-                    $forgot->save();
+                        $forgot = new ForgotPassword();
+                        $forgot->email = $email;
+                        $forgot->code = $code;
+                        $forgot->save();
 
-                    session()->put('email',$email);
-                    session()->put('type',$type);
-                    return response()->json(['status'=>200]);
-                }catch(Exception $th){
-                    return response()->json(['errors'=>404]);
+                        session()->put('email',$email);
+                        session()->put('type',$type);
+                        return response()->json(['status'=>200]);
+                    }catch(Exception $th){
+                        return response()->json(['errors'=>404]);
+                    }
+                }else{
+                    return response()->json(['errors'=>'Email không tồn tại']);
                 }
-            }else{
-                return response()->json(['errors'=>'Email không tồn tại']);
             }
         }
     }

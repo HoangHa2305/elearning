@@ -43,9 +43,11 @@
 										<th>Quản lý lớp</th>
 									</thead>
 									<tbody>
+										@php $i = 0; @endphp
                                         @foreach($sections as $section)
+										@php $i++; @endphp
                                         <tr>
-                                            <td></td>
+                                            <td>{{$i}}</td>
                                             <td>{{$section->name}}</td>
 											<td></td>
 											<td></td>

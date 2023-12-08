@@ -127,7 +127,7 @@
                                     </li>
                                     <li><a href="#" id="title">Lớp đồ án</a>
                                         <ul class="wm-dropdown-menu">
-                                            <li><a href="{{URL('#')}}" id="title">Quản lý đồ án</a></li>
+                                            <li><a href="{{URL('gv/quan-ly-do-an')}}" id="title">Quản lý đồ án</a></li>
                                         </ul>
                                     </li>
                                     @endif

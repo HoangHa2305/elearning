@@ -95,7 +95,7 @@
 												@if(isset($parents))
 												@foreach($parents as $parent)
 												@if($parent->id_parent == $report->id)
-												<p class="text">{{$parent->student->name}} (20IT414)</p>
+												<p class="text">{{$parent->student->name}} ({{$parent->student->code}})</p>
 												@endif
 												@endforeach
 												@endif
@@ -163,10 +163,12 @@
 										@foreach($parents as $parent)
 										@if($parent->id == $report->id_parent)
 										<td class="row-title">
+											@if($report->topic!=null)
 											<a class="text" href="{{URL('dowload/topic/'.$parent->topic)}}" target="_blank">
-													Xem lại đề cương chi tiết
-												</a>
-											</td>
+												Xem lại đề cương chi tiết
+											</a>
+											@endif
+										</td>
 										@endif
 										@endforeach
 										@endif

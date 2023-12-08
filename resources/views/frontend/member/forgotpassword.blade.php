@@ -119,7 +119,7 @@
 				cursor: pointer;
 			}
 			.wm-register{
-				background-color: #26B99A;
+				background-color: #4FA0AB;
 				color: #fff;
 				padding-left: 15px;
 				padding-top: 6px;
@@ -198,12 +198,12 @@
 										+"<span id='countdown'>Mã OTP sẽ hết hạn sau: "+time+"</span>"
 										+"<span class='close-btn'>&times;</span>"
 										+"<div class='pin-container'>"
-											+"<input type='text' class='pin-input' maxlength='1' tabindex='1' />"
-											+"<input type='text' class='pin-input' maxlength='1' tabindex='2' />"
-											+"<input type='text' class='pin-input' maxlength='1' tabindex='3' />"
-											+"<input type='text' class='pin-input' maxlength='1' tabindex='4' />"
-											+"<input type='text' class='pin-input' maxlength='1' tabindex='5' />"
-											+"<input type='text' class='pin-input' maxlength='1' tabindex='6' />"
+											+"<input type='number' class='pin-input' maxlength='1' tabindex='1' />"
+											+"<input type='number' class='pin-input' maxlength='1' tabindex='2' />"
+											+"<input type='number' class='pin-input' maxlength='1' tabindex='3' />"
+											+"<input type='number' class='pin-input' maxlength='1' tabindex='4' />"
+											+"<input type='number' class='pin-input' maxlength='1' tabindex='5' />"
+											+"<input type='number' class='pin-input' maxlength='1' tabindex='6' />"
 										+"</div>"
 										+"<div class='note'>"
 											+"<p>Bạn chưa nhận được mã? <a class='resend'>Gửi lại</a></p>"
@@ -290,7 +290,8 @@
 									});
 								});
 							}else{
-								$(".valid").append("<p class='error'>Địa chỉ email không tồn tại</p>");
+								$(".valid").empty();
+								$(".valid").append("<p class='error'>"+response.errors+"</p>");
 							}
 						}
 					});

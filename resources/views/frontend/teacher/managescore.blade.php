@@ -117,27 +117,7 @@
 										@csrf
 										</form>
 									</tbody>
-								</table>	
-								<div class="container" id="box">
-									<div class="statistics">
-										
-									</div>
-									<div class="flex">
-										<div>
-											<p>Thống kê tình hình lớp hôm nay</p>
-										</div>
-										<div class="absent">
-											<div>
-												<p class="wm-register" style="width: 150px;">Có mặt : 0</p>
-												<p class="vm-primary" style="width: 150px;">Vắng phép :</p>
-											</div>
-											<div id="p">
-												<p class="vm-danger" style="width: 150px;">Vắng :</p>
-												<p class="wm-cancel" style="width: 150px;">Đi trễ : </p>
-											</div>
-										</div>
-									</div>
-								</div>							
+								</table>							
 						</div>
 					</div>
 				</div>

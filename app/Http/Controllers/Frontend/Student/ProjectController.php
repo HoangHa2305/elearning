@@ -109,7 +109,7 @@ class ProjectController extends Controller
             if(isset($file)){
                 $file->storeAs('documents',$file_name,'public');
             }
-            return redirect()->back()->with('success','Nộp đề cương thành công');
+            return redirect('sv/do-an-cua-toi');
         }else{
             return redirect()->back()->withErrors('Nộp đề cương thất bại');
         }
