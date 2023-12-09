@@ -46,12 +46,18 @@
 										<th>Điểm chữ</th>
 									</thead>
 									<tbody>
-										@php $i = 0; @endphp
+										@php 
+                                            $i = 0; 
+                                            $active = 1;
+                                        @endphp
                                         @foreach($projects as $project)
                                         @php 
                                             $i++; 
                                             $diligence_score = 0;
                                             $final_score = 0;
+                                            if($project->active==0){
+                                                $active = 0;
+                                            }
                                             if(!empty($project->diligence_score)){
                                                 $diligence_score = $project->diligence_score;
                                             }
@@ -66,10 +72,10 @@
                                             <td>{{$project->name}}</td>
                                             <td>{{$project->class}}</td>
                                             <td>
-                                                <input type="number" value="{{$project->diligence_score}}" id="input" class="diligence"/>
+                                                <input type="number" value="{{$project->diligence_score}}" {{$project->active==1 ? 'readonly':''}} id="input" class="diligence"/>
                                             </td>
                                             <td>
-                                                <input type="number" value="{{$project->final_score}}" id="input" class="final"/>
+                                                <input type="number" value="{{$project->final_score}}" {{$project->active==1 ? 'readonly':''}} id="input" class="final"/>
                                             </td>
                                             <td>
                                                 <input type="number" value="{{$total_score}}" id="input" class="total" readonly/>
@@ -92,13 +98,17 @@
                                         @endforeach
 										<tr>
 											<td colspan="10">
-                                                <form action="#" method="POST">
-                                                    <input type="hidden" name="section_id" value=""/>
+                                                @if($active==1)
+                                                <span>Giảng viên đã xác nhận điểm nên không được thay đổi, vui lòng liên hệ bộ phận kĩ thuật nếu có sai sót</span>
+                                                @else
+                                                <form action="{{URL('gv/quan-ly-do-an/xac-nhan-diem')}}" method="POST">
+                                                    <input type="hidden" name="group_id" value="{{$group->id}}"/>
                                                     <button type="submit" class="wm-register">Xác nhận</button>
+                                                    @csrf
                                                 </form>
+                                                @endif
 											</td>
 										</tr>
-										@csrf
 									</tbody>
 								</table>							
 						</div>

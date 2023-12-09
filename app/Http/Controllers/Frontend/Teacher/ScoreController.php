@@ -38,67 +38,65 @@ class ScoreController extends Controller
         return view('frontend.teacher.managescore',compact('section','items','absent'));
     }
 
-    public function postScore(Request $request)
+    public function importScore(Request $request)
     {
+        $semester_id = session('semester_id');
+
+        $student_id = $request->student_id;
         $section_id = $request->section_id;
-        $attendance_score = $request->attendance_score;
         $homework_score = $request->homework_score;
         $midterm_score = $request->midterm_score;
         $final_score = $request->final_score;
+        $attendance_score = $request->attendance_score;
+        $total_score = $request->total_score;
+
+        $score = Score::where('id_student',$student_id)
+                        ->where('id_section',$section_id)
+                        ->where('id_semester',$semester_id)
+                        ->first();
         if($attendance_score){
-            foreach($attendance_score as $attendance){
-                $attendance = explode('-',$attendance);
-                $score = Score::where('id_student',$attendance[0])->where('id_section',$section_id)->first();
-                $score->diligence_score = $attendance[1];
-                $score->save();
-            }
+            $score->diligence_score = $attendance_score;
         }
         if($homework_score){
-            foreach($homework_score as $homework){
-                $homework = explode('-',$homework);
-                $score = Score::where('id_student',$homework[0])->where('id_section',$section_id)->first();
-                $score->homework_score = $homework[1];
-                $score->save();             
-            }
+            $score->homework_score = $homework_score;
         }
         if($midterm_score){
-            foreach($midterm_score as $midterm){
-                $midterm = explode('-',$midterm);
-                $score = Score::where('id_student',$midterm[0])->where('id_section',$section_id)->first();
-                $score->midterm_score = $midterm[1];
-                $score->save();
-            }
+            $score->midterm_score = $midterm_score;
         }
         if($final_score){
-            foreach($final_score as $final){
-                $final = explode('-',$final);
-                $score = Score::where('id_student',$final[0])->where('id_section',$section_id)->first();
-                $score->final_score = $final[1];
-                $score->save();
-            }
+            $score->final_score = $final_score;
         }
-        if($attendance_score && $homework_score && $midterm_score && $final_score){
-            foreach($attendance_score as $attendance){
-                $attendance = explode('-',$attendance);
-                $score = Score::where('id_student',$attendance[0])->where('id_section',$section_id)->first();
-                $total_score = $score->attendance_score * 1 + $score->homework_score * 2 + $score->midterm_score * 2 + $score->final_score * 5;
-                $sum_t10_score = $total_score/10;
-                $score->sum_t10_score = $sum_t10_score;
-                if($sum_t10_score > 8.5){
-                    $score->sum_t10_score = 4;
-                }elseif($sum_t10_score >= 7 && $sum_t10_score <= 8.4){
-                    $score->sum_t10_score = 3;
-                }elseif($sum_t10_score >= 5.5 && $sum_t10_score <= 6.9){
-                    $score->sum_t10_score = 2;
-                }elseif($sum_t10_score >= 4 && $sum_t10_score <= 5.4){
-                    $score->sum_t10_score = 1;
-                }else{
-                    $score->sum_t10_score = 0;
-                }
-                $score->active = 1;
-                $score->save();
-            }
+        if($total_score){
+            if($total_score >= 8.5){
+                $sum_t4_score = 4;
+            }elseif($total_score >= 7 && $total_score <= 8.4){
+                $sum_t4_score = 3;
+            }elseif($total_score >= 5.5 && $total_score <= 6.9){
+                $sum_t4_score = 2;
+            }elseif($total_score >= 4 && $total_score <= 5.4){
+                $sum_t4_score = 1;
+            }else{
+                $sum_t4_score = 0;
+            }		
+            $score->sum_t10_score = $total_score;
+            $score->sum_t4_score = $sum_t4_score;
         }
+        $score->save();
+    }
+
+    public function postScore(Request $request)
+    {
+        $semester_id = session('semester_id');
+        $section_id = $request->section_id;
+
+        $scores = Score::where('id_section',$section_id)->where('id_semester',$semester_id)->get();
+
+        foreach($scores as $score){
+            $result = Score::findOrFail($score->id);
+            $result->active = 1;
+            $result->save();
+        }
+        
         return redirect()->back();
     }
 }

@@ -96,8 +96,8 @@ class ProjectController extends Controller
                             'class.code AS class',
                             'type_project.id AS type_id',
                             'score.diligence_score AS diligence_score',
-                            'score.final_score AS final_score'
-                            )
+                            'score.final_score AS final_score',
+                            'score.active AS active')
                     ->where('score.id_type','!=',null)
                     ->where('group_project.id',$id)
                     ->get();
@@ -139,5 +139,27 @@ class ProjectController extends Controller
             $score->sum_t4_score = $sum_t4_score;
         }
         $score->save();
+    }
+
+    public function confirmScore(Request $request)
+    {
+        $semester_id = session('semester_id');
+
+        $id = $request->group_id;
+        $projects = GroupProject::join('type_project','group_project.id_type','=','type_project.id')
+                    ->join('score','type_project.id','=','score.id_type')
+                    ->select('score.id AS id',
+                            'score.active AS active')
+                    ->where('score.id_type','!=',null)
+                    ->where('group_project.id',$id)
+                    ->where('score.id_semester',$semester_id)
+                    ->get();
+        foreach($projects as $project){
+            $score = Score::findOrFail($project->id);
+            $score->active = 1;
+            $score->save();
+        }
+
+        return redirect()->back();
     }
 }
