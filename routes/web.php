@@ -189,11 +189,13 @@ Route::prefix('gv')->group(function(){
     Route::get('ghi-chu/{id}',[FrontendTeacherController::class,'getNotes']); //Ajax
     Route::get('quan-ly-diem',[ScoreController::class,'showListScore']);
     Route::get('quan-ly-diem/{id}',[ScoreController::class,'manageScore']);
+    Route::post('quan-ly-diem/nhap-diem',[ScoreController::class,'importScore']); //Ajax
     Route::post('quan-ly-diem/xac-nhan',[ScoreController::class,'postScore']);
     Route::get('quan-ly-do-an',[TeacherProjectController::class,'showManageProject']);
     Route::get('quan-ly-do-an/bao-cao/{id}',[TeacherProjectController::class,'manageReport']);
     Route::get('quan-ly-do-an/diem/{id}',[TeacherProjectController::class,'manageProjectScore']);
     Route::post('quan-ly-do-an/diem',[TeacherProjectController::class,'postScoreProject']); //Ajax
+    Route::post('quan-ly-do-an/xac-nhan-diem',[TeacherProjectController::class,'confirmScore']);
     Route::get('chi-tiet-bao-cao/{id}',[TeacherProjectController::class,'detailReport']);
     Route::post('xac-nhan-de-cuong',[TeacherProjectController::class,'confirmTopic']); //Ajax
     Route::post('xac-nhan-bao-cao',[TeacherProjectController::class,'confirmReport']); //Ajax

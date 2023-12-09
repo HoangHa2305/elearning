@@ -48,8 +48,10 @@
 										<th>Điểm chữ</th>
 									</thead>
 									<tbody>
-										<form action="{{URL('gv/quan-ly-diem/xac-nhan')}}" method="POST">
-										@php $i = 0; @endphp
+										@php 
+											$i = 0; 
+											$active = 1;
+										@endphp
 										@foreach($items as $item)
 										@php $i++; @endphp
                                         <tr id="{{$item->student->id}}">
@@ -59,6 +61,9 @@
 											<td>{{$item->student->activity_class->code}}</td>
                                             <td>
 												@php 
+													$midterm_score = 0;
+													$final_score = 0;
+													$total_score = 0;
 													$attendance_score = 10;
 													$counts = array_count_values($absent);
 													if(isset($counts[$item->student->id])){
@@ -67,33 +72,42 @@
 														$count = 0;
 													}
 													$attendance_score -= $count;
-													$homework_score = $item->homework_score;
-													$midterm_score = $item->midterm_score;
-													$final_score = $item->final_score;
-													$total_score = 0;
-													if(isset($attendance_score) && isset($homework_score) && isset($midterm_score) && isset($final_score)){
-														$total_score = ($attendance_score + $homework_score + $midterm_score * 3 + $final_score * 5)/10;
+													
+													if($item->active == 0){
+														$active = 0;
 													}
+													if(!empty($item->homework_score)){
+														$homework_score = $item->homework_score;
+													}
+													if(!empty($item->midterm_score)){
+														$midterm_score = $item->midterm_score;
+													}
+													if(!empty($item->final_score)){
+														$final_score = $item->final_score;
+													}
+													if(!empty($item->homework_score)){
+														$total_score = ($attendance_score + $homework_score * 2 + $midterm_score * 2 + $final_score * 5)/10;
+													}else{
+														$total_score = ($attendance_score * 2 + $midterm_score * 2 + $final_score * 6)/10;
+													}
+													$total_score = str_replace(',','.',number_format($total_score,1,'.',''));
+													$total_score = ($total_score - floor($total_score) > 0 ? $total_score : floor($total_score));
 												@endphp
-												<input type="text" value="{{$attendance_score}}" id="input" readonly/>
-												<input type="hidden" name="attendance_score[]" value="{{$item->id_student}} - {{$attendance_score}}"/>
+												<input type="number" value="{{$attendance_score}}" class="attendance" id="input" readonly/>
 											</td>
 											<td>
-												<input type="text" value="{{$homework_score}}" id="input" class="homework"/>
-												<input type="hidden" name="homework_score[]" class="homework_score" value="{{$item->id_student}} - {{$homework_score}}"/>
+												<input type="number" value="{{!empty($item->homework_score) ? $item->homework_score : '' }}" id="input" class="homework"/>
 											</td>
 											<td>
-												<input type="text" value="{{$midterm_score}}" id="input" class="midterm"/>
-												<input type="hidden" name="midterm_score[]" class="midterm_score" value="{{$item->id_student}} - {{$midterm_score}}"/>
+												<input type="number" value="{{!empty($item->midterm_score) ? $item->midterm_score : '' }}" id="input" class="midterm"/>
 											</td>
 											<td>
-												<input type="text" value="{{$final_score}}" id="input" class="final"/>
-												<input type="hidden" name="final_score[]" class="final_score" value="{{$item->id_student}} - {{$final_score}}"/>
+												<input type="number" value="{{!empty($item->final_score) ? $item->final_score : '' }}" id="input" class="final"/>
 											</td>
 											<td>
-												<input type="text" value="{{$total_score > 0 ? $total_score : ''}}" id="input" readonly/>
+												<input type="text" value="{{$total_score}}" class="total" id="input" readonly/>
 											</td>
-											<td>
+											<td class="keyword">
 												@if($total_score >= 8.5)
 												<b class="success_score">A</b>
 												@elseif($total_score >= 7 && $total_score <= 8.4)
@@ -110,12 +124,17 @@
 										@endforeach
 										<tr>
 											<td colspan="10">
-												<input type="hidden" name="section_id" value="{{$section->id}}"/>
-												<button type="submit" class="wm-register">Xác nhận</button>
+												@if($active==1)
+													<span>Giảng viên đã xác nhận điểm nên không được thay đổi, vui lòng liên hệ bộ phận kĩ thuật nếu có sai sót</span>
+												@else
+												<form action="{{URL('gv/quan-ly-diem/xac-nhan')}}" method="POST">
+													<input type="hidden" name="section_id" class="section_id" value="{{$section->id}}"/>
+													<button type="submit" class="wm-register">Xác nhận</button>
+													@csrf
+												</form>
+												@endif
 											</td>
 										</tr>
-										@csrf
-										</form>
 									</tbody>
 								</table>							
 						</div>
@@ -296,21 +315,119 @@
                     } 
                 });
 				$(".homework").change(function(){
-					var val = $(this).val();
-					var id = $(this).closest("tr").attr("id");
-					$(this).closest("td").find('.homework_score').attr("name","homework_score[]").val(id+" - "+val);
+					var homework_score = $(this).val();
+					var student_id = $(this).closest("tr").attr("id");
+					var section_id = $(".section_id").val();
+					var attendance_score = $(this).closest("tr").find(".attendance").val();
+					var midterm_score = $(this).closest("tr").find(".midterm").val();
+					var final_score = $(this).closest("tr").find(".final").val();
+
+					if($.trim(midterm_score)===''){
+                        midterm_score = 0;
+                    }
+					if($.trim(final_score)===''){
+                        final_score = 0;
+                    }			
+					var total = (parseFloat(attendance_score) + parseFloat(homework_score) * 2 + parseFloat(midterm_score) * 2 + parseFloat(final_score) * 5)/10;	
+						
+					$(this).closest("tr").find(".total").val(total);
+					if(total >= 8.5){
+                        $(this).closest("tr").find(".keyword").html("<b class='success_score'>A</b>");
+                    }else if(total >= 7 && total <= 8.4){
+                        $(this).closest("tr").find(".keyword").html("<b class='primary_score'>B</b>");
+                    }else if(total >= 5.5 && total <= 6.9){
+                        $(this).closest("tr").find(".keyword").html("<b class='basic_score'>C</b>");
+                    }else if(total >= 4 && total <= 5.4){
+                        $(this).closest("tr").find(".keyword").html("<b class='warning_score'>D</b>");
+                    }else{
+                        $(this).closest("tr").find(".keyword").html("<b class='danger_score'>F</b>");
+                    }
+					$.ajax({
+						url:"{{URL('gv/quan-ly-diem/nhap-diem')}}",
+						type:"POST",
+						data:{
+							student_id:student_id,
+							section_id:section_id,
+							homework_score:homework_score
+						}
+					});
 				});
 
 				$(".midterm").change(function(){
-					var val = $(this).val();
-					var id = $(this).closest("tr").attr("id");
-					$(this).closest("td").find('.midterm_score').attr("name","midterm_score[]").val(id+" - "+val);
+					var midterm_score = $(this).val();
+					var student_id = $(this).closest("tr").attr("id");
+					var section_id = $(".section_id").val();
+					var attendance_score = $(this).closest("tr").find(".attendance").val();
+					var homework_score = $(this).closest("tr").find(".homework").val();
+					var final_score = $(this).closest("tr").find(".final").val();
+
+					if($.trim(final_score)===''){
+                        final_score = 0;
+                    }	
+					if($.trim(homework_score)===''){
+						var total = (parseFloat(attendance_score) * 2 + parseFloat(midterm_score) * 2 + parseFloat(final_score) * 6)/10;
+					}else{
+						var total = (parseFloat(attendance_score) + parseFloat(homework_score) * 2 + parseFloat(midterm_score) * 2 + parseFloat(final_score) * 5)/10;
+					}
+					$(this).closest("tr").find(".total").val(total);
+					if(total >= 8.5){
+                        $(this).closest("tr").find(".keyword").html("<b class='success_score'>A</b>");
+                    }else if(total >= 7 && total <= 8.4){
+                        $(this).closest("tr").find(".keyword").html("<b class='primary_score'>B</b>");
+                    }else if(total >= 5.5 && total <= 6.9){
+                        $(this).closest("tr").find(".keyword").html("<b class='basic_score'>C</b>");
+                    }else if(total >= 4 && total <= 5.4){
+                        $(this).closest("tr").find(".keyword").html("<b class='warning_score'>D</b>");
+                    }else{
+                        $(this).closest("tr").find(".keyword").html("<b class='danger_score'>F</b>");
+                    }
+					$.ajax({
+						url:"{{URL('gv/quan-ly-diem/nhap-diem')}}",
+						type:"POST",
+						data:{
+							student_id:student_id,
+							section_id:section_id,
+							midterm_score:midterm_score
+						}
+					});
 				});
 
 				$(".final").change(function(){
-					var val = $(this).val();
-					var id = $(this).closest("tr").attr("id");
-					$(this).closest("td").find('.final_score').attr("name","final_score[]").val(id+" - "+val);
+					var final_score = $(this).val();
+					var student_id = $(this).closest("tr").attr("id");
+					var section_id = $(".section_id").val();
+					var attendance_score = $(this).closest("tr").find(".attendance").val();
+					var midterm_score = $(this).closest("tr").find(".midterm").val();
+					var homework_score = $(this).closest("tr").find(".homework").val();
+
+					if($.trim(homework_score)===''){
+						var total = (parseFloat(attendance_score) * 2 + parseFloat(midterm_score) * 2 + parseFloat(final_score) * 6)/10;
+					}else{
+						var total = (parseFloat(attendance_score) + parseFloat(homework_score) * 2 + parseFloat(midterm_score) * 2 + parseFloat(final_score) * 5)/10;
+					}
+					$(this).closest("tr").find(".total").val(total);
+					if(total >= 8.5){
+                        $(this).closest("tr").find(".keyword").html("<b class='success_score'>A</b>");
+                    }else if(total >= 7 && total <= 8.4){
+                        $(this).closest("tr").find(".keyword").html("<b class='primary_score'>B</b>");
+                    }else if(total >= 5.5 && total <= 6.9){
+                        $(this).closest("tr").find(".keyword").html("<b class='basic_score'>C</b>");
+                    }else if(total >= 4 && total <= 5.4){
+                        $(this).closest("tr").find(".keyword").html("<b class='warning_score'>D</b>");
+                    }else{
+                        $(this).closest("tr").find(".keyword").html("<b class='danger_score'>F</b>");
+                    }
+					$.ajax({
+						url:"{{URL('gv/quan-ly-diem/nhap-diem')}}",
+						type:"POST",
+						data:{
+							student_id:student_id,
+							section_id:section_id,
+							attendance_score:attendance_score,
+							final_score:final_score,
+							total_score:total
+						}
+					});
 				});
 			});
 		</script>
