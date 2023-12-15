@@ -47,8 +47,8 @@
                                         <tr>
                                             <td></td>
                                             <td>{{$section->name}}</td>
-											<td></td>
-											<td></td>
+											<td>Hai / 1->2</td>
+											<td><b>Còn 5 buổi</b></td>
 											<td>
 												<a href="{{URL('gv/diem-danh/'.$section->id.'')}}" class="wm-register">Lịch trình</a>
 												<a href="#" class="btn">Gửi mail</a>

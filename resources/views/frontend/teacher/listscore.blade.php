@@ -49,8 +49,8 @@
                                         <tr>
                                             <td>{{$i}}</td>
                                             <td>{{$section->name}}</td>
-											<td></td>
-											<td></td>
+											<td>Hai / 1->2</td>
+											<td><b>Lớp đã kết thúc</b></td>
 											<td>
 												<a href="{{URL('gv/quan-ly-diem/'.$section->id.'')}}" class="wm-register">Quản lí điểm</a>
 											</td>

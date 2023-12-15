@@ -95,7 +95,9 @@
                                 </div>
                                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
                                   <ul class="nav navbar-nav">
+                                    @if(isset($student) || isset($teacher))
                                     <li class="active"><a href="{{route('index')}}" id="title">Trang chủ</a></li>
+                                    @endif
                                     @if(isset($student))
                                     <li><a href="#" id="title">Sinh viên</a>
                                         <ul class="wm-dropdown-menu">

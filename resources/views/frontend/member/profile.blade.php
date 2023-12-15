@@ -31,11 +31,11 @@
 					<div class="row">
 						<aside class="col-md-4">
 							<div class="wm-student-dashboard-nav">
-								<div class="wm-student-nav">
+								<div class="wm-student-nav" id="wm-student-nav">
 									<figure>
 										<a href="#"><img src="{{asset('uploads/student/'.$student->avatar.'')}}" alt="" id="avatar"></a>
 									</figure>
-									<div class="wm-student-nav-text">
+									<div class="wm-student-nav-text" id="wm-student-nav-text">
 										<h6>{{$student->name}}</h6>
 										<p>MSV {{$student->code}}</p>
                                         <p>Lớp {{$student->activity_class->code}}</p>
@@ -134,6 +134,9 @@
 		</div>
 		<!--// Main Content \\-->
         <style>
+			#wm-student-nav{
+				background-color: #F5FBFD;
+			}
             #avatar{
                 height: 120px;
                 border-radius: 50%;

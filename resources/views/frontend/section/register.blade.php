@@ -32,7 +32,7 @@
 						<div class="col-md-12">
 							<div class="wm-student-dashboard-statement wm-dashboard-statement">
 								<div class="wm-plane-title">
-									<h4>B1. Chọn đăng ký các lớp học phần theo nhóm</h4>							
+									<h4 id="title-h4">B1. Chọn đăng ký các lớp học phần theo nhóm</h4>							
 								</div>
 								<div class="wm-article">
 									<ul>
@@ -49,7 +49,7 @@
 							</div>	
 							<div class="wm-student-dashboard-statement wm-dashboard-statement">
 								<div class="wm-plane-title">
-									<h4>B2. Chọn đăng ký các học phần chọn riêng lẻ</h4>							
+									<h4 id="title-h4">B2. Chọn đăng ký các học phần chọn riêng lẻ</h4>							
 								</div>
 								<div class="wm-article">
 									<table class="wm-article">
@@ -96,7 +96,7 @@
 								</div>
 							</div>	
 							<div class="wm-plane-title">
-								<h4>Các lớp học phần đã đăng ký thành công</h4>							
+								<h4 id="title-h4">Các lớp học phần đã đăng ký thành công</h4>							
 							</div>
 							<div class="wm-student-dashboard-statement wm-dashboard-statement">
 								<table class="wm-article">
@@ -162,6 +162,10 @@
 		</div>
 		<!--// Main Content \\-->
 		<style>
+			#title-h4{
+				font-family: 'Inter', sans-serif;
+				color: #73879C;
+			}
 			.custom-alert {
 				display: none;
 				position: fixed;

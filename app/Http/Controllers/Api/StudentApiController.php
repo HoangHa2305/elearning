@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
+use App\Models\Attendance;
 use App\Models\ForgotPassword;
 use App\Models\Score;
 use App\Models\Section;
 use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
+use App\Models\Typeproject;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -163,6 +165,7 @@ class StudentApiController extends Controller
         ->where('score.id_student',$id)
         ->where('score.id_semester',$semester->id)
         ->select('section.name AS name',
+            'section.id AS section_id',
             'score.id AS id',
             'teacher.name AS teacher',
             'section.room AS room',
@@ -200,6 +203,8 @@ class StudentApiController extends Controller
                 $formatDay[] = 'Chủ nhật / '.implode('->',json_decode($today->sunday));
             }
             $result = [
+                'id' => $today->id,
+                'section_id' => $today->section_id,
                 'name' => $today->name,
                 'teacher' => $today->teacher,
                 'week' => $today->week,
@@ -250,5 +255,159 @@ class StudentApiController extends Controller
         $item['full'] = $total_score;
 
         return response()->json(['score' => $item]);
+    }
+
+    public function getProjectClass(Request $request)
+    {
+        $student_id = $request->student_id;
+        $semester_id = $request->semester_id;
+        $project = Score::join('type_project','score.id_type','=','type_project.id')
+                    ->select('type_project.title AS title',
+                             'type_project.id AS id')
+                    ->where('score.id_student',$student_id)
+                    ->where('score.id_semester',$semester_id)
+                    ->get();
+
+        return response()->json(['project' => $project]);
+    }
+
+    public function detailProject(Request $request)
+    {
+        $student_id = $request->id_student;
+        $semester_id = $request->id_semester;
+        $type_id = $request->id;
+
+        $data = [];
+        $projects = Typeproject::join('group_project','group_project.id_type','=','type_project.id')
+                    ->join('reports','reports.id_group','=','group_project.id')
+                    ->join('teacher','group_project.id_teacher','=','teacher.id')
+                    ->select('reports.title AS title',
+                            'group_project.title AS group_title',
+                            'teacher.level AS level',
+                            'teacher.name AS name',
+                            'teacher.phone AS phone',
+                            'teacher.email AS email',
+                            'type_project.date_start AS date_start',
+                            'type_project.time_start AS time_start',
+                            'type_project.date_end AS date_end',
+                            'type_project.time_end AS time_end')
+                    ->where('reports.id_student',$student_id)
+                    ->where('type_project.id_semester',$semester_id)
+                    ->where('type_project.id',$type_id)
+                    ->get();
+        foreach($projects as $project){
+            $data['title'] = $project->group_title;
+            $data['topic'] = $project->title;
+            if($project->level=='Tiến sĩ'){
+                $data['name'] = 'TS. '.$project->name;
+            }elseif($project->level=='Thạc sĩ'){
+                $data['name'] = 'ThS. '.$project->name;
+            }
+            $data['phone'] = $project->phone;
+            $data['email'] = $project->email;
+            $data['start'] = $project->date_start.' '.$project->time_start;
+            $data['end'] = $project->date_end.' '.$project->time_end;
+        }
+
+        return response()->json(['project' => $data]);
+    }
+
+    public function detailSubject(string $id)
+    {
+        $data = [];
+
+        $sections = Section::join('teacher','section.id_teacher','=','teacher.id')
+                    ->select('section.name AS title',
+                            'teacher.level AS level',
+                            'teacher.name AS name',
+                            'section.week AS week',
+                            'section.room AS room',
+                            'section.monday AS monday',
+                            'section.tuesday AS tuesday',
+                            'section.wednesday AS wednesday',
+                            'section.thursday AS thursday',
+                            'section.friday AS friday',
+                            'section.saturday AS saturday',
+                            'section.sunday AS sunday')
+                    ->where('section.id',$id)
+                    ->get();
+        foreach($sections as $section){
+            $data['title'] = $section->title; 
+            $data['week'] = $section->week;
+            $data['room'] = $section->room;
+            if($section->level=='Tiến sĩ'){
+                $data['name'] = 'TS. '.$section->name;
+            }elseif($section->level=='Thạc sĩ'){
+                $data['name'] = 'ThS. '.$section->name;
+            }
+            $formatDay = [];
+            $formatTime = [];
+            if(!is_null($section->monday)){
+                $formatDay[] = 'Hai';
+                $formatTime[] = implode(' -> ',json_decode($section->monday));
+            }
+            if(!is_null($section->tuesday)){
+                $formatDay[] = 'Ba';
+                $formatTime[] = implode(' -> ',json_decode($section->tuesday));
+            }
+            if(!is_null($section->wednesday)){
+                $formatDay[] = 'Tư';
+                $formatTime[] = implode(' -> ',json_decode($section->wednesday));
+            }
+            if(!is_null($section->thursday)){
+                $formatDay[] = 'Năm';
+                $formatTime[] = implode(' -> ',json_decode($section->thursday));
+            }
+            if(!is_null($section->friday)){
+                $formatDay[] = 'Sáu';
+                $formatTime[] = implode(' -> ',json_decode($section->friday));
+            }
+            if(!is_null($section->saturday)){
+                $formatDay[] = 'Bảy';
+                $formatTime[] = implode(' -> ',json_decode($section->saturday));
+            }
+            if(!is_null($section->sunday)){
+                $formatDay[] = 'Chủ nhật';
+                $formatTime[] = implode(' -> ',json_decode($section->sunday));
+            }
+
+            $data['date'] = $formatDay;
+            $data['time'] = $formatTime;
+        }
+
+        $attendances = Attendance::where('id_section',$id)->get();
+        foreach($attendances as $attendance){
+            $result['content'] = $attendance->content;
+            $result['time'] = $attendance->time.' '.$attendance->date;
+            $arrays = json_decode($attendance->absent);
+            foreach($arrays as $array){
+                $absent = [];
+                $student = Student::findOrFail($array);
+                $absent[] = $student->name;
+            }
+            $result['absent'] = $absent;
+            $results[] = $result;
+        }
+
+        return response()->json(['section' => $data,'content' => $results]);
+    }
+
+    public function getTution(Request $request)
+    {
+        $student_id = $request->id_student;
+        $semester_id = $request->id_semester;
+
+        $tution = [];
+        $credit = 0;
+
+        $scores = Score::where('id_student',$student_id)->where('id_section','!=',null)->where('id_semester',$semester_id)->get();
+        foreach($scores as $score){
+            $data['name'] = $score->section->name;
+            $data['credit'] = $score->section->subject->credits;
+            $data['session'] = $score->session;
+            $credit += $score->section->subject->credits;
+            $tution[] = $data;
+        }
+        return response()->json(['tution' => $tution,'credit' => $credit]);
     }
 }

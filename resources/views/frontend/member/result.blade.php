@@ -107,37 +107,46 @@
 											@foreach($scores as $score)
 											@if($semester->id == $score->id_semester)
 											@php $i++; @endphp
-											<tr>
-												<td>{{$i}}</td>
-												<td>{{$score->section->subject->name}}</td>
-												<td>{{$score->section->subject->credits}}</td>
-												<td>{{$score->session}}</td>
-												<td>
+											<tr {{($i % 2 != 0) ? "class=tr":''}}>
+												<td id="td">{{$i}}</td>
+												<td id="td-left">{{$score->section->subject->name}}</td>
+												<td id="td">{{$score->section->subject->credits}}</td>
+												<td id="td">{{$score->session}}</td>
+												<td id="td">
 													@if($score->diligence_score)
 													{{$score->diligence_score}}
 													@endif
 												</td>
-												<td>
+												<td id="td">
 													@if($score->homework_score)
 													{{$score->homework_score}}
 													@endif
 												</td>
-												<td>
+												<td id="td">
 													@if($score->midterm_score)
 													{{$score->midterm_score}}
 													@endif
 												</td>
-												<td>
+												@if($score->active == 1)
+												<td colspan="3" id="td">
+													<a href="{{URL('sv/khao-sat/cau-hoi-khao-sat/'.$score->section->id.'')}}">
+														<button class="btn btn-primary">
+															Đánh giá lớp học phần
+														</button>
+													</a>
+												</td>
+												@elseif($score->active == 2)
+												<td id="td">
 													@if($score->final_score)
 													{{$score->final_score}}
 													@endif
 												</td>
-												<td>
+												<td id="td">
 													@if($score->sum_t10_score)
 														{{$score->sum_t10_score}}
 													@endif
 												</td>
-												<td>
+												<td id="td">
 													@if($score->sum_t10_score)
 														@if($score->sum_t10_score >= 8.5)
 														<b class="success_score">A</b>
@@ -152,6 +161,11 @@
 														@endif
 													@endif
 												</td>
+												@else
+												<td id="td"></td>
+												<td id="td"></td>
+												<td id="td"></td>
+												@endif
 											</tr>
 											@endif
 											@endforeach
@@ -159,25 +173,25 @@
 											@foreach($projects as $project)
 											@if($semester->id == $project->id_semester)
 											@php $i++; @endphp
-											<tr>
-												<td>{{$i}}</td>
-												<td>{{$project->title}}</td>
-												<td>{{$project->credits}}</td>
-												<td>{{$project->session}}</td>
-												<td>
+											<tr {{($i % 2 != 0) ? "class=tr":''}}>
+												<td id="td">{{$i}}</td>
+												<td id="td-left">{{$project->title}}</td>
+												<td id="td">{{$project->credits}}</td>
+												<td id="td">{{$project->session}}</td>
+												<td id="td">
 													@if(!empty($project->diligence_score))
 														{{$project->diligence_score}}
 													@endif
 												</td>
-												<td></td>
-												<td></td>
-												<td>
+												<td id="td"></td>
+												<td id="td"></td>
+												<td id="td">
 													@if(!empty($project->diligence_score))
 														{{$project->diligence_score}}
 													@endif
 												</td>
-												<td></td>
-												<td>
+												<td id="td"></td>
+												<td id="td">
 													@if($project->sum_t10_score)
 														@if($project->sum_t10_score >= 8.5)
 														<b class="success_score">A</b>
@@ -215,6 +229,23 @@
 				background-color: #73879C;
 				color: white;
 				font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+			}
+			#td{
+				border-left: none;
+				border-right: none;
+				padding: 10px;
+			}
+			#td-left{
+				border-left: none;
+				border-right: none;
+				padding: 10px;
+				text-align: left;
+			}
+			.tr{
+				background-color: #f9f9f9;
+			}
+			tr.tr:hover{
+				background-color: rgba(38,185,154,.07);
 			}
 			.semester{
 				font-weight: bold;

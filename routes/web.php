@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\YearTrainController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\Student\ProjectController;
 use App\Http\Controllers\Frontend\Student\ScheduleController;
+use App\Http\Controllers\Frontend\Student\SectionController as StudentSectionController;
 use App\Http\Controllers\Frontend\Student\UserController;
 use App\Http\Controllers\Frontend\Teacher\ProjectController as TeacherProjectController;
 use App\Http\Controllers\Frontend\Teacher\ScoreController;
@@ -157,19 +158,20 @@ Route::get('dowload/topic/{name}',[HomeController::class,'dowloadTopic']);
 Route::post('gv/login',[FrontendTeacherController::class,'login'])->name('loginTeacher');
 
 Route::prefix('sv')->group(function(){
-    Route::get('dang-ki-tin-chi',[UserController::class,'showRegistration']);
-    Route::post('dang-ki-tin-chi/mon-hoc',[UserController::class,'getSection']);    //Ajax
-    Route::post('dang-ki-tin-chi',[UserController::class,'postRegistration']);
-    Route::get('dang-ki-tin-chi/mon/{id}',[UserController::class,'registerCredits']);
-    Route::get('dang-ki-tin-chi/huy/mon/{id}',[UserController::class,'destroyCredits']);
-    Route::get('dang-ki-tin-chi/mon/do-an/{id}',[UserController::class,'creditProject']);
-    Route::get('dang-ki-tin-chi/huy/mon/do-an/{id}',[UserController::class,'destroyCreditProject']);
+    Route::get('dang-ki-tin-chi',[StudentSectionController::class,'showRegistration']);
+    Route::post('dang-ki-tin-chi/mon-hoc',[StudentSectionController::class,'getSection']);    //Ajax
+    Route::post('dang-ki-tin-chi',[StudentSectionController::class,'postRegistration']);
+    Route::get('dang-ki-tin-chi/mon/{id}',[StudentSectionController::class,'registerCredits']);
+    Route::get('dang-ki-tin-chi/huy/mon/{id}',[StudentSectionController::class,'destroyCredits']);
+    Route::get('dang-ki-tin-chi/mon/do-an/{id}',[StudentSectionController::class,'creditProject']);
+    Route::get('dang-ki-tin-chi/huy/mon/do-an/{id}',[StudentSectionController::class,'destroyCreditProject']);
     Route::get('hoso',[UserController::class,'showProfile']);
     Route::get('diem',[UserController::class,'showResult']);
+    Route::get('khao-sat/cau-hoi-khao-sat/{id}',[UserController::class,'showRate']);
     Route::get('lich-hoc',[ScheduleController::class,'showSchedule']);
     Route::get('lich-trinh-giang-day/{id}',[ScheduleController::class,'detailSchedule']);
-    Route::get('tkb',[UserController::class,'showCalendar']);
-    Route::get('tkb/tuan/{tuan}',[UserController::class,'nextCalendar']);
+    Route::get('tkb',[ScheduleController::class,'showCalendar']);
+    Route::get('tkb/tuan/{tuan}',[ScheduleController::class,'nextCalendar']);
     Route::get('hoc-phi-sap-nop',[UserController::class,'showTuition']);
     Route::post('thanh-toan-hoc-phi',[UserController::class,'payment_momo']);
     Route::get('thanh-toan-thanh-cong',[UserController::class,'payment_success']);
