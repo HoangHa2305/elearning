@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="wm-student-dashboard-statement wm-dashboard-statement">
-                        <div class="wm-plane-title">
+                        <div class="wm-plane-title" id="wm-plane-title">
                             <h4 id="h4">Thời khóa biểu - Hôm nay là {{$date}} - thuộc tuần học {{$week}}</h4>						
                         </div>
                         <hr>
@@ -130,9 +130,12 @@
     });
 </script>
 <style>
+    #wm-plane-title{
+        background-color: #F5FBFD;
+    }
     #h4{
         font-size: 25px;
-        font-family: 'Times New Roman', Times, serif;
+        font-family: 'Inter', sans-serif;
     }
     .week{
         padding-top: 10px;

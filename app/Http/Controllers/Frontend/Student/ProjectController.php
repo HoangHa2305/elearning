@@ -33,6 +33,7 @@ class ProjectController extends Controller
                         'reports.parent AS parent',
                         'reports.title AS name',
                         'reports.topic AS topic',
+                        'reports.confirm AS confirm',
                         'reports.report AS report',
                         'reports.id_parent AS id_parent'
                         )

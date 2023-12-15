@@ -184,7 +184,7 @@
 											</span>
 											@endif
 											<p>- GVHD xác nhận:</p>
-											@if($report->confirm)
+											@if($report->confirm==1)
 											<span class="badage">Đã Xác nhận</span>
 											@else
 											<span class="danger">
@@ -218,7 +218,7 @@
 											</span>
 											@endif
 											<p>- GVHD xác nhận:</p>
-											@if($parent->confirm)
+											@if($parent->confirm==1)
 											<span class="badage">Đã Xác nhận</span>
 											@else
 											<span class="danger">
