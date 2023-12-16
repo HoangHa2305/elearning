@@ -11,6 +11,7 @@ use App\Models\Section;
 use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
+use App\Models\Teacher;
 use App\Models\Typeproject;
 use Exception;
 use Illuminate\Http\Request;
@@ -24,25 +25,43 @@ class StudentApiController extends Controller
     {
         $email = $request->email;
         $password = $request->password;
+        $role = $request->role;
 
-        $student = Student::where('email',$email)->first();
-        $student['birth'] = date('d/m/Y',strtotime($student->birth));
-        $student['class'] = $student->activity_class->code;
-        $student['branch'] = $student->get_branch->name;
-        if($student->sex == 0){
-            $student['sex'] = "Nam";
-        }else{
-            $student['sex'] = "Nữ";
-        }
         $semester_id = Semester::orderBy('id','desc')->first();
-        if($student && Hash::check($password,$student->password)){
-            return response()->json([
-                'status' => 200,
-                'student' => $student,
-                'semester_id' => $semester_id->id
-            ]);
-        }else{
-            return response()->json(['errors' => 'Đăng nhập thất bại']);
+
+        if($role==1){
+            $student = Student::where('email',$email)->first();
+            $student['birth'] = date('d/m/Y',strtotime($student->birth));
+            $student['class'] = $student->activity_class->code;
+            $student['branch'] = $student->get_branch->name;
+            if($student->sex == 0){
+                $student['sex'] = "Nam";
+            }else{
+                $student['sex'] = "Nữ";
+            }
+
+            if($student && Hash::check($password,$student->password)){
+                return response()->json([
+                    'status' => 200,
+                    'student' => $student,
+                    'semester_id' => $semester_id->id
+                ]);
+            }else{
+                return response()->json(['errors' => 'Đăng nhập thất bại']);
+            }
+        }elseif($role==2){
+            $teacher = Teacher::where('email',$email)->first();
+
+            if($teacher && Hash::check($password,$teacher->password)){
+                $teacher['faculty_name'] = $teacher->faculty->name;
+                return response()->json([
+                    'status' => 200,
+                    'teacher' => $teacher,
+                    'semester_id' => $semester_id->id
+                ]);
+            }else{
+                return response()->json(['errors' => 'Đăng nhập thất bại']);
+            }
         }
     }
 
@@ -50,8 +69,14 @@ class StudentApiController extends Controller
     {
         $data = $request->json()->all();
         $email = $data['email'];
+        $role = $data['role'];
 
-        $check = Student::where('email',$email)->first();
+        if($role==1){
+            $check = Student::where('email',$email)->first();
+        }elseif($role==2){
+            $check = Teacher::where('email',$email)->first();
+        }
+ 
         if($check){
             return response()->json(['status'=>200]);
         }else{
@@ -62,9 +87,16 @@ class StudentApiController extends Controller
     public function sendMail(Request $request)
     {
         $email = $request->email;
+        $role = $request->role;
 
-        $student = Student::where('email',$email)->first();
-        $code = substr($student->id*1000000+time(),-6);
+        if($role==1){
+            $student = Student::where('email',$email)->first();
+            $code = substr($student->id*1000000+time(),-6);
+        }elseif($role==2){
+            $teacher = Teacher::where('email',$email)->first();
+            $code = substr($teacher->id*1000000+time(),-6);
+        }
+    
         $data = [
             'subject' => 'Đặt lại mật khẩu',
             'body' => 'Mã đặt lại mật khẩu của bạn là:',
@@ -102,14 +134,25 @@ class StudentApiController extends Controller
     {
         $email = $request->email;
         $new_password = $request->new_password;
+        $role = $request->role;
 
-        $student = Student::where('email',$email)->first();
-        $student->password = bcrypt($new_password);
-        if($student->save()){
-            return response()->json(['status'=>400]);
-        }else{
-            return response()->json(['errors'=>404]);
-        }
+        if($role==1){
+            $student = Student::where('email',$email)->first();
+            $student->password = bcrypt($new_password);
+            if($student->save()){
+                return response()->json(['status'=>400]);
+            }else{
+                return response()->json(['errors'=>404]);
+            }
+        }elseif($role==2){
+            $teacher = Teacher::where('email',$email)->first();
+            $teacher->password = bcrypt($new_password);
+            if($teacher->save()){
+                return response()->json(['status'=>400]);
+            }else{
+                return response()->json(['errors'=>404]);
+            }
+        }  
     }
 
     public function getListSubject(string $id)

@@ -46,7 +46,7 @@ class SubjectController extends Controller
         }
         if($request->section_project == 1){
             $data['branch_id'] = 0;
-        }
+        }  
         if(Subject::create($data)){
             return redirect()->back()->with('success','Thêm môn học thành công');
         }else{
