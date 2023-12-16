@@ -70,6 +70,7 @@ Route::prefix('admin')->group(function(){
     Route::get('teacher',[TeacherController::class,'index']);
     Route::get('teacher/edit/{id}',[TeacherController::class,'show']);
     Route::post('teacher/edit/{id}',[TeacherController::class,'update']);
+    Route::get('teacher/delete/{id}',[TeacherController::class,'destroy']);
     //Sinh viên
     Route::get('student/add',[StudentController::class,'create']);
     Route::post('student/add',[StudentController::class,'store']);
