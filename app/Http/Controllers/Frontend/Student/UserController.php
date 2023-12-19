@@ -12,6 +12,7 @@ use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\Tution;
 use App\Models\Typeproject;
 use Carbon\Carbon;
 use DateTime;
@@ -72,6 +73,7 @@ class UserController extends Controller
                             'score.diligence_score AS diligence_score',
                             'subject.credits AS credits')
                     ->where('score.id_student',$student_id)
+                    ->where('score.id_semester',$semester_id)
                     ->where('score.id_type','!=',null)
                     ->get();
         return view('frontend.member.result',compact('semesters','scores','projects'));
@@ -89,7 +91,18 @@ class UserController extends Controller
         $student_id = session('student_id');
 
         $sections = Score::where('id_student',$student_id)->where('id_section','!=',null)->where('id_semester',$semester_id)->get();
-        return view('frontend.member.tuition',compact('sections'));
+
+        $projects = Score::join('type_project','score.id_type','=','type_project.id')
+                    ->join('subject','subject.id','=','type_project.id_subject')
+                    ->select('type_project.title AS title',
+                            'score.session AS session',
+                            'subject.credits AS credits')
+                    ->where('score.id_student',$student_id)
+                    ->where('score.id_semester',$semester_id)
+                    ->where('score.id_type','!=',null)
+                    ->get();
+        $tutions = Tution::where('id_student',$student_id)->where('id_semester',$semester_id)->get();
+        return view('frontend.member.tuition',compact('sections','projects','tutions'));
     }
 
     public function execPostRequest($url, $data)
@@ -113,6 +126,12 @@ class UserController extends Controller
 
     public function payment_momo(Request $request)
     {
+        $semester_id = session('semester_id');
+        $student_id = session('student_id');
+
+        $code = date('m').'/'.date('Y').'-HP-Agribank';
+        $semester = Semester::findOrFail($semester_id);
+        
         $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
 
         $partnerCode = 'MOMOBKUN20180529';
@@ -147,6 +166,15 @@ class UserController extends Controller
         $result = $this->execPostRequest($endpoint, json_encode($data));
         $jsonResult = json_decode($result, true);  // decode json
 
+        $tution = new Tution();
+        $tution->id_student = $student_id;
+        $tution->id_semester = $semester_id;
+        $tution->code = $code;
+        $tution->desc = 'Thu học phí '.$semester->name.' năm học '.$semester->get_yearstudy->name;
+        $tution->total = $request->total;
+        $tution->date = date('d/m/Y');
+        $tution->collector = 'Bank Agribank';
+        $tution->save();
         //Just a example, please check more in there
         return redirect()->to($jsonResult['payUrl']);
         // header('Location: ' . $jsonResult['payUrl']);
