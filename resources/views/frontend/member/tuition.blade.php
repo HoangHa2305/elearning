@@ -32,7 +32,7 @@
 						<div class="col-md-12">
 							<div class="wm-student-dashboard-statement wm-dashboard-statement">
 								<div class="wm-plane-title">
-									<h4>Hình thức nộp học phí theo thông báo chính thức của Phòng Kế hoạch Tài Chính</h4>
+									<h4 id="h4">Hình thức nộp học phí theo thông báo chính thức của Phòng Kế hoạch Tài Chính</h4>
                                     <table class="wm-article">
                                         <thead>
                                             <th>STT</th>
@@ -66,6 +66,23 @@
                                                 <td>Học mới</td>
                                             </tr>
                                             @endforeach
+                                            @foreach($projects as $project)
+                                            @php 
+                                                $i++; 
+                                                $credit = $project->credits;
+                                                $totalcredits += $credit;
+                                                $total = $price * $credit;
+                                                $subtotal += $total;
+                                            @endphp
+                                            <tr>
+                                                <td>{{$i}}</td>
+                                                <td id="name">{{$project->title}}</td>
+                                                <td>{{$project->session}}</td>
+                                                <td>{{$credit}}</td>
+                                                <td>{{number_format($total,0,3)}}</td>
+                                                <td>Học mới</td>
+                                            </tr>
+                                            @endforeach
                                             <tr>
                                                 <td></td>
                                                 <td colspan="2">Tổng</td>
@@ -87,6 +104,19 @@
                                             <td>Người thu</td>
                                             <td>Ngày thu</td>
                                         </tr>
+                                        @if(!empty($tutions))
+                                        @php $i = 0; @endphp
+                                        @foreach($tutions as $tution)
+                                        @php $i++; @endphp
+                                        <tr>
+                                            <td>{{$i}}</td>
+                                            <td>{{$tution->code}}</td>
+                                            <td><i class="fa fa-print"></i></td>
+                                            <td>{{$tution->collector}}</td>
+                                            <td>{{$tution->date}}</td>
+                                        </tr>
+                                        @endforeach
+                                        @endif
                                     </table>	
                                     <div>
                                         <button class="btn btn-danger" disabled>Bạn chưa nộp học phí</button>
@@ -125,6 +155,9 @@
                 font-family: Arial, Helvetica, sans-serif;
                 color: #73879C;
                 font-size: 17px;
+            }
+            #h4{
+                font-family: Arial, Helvetica, sans-serif;
             }
             #main{
                 color: red;

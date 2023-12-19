@@ -179,6 +179,50 @@ class StudentApiController extends Controller
         }
     }
 
+    public function getSubjectSchedule(Request $request)
+    {
+        $id = $request->id;
+        $id_student = $request->id_student;
+
+        $semester = Semester::orderByDesc('id')->first();
+        if($id == 2){
+            $day = 'monday';
+        }elseif($id == 3){
+            $day = 'tuesday';
+        }elseif($id == 4){
+            $day = 'wednesday';
+        }elseif($id == 5){
+            $day = 'thursday';
+        }elseif($id == 6){
+            $day = 'friday';
+        }elseif($id == 7){
+            $day = 'saturday';
+        }elseif($id == 8){
+            $day = 'sunday';
+        }
+
+        $sections = Score::join('section','score.id_section','=','section.id')
+                    ->select('section.id AS id',
+                            'section.name AS name',
+                            'section.room AS room',
+                            'section.'.$day)
+                    ->where('score.id_student',$id_student)
+                    ->where('score.id_semester',$semester->id)
+                    ->where('score.id_section','!=',null)
+                    ->where('section.'.$day,'!=',null)
+                    ->get();
+
+        if($sections){
+            foreach($sections as $section){
+                $section->$day = json_decode($section->$day);
+                $section->time = implode('-',$section->$day);
+            }
+            return response()->json(['section'=>$sections]);
+        }else{
+            return response()->json(['errors' => 200]);
+        }
+    }
+
     public function getListScore(string $id)
     {
         $semester = Semester::orderByDesc('id')->first();

@@ -185,6 +185,9 @@ class TeacherController extends Controller
                     $result->late = json_encode(array_values($late));
                 }
             }
+            if($request->content){
+                $result->content = $request->content;
+            }
             $result->save();
         }else{
             $attendance =  new Attendance();
@@ -225,7 +228,7 @@ class TeacherController extends Controller
         $time = date('h:i:s');
         $teacher_id = session('teacher_id');
         $section_id = $request->section_id;
-        $content = $request->content;
+        $content = $request->content;  
         $attendance = Attendance::where('id_section',$section_id)->where('date',$date)->first();
         if(isset($attendance)){
             if($content){
