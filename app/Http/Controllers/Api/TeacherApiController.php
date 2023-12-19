@@ -174,6 +174,7 @@ class TeacherApiController extends Controller
                     $data['time'] = $formatTime;
 
         $attendances = Attendance::where('id_section',$id)->get();
+        $results = [];
         foreach($attendances as $attendance){
             $result['content'] = $attendance->content;
             $result['time'] = $attendance->time.' '.$attendance->date;
@@ -184,9 +185,10 @@ class TeacherApiController extends Controller
                     $student = Student::findOrFail($array);
                     $absent[] = $student->name;
                 }
+
                 $result['absent'] = $absent;
-            } 
-            $results[] = $result;
+            }   
+            $results[] = $result;       
         }
 
         return response()->json(['section' => $data,'content' => $results]);
