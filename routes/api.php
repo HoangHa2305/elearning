@@ -36,6 +36,8 @@ Route::prefix('student')->group(function(){
     Route::post('get/detail/project',[StudentApiController::class,'detailProject']);
     Route::get('detail/subject/{id}',[StudentApiController::class,'detailSubject']);
     Route::post('tution',[StudentApiController::class,'getTution']);
+    Route::get('tution/paid/{id}',[StudentApiController::class,'getPaid']);
+    Route::post('get/group',[StudentApiController::class,'getGroup']);
 });
 Route::prefix('teacher')->group(function(){
     Route::get('get/subject/{id}',[TeacherApiController::class,'getAllSubject']);

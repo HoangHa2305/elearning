@@ -104,7 +104,7 @@ class HomeController extends Controller
     {
         $email = $request->email;
         $pin = $request->pin;
-        $url = "/elearning/public/mat-khau-moi";
+        $url = "/elearning/mat-khau-moi";
 
         $check = ForgotPassword::where('email',$email)->latest()->first();
         $confirm = $check->code;

@@ -36,4 +36,9 @@ class Score extends Model
     {
         return $this->belongsTo(Student::class,'id_student');
     }
+
+    public function type()
+    {
+        return $this->belongsTo(Typeproject::class,'id_type');
+    }
 }

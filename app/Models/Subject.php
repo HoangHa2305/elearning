@@ -31,4 +31,9 @@ class Subject extends Model
     {
         return $this->belongsTo(YearTrain::class,'yeartrain_id');
     }
+
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class,'semester_id');
+    }
 }

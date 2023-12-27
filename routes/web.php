@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\SemesterController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Admin\TutionController;
 use App\Http\Controllers\Admin\TypeProjectController;
 use App\Http\Controllers\Admin\YearStudyController;
 use App\Http\Controllers\Admin\YearTrainController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Frontend\Student\UserController;
 use App\Http\Controllers\Frontend\Teacher\ProjectController as TeacherProjectController;
 use App\Http\Controllers\Frontend\Teacher\ScoreController;
 use App\Http\Controllers\Frontend\Teacher\TeacherController as FrontendTeacherController;
+use App\Models\Tution;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -130,6 +132,11 @@ Route::prefix('admin')->group(function(){
     Route::get('project/list/student/{id}',[ReportController::class,'index']);
     Route::get('project/list/student/{id}/add',[ReportController::class,'create']);
     Route::post('project/list/student/{id}/add',[ReportController::class,'store']);
+    //Học phí
+    Route::get('tution',[TutionController::class,'index']);
+    Route::get('tution/add',[TutionController::class,'create']);
+    Route::post('tution/add',[TutionController::class,'store']);
+    Route::get('tution/not/submit',[TutionController::class,'notSubmit']);
     //Ajax
     Route::post('ajax/post/yeartrain',[StudentController::class,'postYearTrain']);
     Route::post('ajax/post/branch',[StudentController::class,'postBranch']);
@@ -158,7 +165,7 @@ Route::post('mat-khau-moi',[HomeController::class,'postNewPassword']);
 Route::get('dowload/topic/{name}',[HomeController::class,'dowloadTopic']);
 Route::post('gv/login',[FrontendTeacherController::class,'login'])->name('loginTeacher');
 
-Route::prefix('sv')->group(function(){
+Route::prefix('sv')->middleware(['student'])->group(function(){
     Route::get('dang-ki-tin-chi',[StudentSectionController::class,'showRegistration']);
     Route::post('dang-ki-tin-chi/mon-hoc',[StudentSectionController::class,'getSection']);    //Ajax
     Route::post('dang-ki-tin-chi',[StudentSectionController::class,'postRegistration']);
@@ -167,8 +174,11 @@ Route::prefix('sv')->group(function(){
     Route::get('dang-ki-tin-chi/mon/do-an/{id}',[StudentSectionController::class,'creditProject']);
     Route::get('dang-ki-tin-chi/huy/mon/do-an/{id}',[StudentSectionController::class,'destroyCreditProject']);
     Route::get('hoso',[UserController::class,'showProfile']);
-    Route::get('diem',[UserController::class,'showResult']);
+    Route::get('diem',[UserController::class,'showResult'])->name('sv.diem');
     Route::get('khao-sat/cau-hoi-khao-sat/{id}',[UserController::class,'showRate']);
+    Route::post('khao-sat/cau-hoi-khao-sat/{id}',[UserController::class,'postRate']);
+    Route::get('khao-sat-hoc-phan/{id}',[UserController::class,'showNecessary']);
+    Route::post('khao-sat-hoc-phan/{id}',[UserController::class,'postNecessary']);
     Route::get('lich-hoc',[ScheduleController::class,'showSchedule']);
     Route::get('lich-trinh-giang-day/{id}',[ScheduleController::class,'detailSchedule']);
     Route::get('tkb',[ScheduleController::class,'showCalendar']);
