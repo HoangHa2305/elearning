@@ -41,6 +41,47 @@
             </div>
             <!--// Main Section \\-->
 
+             <!--// Main Section \\-->
+             <div class="wm-main-section wm-whychooseus-full" id="why">
+                <div class="container">
+                    <div class="row">    
+                        <div class="col-md-12">
+                            <div class="whychooseus-list">
+                                <div class="wm-fancy-title"> <h2 id="title-why">Tại sao <span id="title-why">chọn chúng tôi?</span></h2> </div>
+                                <ul class="row">
+                                    <li class="col-md-3">
+                                        <span id="title-why" class="teacher">100%</span>
+                                        <h6 id="content-why">Giảng viên trình độ thạc sĩ, tiến sĩ</h6>
+                                    </li>
+                                    <li class="col-md-3">
+                                        <span id="title-why" class="student">+6000</span>
+                                        <h6 id="content-why">Sinh viên</h6>
+                                    </li>
+                                    <li class="col-md-3">
+                                        <span id="title-why" class="partner">+200</span>
+                                        <h6 id="content-why">Đối tác trong nước & quốc tế</h6>
+                                    </li>
+                                    <li class="col-md-3">
+                                        <span id="title-why" class="publication">+1000</span>
+                                        <h6 id="content-why">Công bố khoa học</h6>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-4">
+                            <div class="wm-questions-studying">
+                                <img src="extra-images/ask-questoin-bg.png" alt="">
+                                <h3 class="wm-color">Questions about studying with us?</h3>
+                                <p>We have a team of student advisers & officers to answer any questions:</p>
+                                <a class="wm-banner-btn" href="#">ask us now</a>
+                            </div>
+                        </div> -->
+
+                    </div>
+                </div>
+            </div>
+            <!--// Main Section \\-->
+
             <!--// Main Section \\-->
             <div class="wm-main-section wm-courses-popular-full">
                 <div class="container">
@@ -123,48 +164,6 @@
                                 </ul> -->
                             </div>
                         </div>
-
-                    </div>
-                </div>
-            </div>
-            <!--// Main Section \\-->
-
-            <!--// Main Section \\-->
-            <div class="wm-main-section wm-whychooseus-full" id="why">
-                <div class="container">
-                    <div class="row">
-                        
-                        <div class="col-md-12">
-                            <div class="whychooseus-list">
-                                <div class="wm-fancy-title"> <h2 id="title-why">Tại sao <span id="title-why">chọn chúng tôi?</span></h2> </div>
-                                <ul class="row">
-                                    <li class="col-md-3">
-                                        <span id="title-why">100%</span>
-                                        <h6 id="content-why">Giảng viên trình độ thạc sĩ, tiến sĩ</h6>
-                                    </li>
-                                    <li class="col-md-3">
-                                        <span id="title-why">+6000</span>
-                                        <h6 id="content-why">Sinh viên</h6>
-                                    </li>
-                                    <li class="col-md-3">
-                                        <span id="title-why">+200</span>
-                                        <h6 id="content-why">Đối tác trong nước & quốc tế</h6>
-                                    </li>
-                                    <li class="col-md-3">
-                                        <span id="title-why">+1000</span>
-                                        <h6 id="content-why">Công bố khoa học</h6>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- <div class="col-md-4">
-                            <div class="wm-questions-studying">
-                                <img src="extra-images/ask-questoin-bg.png" alt="">
-                                <h3 class="wm-color">Questions about studying with us?</h3>
-                                <p>We have a team of student advisers & officers to answer any questions:</p>
-                                <a class="wm-banner-btn" href="#">ask us now</a>
-                            </div>
-                        </div> -->
 
                     </div>
                 </div>
@@ -606,6 +605,7 @@
     }
     #why{
         background-color: #F5FBFD;
+        margin-top: -50px;
     }
     #title-why{
         font-family: 'Inter', sans-serif;
@@ -628,4 +628,90 @@
         background-color: #FFBB71;
     }
 </style>
+<script>
+    function runCounter(){
+        var startNumber = 1;
+        var endNumberStudent = parseInt($(".student").text().replace('+',''),10);
+        var endNumberTeacher = parseInt($(".teacher").text().replace('%',''),10);
+        var endNumberPartner = parseInt($(".partner").text().replace('+',''),10);
+        var endNumberPublication = parseInt($(".publication").text().replace('+',''),10);
+
+        // Thời gian chạy hiệu ứng (miligiây)
+        var duration = 1000;
+
+        // Tính toán bước tăng giảm
+        var step = (endNumberStudent - startNumber) / (duration / 1000);
+
+        function updateCounter(){
+            $(".student").animate(
+                {
+                    Counter: endNumberStudent
+                },
+                {
+                    duration: duration,
+                    step: function (now) {
+                        // Cập nhật giá trị của phần tử <p>
+                        $(this).text(Math.round(now));
+                    },
+                    complete: function () {
+                        // Đảm bảo giá trị cuối cùng là chính xác
+                        $(this).text('+'+endNumberStudent);
+                    }
+                }
+            );
+            $(".teacher").animate(
+                {
+                    Counter: endNumberTeacher
+                },
+                {
+                    duration: duration,
+                    step: function (now) {
+                        // Cập nhật giá trị của phần tử <p>
+                        $(this).text(Math.round(now));
+                    },
+                    complete: function () {
+                        // Đảm bảo giá trị cuối cùng là chính xác
+                        $(this).text(endNumberTeacher+'%');
+                    }
+                }
+            );
+            $(".partner").animate(
+                {
+                    Counter: endNumberPartner
+                },
+                {
+                    duration: duration,
+                    step: function (now) {
+                        // Cập nhật giá trị của phần tử <p>
+                        $(this).text(Math.round(now));
+                    },
+                    complete: function () {
+                        // Đảm bảo giá trị cuối cùng là chính xác
+                        $(this).text('+'+endNumberPartner);
+                    }
+                }
+            );
+            $(".publication").animate(
+                {
+                    Counter: endNumberPublication
+                },
+                {
+                    duration: duration,
+                    step: function (now) {
+                        // Cập nhật giá trị của phần tử <p>
+                        $(this).text(Math.round(now));
+                    },
+                    complete: function () {
+                        // Đảm bảo giá trị cuối cùng là chính xác
+                        $(this).text('+'+endNumberPublication);
+                    }
+                }
+            );
+        }
+        updateCounter();
+    }
+    $(document).ready(function(){
+        runCounter();
+    });
+</script>
 @endsection

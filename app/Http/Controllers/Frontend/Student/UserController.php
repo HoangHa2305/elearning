@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\Group;
+use App\Models\RateSubject;
 use App\Models\Report;
 use App\Models\Score;
 use App\Models\Section;
@@ -73,9 +74,9 @@ class UserController extends Controller
                             'score.diligence_score AS diligence_score',
                             'subject.credits AS credits')
                     ->where('score.id_student',$student_id)
-                    ->where('score.id_semester',$semester_id)
                     ->where('score.id_type','!=',null)
                     ->get();
+
         return view('frontend.member.result',compact('semesters','scores','projects'));
     }
 
@@ -83,6 +84,57 @@ class UserController extends Controller
     {
         $section = Section::findOrFail($id);
         return view('frontend.member.ratesubject',compact('section'));
+    }
+
+    public function postRate(string $id, Request $request)
+    {
+        $semester_id = session('semester_id');
+        $student_id = session('student_id');
+
+        $about_section = ($request->section1 + $request->section2 + $request->section3 + $request->section4) / 4;
+        $about_teaching = ($request->teaching1 + $request->teaching2 + $request->teaching3 
+                        + $request->teaching4 + $request->teaching5 + $request->teaching6) / 6;
+
+        $result = RateSubject::create([
+            'id_section' => $id,
+            'id_semester' => $semester_id,
+            'id_student' => $student_id,
+            'about_section' => $about_section,
+            'about_teaching' => $about_teaching,
+            'about_content_section' => $request->about_content_section,
+            'about_curriculum' => $request->about_curriculum
+        ]);
+        $score = Score::where('id_section',$id)->where('id_student',$student_id)->where('id_semester',$semester_id)->first();
+        $score->active = 3;
+        $score->save();
+        if($result){
+            return redirect('sv/diem');
+        }
+    }
+
+    public function showNecessary(string $id)
+    {
+        $section = Section::findOrFail($id);
+        $semester = $section->subject->semester->name;
+        return view('frontend.member.necessary',compact('semester','section'));
+    }
+
+    public function postNecessary(string $id, Request $request)
+    {
+        $semester_id = session('semester_id');
+        $student_id = session('student_id');
+
+        $rate = RateSubject::where('id_section',$id)->where('id_semester',$semester_id)->where('id_student',$student_id)->first();
+        $rate->necessary = $request->necessary;
+        if($request->feedback){
+            $rate->feedback = $request->feedback;
+        }
+        if($rate->save()){
+            $score = Score::where('id_section',$id)->where('id_student',$student_id)->where('id_semester',$semester_id)->first();
+            $score->active = 4;
+            $score->save();
+            return redirect()->route('sv.diem',compact('rate'));
+        }
     }
 
     public function showTuition()

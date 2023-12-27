@@ -50,18 +50,37 @@
 											<th>TC tích lũy</th>
 										</thead>
 										<tbody>
+											@php 
+												$credit = 0; 
+												$total_t4 = 0;
+												$total_t10 = 0;
+												$gtotal_t4 = 0;
+												$gtotal_t10 = 0;
+											@endphp
+											@foreach($semesters as $semester)
+											@php
+												foreach($scores as $score){
+													if($score->id_semester == $semester->id){
+														$credit += $score->section->subject->credits;
+														$total_t4 += $score->sum_t4_score*$score->section->subject->credits;
+														$gtotal_t4 = number_format($total_t4/$credit,1);
+														$total_t10 += $score->sum_t10_score*$score->section->subject->credits;
+														$gtotal_t10 = number_format($total_t10/$credit,1);
+													}
+												}
+											@endphp
 											<tr>
 												<td>1</td>
-												<td>Học kỳ 1, năm 2020 - 2021</td>
-												<td>17</td>
-												<td>17</td>
+												<td>{{$semester->name}}, năm {{$semester->get_yearstudy->name}}</td>
+												<td>{{$credit}}</td>
+												<td>{{$credit}}</td>
 												<td>
 													<b>
-														<code class="classification">3.06</code>
+														<code class="classification">{{$gtotal_t4}}</code>
 													</b>
 												</td>
-												<td>7.8</td>
-												<td>7.8</td>
+												<td>{{$gtotal_t10}}</td>
+												<td>{{$gtotal_t10}}</td>
 												<td>17</td>
 												<td>
 													<b>
@@ -72,6 +91,7 @@
 												<td>7.8</td>
 												<td>17</td>
 											</tr>
+											@endforeach
 										</tbody>
 									</table>
 									<hr>
@@ -127,7 +147,7 @@
 													{{$score->midterm_score}}
 													@endif
 												</td>
-												@if($score->active == 1)
+												@if($score->active == 2)
 												<td colspan="3" id="td">
 													<a href="{{URL('sv/khao-sat/cau-hoi-khao-sat/'.$score->section->id.'')}}">
 														<button class="btn btn-primary">
@@ -135,7 +155,17 @@
 														</button>
 													</a>
 												</td>
-												@elseif($score->active == 2)
+												@elseif($score->active == 3)
+												<td colspan="3" id="td">
+													<a href="{{URL('sv/khao-sat-hoc-phan/'.$score->section->id.'')}}">
+														<button class="btn btn-success">
+														Đánh giá sự cần thiết
+														<br> 
+														của Học phần
+														</button>
+													</a>
+												</td>
+												@elseif($score->active == 4)
 												<td id="td">
 													@if($score->final_score)
 													{{$score->final_score}}
@@ -278,6 +308,10 @@
 			.warning_score{
 				color: orange;
 			}
+			.btn-success{
+				background: #26B99A;
+    			border: 1px solid #169F85;
+			}
         </style>
 		<script>
 			$(document).ready(function() {
@@ -286,7 +320,6 @@
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
 					} 
                 });
-
 			});
 		</script>
 @endsection		

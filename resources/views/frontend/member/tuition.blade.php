@@ -57,7 +57,7 @@
                                                 $total = $price * $credit;
                                                 $subtotal += $total;
                                             @endphp
-                                            <tr>
+                                            <tr class="tr">
                                                 <td>{{$i}}</td>
                                                 <td id="name">{{$section->section->name}}</td>
                                                 <td>{{$section->session}}</td>
@@ -74,7 +74,7 @@
                                                 $total = $price * $credit;
                                                 $subtotal += $total;
                                             @endphp
-                                            <tr>
+                                            <tr class="tr">
                                                 <td>{{$i}}</td>
                                                 <td id="name">{{$project->title}}</td>
                                                 <td>{{$project->session}}</td>
@@ -83,7 +83,7 @@
                                                 <td>Học mới</td>
                                             </tr>
                                             @endforeach
-                                            <tr>
+                                            <tr class="tr">
                                                 <td></td>
                                                 <td colspan="2">Tổng</td>
                                                 <td>{{$totalcredits}}</td>
@@ -104,7 +104,7 @@
                                             <td>Người thu</td>
                                             <td>Ngày thu</td>
                                         </tr>
-                                        @if(!empty($tutions))
+                                        @if(count($tutions)!=0)
                                         @php $i = 0; @endphp
                                         @foreach($tutions as $tution)
                                         @php $i++; @endphp
@@ -118,6 +118,7 @@
                                         @endforeach
                                         @endif
                                     </table>	
+                                    @if(count($tutions)==0)
                                     <div>
                                         <button class="btn btn-danger" disabled>Bạn chưa nộp học phí</button>
                                         <div class="right">
@@ -127,7 +128,13 @@
                                                 <button class="btn btn-pink" >Thanh toán học phí trực tuyến</button>
                                             </form>
                                         </div>	
-                                    </div>			
+                                    </div>	
+                                    @endif	
+                                    <div>
+                                        <p>Lưu ý:</p>
+                                        <p>- Các khoản phí tạm phí của Tân sinh viên K21 sẽ sớm được cập nhật.</p>
+                                        <p>- Mọi vấn đề phát sinh liên quan tới học Học phí và các khoản phí, sinh viên liên lạc trực tiếp qua số điện thoại: <i>02363667114</i></p>
+                                    </div>	
 								</div>
 							</div>
                         </div>
@@ -146,6 +153,9 @@
             #total{
                 color: #73879C;
             }
+            tr.tr:hover{
+				background-color: rgba(38,185,154,.07);
+			}
             thead {
 				background-color: #73879C;
 				color: white;

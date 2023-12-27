@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
 use App\Models\Attendance;
 use App\Models\ForgotPassword;
+use App\Models\Group;
 use App\Models\Score;
 use App\Models\Section;
 use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\Tution;
 use App\Models\Typeproject;
 use Exception;
 use Illuminate\Http\Request;
@@ -488,6 +490,7 @@ class StudentApiController extends Controller
         $credit = 0;
 
         $scores = Score::where('id_student',$student_id)->where('id_section','!=',null)->where('id_semester',$semester_id)->get();
+        $projects = Score::where('id_student',$student_id)->where('id_type','!=',null)->where('id_semester',$semester_id)->get();
         foreach($scores as $score){
             $data['name'] = $score->section->name;
             $data['credit'] = $score->section->subject->credits;
@@ -495,6 +498,52 @@ class StudentApiController extends Controller
             $credit += $score->section->subject->credits;
             $tution[] = $data;
         }
+        foreach($projects as $project){
+            $data['name'] = $project->type->title;
+            $data['credit'] = $project->type->subject->credits;
+            $data['session'] = $score->session;
+            $credit += $project->type->subject->credits;
+
+            $tution[] = $data;
+        }
         return response()->json(['tution' => $tution,'credit' => $credit]);
+    }
+
+    public function getPaid(string $id)
+    {
+        $data = [];
+        $gtotal = 0;
+        $tutions = Tution::where('id_student',$id)->get();
+
+        foreach($tutions as $tution){
+            $result['code'] = $tution->code;
+            $result['date'] = $tution->date;
+            $result['total'] = $tution->total;
+            $result['description'] = $tution->desc;
+            $result['collector'] = $tution->collector;
+            $gtotal += $tution->total;
+
+            $data[] = $result;
+        }
+        return response()->json(['tution' => $data,'total' => $gtotal]);
+    }
+
+    public function getGroup(Request $request)
+    {
+        $branch_id = $request->branch_id;
+        $semester_id = $request->semester_id;
+
+        $data = [];
+
+        $groups = Group::where('branch_id',$branch_id)
+                ->where('semester_id',$semester_id)
+                ->where('active',1)->get();
+        foreach($groups as $group){
+            $result['id'] = $group->id;
+            $result['name'] = $group->name;
+
+            $data[] = $result;
+        }
+        return response()->json(['group' => $data]);        
     }
 }

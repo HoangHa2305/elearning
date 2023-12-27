@@ -92,6 +92,7 @@
 													</div>
 												</td>
 											</tr>
+											<form action="" method="POST">
 											<tr class="tr">
 												<td id="td-left">
 													<b>1. Giảng viên trình bày rõ ràng mục tiêu, phương pháp học tập, kiểm tra, 
@@ -101,27 +102,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="section1" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section1" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section1" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section1" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section1" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -137,27 +138,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="section2" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section2" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section2" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section2" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section2" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -172,27 +173,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="section3" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section3" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section3" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section3" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section3" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -208,27 +209,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="section4" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section4" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section4" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section4" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="section4" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -279,27 +280,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching1" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching1" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching1" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching1" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching1" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -314,27 +315,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching2" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching2" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching2" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching2" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching2" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -350,27 +351,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching3" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching3" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching3" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching3" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching3" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -386,27 +387,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching4" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching4" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching4" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching4" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching4" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -422,27 +423,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching5" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching5" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching5" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching5" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching5" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -458,27 +459,27 @@
 												<td id="td">
 													<div class="status">
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching6" value="1" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoankhongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching6" value="2" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/khongdongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching6" value="3" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongymotphan.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching6" value="4" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/dongy.png')}}"/>
 														</div>
 														<div class="icon">
-															<input type="radio">
+															<input name="teaching6" value="5" type="radio">
 															<br>
 															<img src="{{asset('uploads/icon/hoantoandongy.png')}}"/>
 														</div>
@@ -500,7 +501,7 @@
 														phối thời gian , …)
 													</b>
 													<br>
-													<textarea id="textarea" class="form-control"></textarea>
+													<textarea id="textarea" name="about_content_section" class="form-control"></textarea>
 												</td>
 											</tr>
 											<tr class="tr">
@@ -510,7 +511,7 @@
 														không; có kịp thời cho việc chuẩn bị, ôn tập không,...)
 													</b>
 													<br>
-													<textarea id="textarea" class="form-control"></textarea>
+													<textarea id="textarea" name="about_curriculum" class="form-control"></textarea>
 												</td>
 											</tr>
 											<tr class="tr">
@@ -518,6 +519,8 @@
 													<button class="btn btn-success btn-lg" type="submit">Đánh giá</button>
 												</td>
 											</tr>
+											@csrf
+											</form>
 										</tbody>
                                     </table>							
 								</div>

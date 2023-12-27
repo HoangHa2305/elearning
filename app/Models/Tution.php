@@ -21,4 +21,9 @@ class Tution extends Model
         'date',
         'collector'
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class,'id_student');
+    }
 }
