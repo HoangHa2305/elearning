@@ -38,6 +38,12 @@ Route::prefix('student')->group(function(){
     Route::post('tution',[StudentApiController::class,'getTution']);
     Route::get('tution/paid/{id}',[StudentApiController::class,'getPaid']);
     Route::post('get/group',[StudentApiController::class,'getGroup']);
+    Route::post('get/subject/by/group',[StudentApiController::class,'getSubjectByGroup']);
+    Route::post('credit/section',[StudentApiController::class,'registerCredits']);
+    Route::post('credit/all',[StudentApiController::class,'registerAllGroup']);
+    Route::post('destroy/credit',[StudentApiController::class,'destroyCredit']);
+    Route::post('credit/project',[StudentApiController::class,'creditProject']);
+    Route::post('destroy/project',[StudentApiController::class,'destroyProject']);
 });
 Route::prefix('teacher')->group(function(){
     Route::get('get/subject/{id}',[TeacherApiController::class,'getAllSubject']);
