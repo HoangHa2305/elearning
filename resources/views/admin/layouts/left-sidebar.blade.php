@@ -47,7 +47,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="error-404.html" aria-expanded="false">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ URL('admin/notice/add') }}" aria-expanded="false">
                                 <i class="mdi mdi-alert-outline"></i>
                                 <span class="hide-menu">Thông báo</span>
                             </a>

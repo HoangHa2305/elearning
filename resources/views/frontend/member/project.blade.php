@@ -201,10 +201,12 @@
 												Chưa nộp
 											</span>
 											@endif
+											@if($report->status == 1)
 											<p>- Được phép bảo vệ đề tài:</p>
 											<span class="badage">Đồng ý</span>
 											<p>- Điểm Hướng dẫn:</p>
-											<span class="badage">9</span>
+											<span class="badage">{{$report->diligence_score}}</span>
+											@endif
 											@elseif($report->parent==1)
 											@foreach($parents as $parent)
 											@if($parent->id == $report->id_parent)

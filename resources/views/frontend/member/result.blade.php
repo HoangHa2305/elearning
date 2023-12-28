@@ -56,8 +56,13 @@
 												$total_t10 = 0;
 												$gtotal_t4 = 0;
 												$gtotal_t10 = 0;
+												$sum_4_tl = 0;
+												$sum_10_tl = 0;
+												$i = 0;
+												$total_credit = 0;
 											@endphp
 											@foreach($semesters as $semester)
+											@php $i++; @endphp
 											@php
 												foreach($scores as $score){
 													if($score->id_semester == $semester->id){
@@ -66,11 +71,16 @@
 														$gtotal_t4 = number_format($total_t4/$credit,1);
 														$total_t10 += $score->sum_t10_score*$score->section->subject->credits;
 														$gtotal_t10 = number_format($total_t10/$credit,1);
+														$sum_4_tl += $gtotal_t4;
+														$sum_10_tl += $gtotal_t10;
+														$sum_4_tl = number_format($gtotal_t4/$i,1);
+														$sum_10_tl = number_format($gtotal_t10/$i,1);
+														$total_credit += $credit;
 													}
 												}
 											@endphp
 											<tr>
-												<td>1</td>
+												<td>{{$i}}</td>
 												<td>{{$semester->name}}, năm {{$semester->get_yearstudy->name}}</td>
 												<td>{{$credit}}</td>
 												<td>{{$credit}}</td>
@@ -84,12 +94,22 @@
 												<td>17</td>
 												<td>
 													<b>
+														@if($gtotal_t4 >= 3.6 && $gtotal_t4 <= 4.0)
+														<code class="classification">Xuất sắc</code>
+														@elseif($gtotal_t4 >= 3.2 && $gtotal_t4 < 3.6)
+														<code class="classification">Giỏi</code>
+														@elseif($gtotal_t4 >= 2.5 && $gtotal_t4 < 3.2)
 														<code class="classification">Khá</code>
+														@elseif($gtotal_t4 >= 2.0 && $gtotal_t4 < 2.5)
+														<code class="classification">Trung bình</code>
+														@elseif($gtotal_t4 < 2.0)
+														<code class="classification">Yếu</code>
+														@endif
 													</b>
 												</td>
-												<td>3.06</td>
-												<td>7.8</td>
-												<td>17</td>
+												<td>{{$sum_4_tl}}</td>
+												<td>{{$sum_10_tl}}</td>
+												<td>{{$total_credit}}</td>
 											</tr>
 											@endforeach
 										</tbody>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\GroupProjectController;
+use App\Http\Controllers\Admin\NoticeController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\SemesterController;
@@ -123,6 +124,9 @@ Route::prefix('admin')->group(function(){
     Route::post('group/branch/{id}/year/{year}/semester/{semester}/add',[GroupController::class,'store']);
     Route::get('group/branch/{id}/year/{year}/semester/{semester}',[GroupController::class,'index']);
     Route::get('group/subject/{id}',[GroupController::class,'getSubject']);
+    Route::get('group/subject/score/{id}',[GroupController::class,'manageScore']);
+    Route::post('group/subject/score/{id}',[GroupController::class,'confirmScore']);
+    Route::get('group/subject/score/cancel/{id}',[GroupController::class,'cancelConfirm']);
     Route::get('type/branch/{id}/semester/{semester}/project',[TypeProjectController::class,'index']);
     Route::get('type/branch/{id}/semester/{semester}/project/add',[TypeProjectController::class,'create']);
     Route::post('type/branch/{id}/semester/{semester}/project/add',[TypeProjectController::class,'store']);
@@ -138,6 +142,9 @@ Route::prefix('admin')->group(function(){
     Route::get('tution/add',[TutionController::class,'create']);
     Route::post('tution/add',[TutionController::class,'store']);
     Route::get('tution/not/submit',[TutionController::class,'notSubmit']);
+    //Thông báo
+    Route::get('notice/add',[NoticeController::class,'create']);
+    Route::post('notice/add',[NoticeController::class,'store']);
     //Ajax
     Route::post('ajax/post/yeartrain',[StudentController::class,'postYearTrain']);
     Route::post('ajax/post/branch',[StudentController::class,'postBranch']);
@@ -156,6 +163,7 @@ Route::prefix('admin')->group(function(){
 
 Route::get('/set/semester',[HomeController::class,'setSemester']); //Ajax header
 Route::get('/',[HomeController::class,'index'])->name('index');
+Route::get('thong-bao/{id}',[HomeController::class,'detailNotice']);
 Route::post('/login',[UserController::class,'login'])->name('loginStudent');
 Route::get('/logout',[UserController::class,'logout'])->name('logout');
 Route::get('quen-mat-khau/{type}',[HomeController::class,'forgotPassword']);
@@ -184,6 +192,7 @@ Route::prefix('sv')->middleware(['student'])->group(function(){
     Route::get('lich-trinh-giang-day/{id}',[ScheduleController::class,'detailSchedule']);
     Route::get('tkb',[ScheduleController::class,'showCalendar']);
     Route::get('tkb/tuan/{tuan}',[ScheduleController::class,'nextCalendar']);
+    Route::get('hoc-phi-da-nop',[UserController::class,'historyTution']);
     Route::get('hoc-phi-sap-nop',[UserController::class,'showTuition']);
     Route::post('thanh-toan-hoc-phi',[UserController::class,'payment_momo']);
     Route::get('thanh-toan-thanh-cong',[UserController::class,'payment_success']);
@@ -195,6 +204,8 @@ Route::prefix('sv')->middleware(['student'])->group(function(){
 });
 Route::prefix('gv')->group(function(){
     Route::get('danh-sach-hoc-phan',[FrontendTeacherController::class,'showListSection']);
+    Route::get('gui-mail/{id}',[FrontendTeacherController::class,'showSendMail']);
+    Route::post('gui-mail/{id}',[FrontendTeacherController::class,'postSendMail']);
     Route::get('diem-danh/{id}',[FrontendTeacherController::class,'showAttendance']);
     Route::post('diem-danh',[FrontendTeacherController::class,'postAttendance']); //Ajax
     Route::post('diem-danh/{id}',[FrontendTeacherController::class,'postAllAttendance']);

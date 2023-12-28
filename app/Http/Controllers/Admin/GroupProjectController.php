@@ -40,5 +40,7 @@ class GroupProjectController extends Controller
     {
         $result = GroupProject::findOrFail($id);
         $result->delete();
+
+        return redirect()->back();
     }
 }

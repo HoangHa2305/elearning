@@ -19,6 +19,7 @@ class ProjectController extends Controller
         $reports = Report::join('group_project','reports.id_group','=','group_project.id')
                 ->join('type_project','group_project.id_type','=','type_project.id')
                 ->join('teacher','group_project.id_teacher','=','teacher.id')
+                ->join('score','type_project.id','=','score.id_type')
                 ->select('group_project.title AS title',
                         'type_project.date_start AS date_start',
                         'type_project.time_start AS time_start',
@@ -35,10 +36,13 @@ class ProjectController extends Controller
                         'reports.topic AS topic',
                         'reports.confirm AS confirm',
                         'reports.report AS report',
+                        'reports.status AS status',
+                        'score.diligence_score AS diligence_score',
                         'reports.id_parent AS id_parent'
                         )
                 ->where('reports.id_student',$student_id)
                 ->where('type_project.id_semester',$semester_id)
+                ->where('score.id_student',$student_id)
                 ->get();
         return view('frontend.member.project',compact('reports','parents'));
     }

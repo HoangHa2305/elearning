@@ -132,6 +132,7 @@
                                     @endif	
                                     <div>
                                         <p>Lưu ý:</p>
+                                        <p>- Xem học phí đã nộp <a href="{{URL('sv/hoc-phi-da-nop')}}">Tại đây</a></p>
                                         <p>- Các khoản phí tạm phí của Tân sinh viên K21 sẽ sớm được cập nhật.</p>
                                         <p>- Mọi vấn đề phát sinh liên quan tới học Học phí và các khoản phí, sinh viên liên lạc trực tiếp qua số điện thoại: <i>02363667114</i></p>
                                     </div>	

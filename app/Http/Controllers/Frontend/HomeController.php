@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
 use App\Models\ForgotPassword;
+use App\Models\Notice;
 use App\Models\Semester;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -16,7 +17,15 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return view('frontend.index');
+        $notices = Notice::limit(3)->get();
+        return view('frontend.index',compact('notices'));
+    }
+
+    public function detailNotice(string $id)
+    {
+        $notice = Notice::findOrFail($id);
+
+        return view('frontend.detailnotice',compact('notice'));
     }
 
     public function setSemester(string $id)

@@ -82,6 +82,80 @@
             </div>
             <!--// Main Section \\-->
 
+             <!--// Main Section \\-->
+             <div class="wm-main-section wm-news-grid-full">
+                <div class="container">
+                    <div class="row">
+                        
+                        <div class="col-md-12">
+                            <div class="wm-fancy-title"> <h2 id="title-why">Thông báo</h2> <p>Thông báo từ phòng Đào tạo</p> </div>
+                            <div class="wm-news wm-news-grid">
+                                <ul class="row">
+                                    @foreach($notices as $notice)
+                                    <li class="col-md-4">
+                                        <div class="wm-newsgrid-text">
+                                            <h5><a href="#" id="notice-title" class="wm-color">{{$notice->title}}</a></h5>
+                                            <p>{{substr(html_entity_decode(strip_tags($notice->desc)),0,150)}}</p>
+                                            <a class="wm-banner-btn" id="" href="{{URL('thong-bao/'.$notice->id.'')}}">Xem thêm</a>
+                                        </div>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--// Main Section \\-->
+
+            <div class="wm-main-section wm-ourhistory-full" id="history-img">
+                <span class="wm-light-transparent" style="background-color: #4FA0AB;"></span>
+                <div class="container">
+                    <div class="row">
+                    <div class="col-md-5">
+                            <div class="wm-history-list">
+                                <h2>Lịch sử hình thành</h2>
+                                <ul>
+                                    <li>
+                                        <time datetime="2008-02-14 20:00">2016</time>
+                                        <span>Released the Arctic Collection the Perennial Collection of handknotted luxury area rugs.</span>
+                                    </li>
+                                    <li>
+                                        <time datetime="2008-02-14 20:00">2015</time>
+                                        <span>Installed our first custom floorcovering for a museum at the Aga Khan Museum in Toronto</span>
+                                    </li>
+                                    <li>
+                                        <time datetime="2008-02-14 20:00">2014</time>
+                                        <span>Designed our first wallcovering for all these healthcare sector at the Toronto Centre.</span>
+                                    </li>
+                                    <li>
+                                        <time datetime="2008-02-14 20:00">2013</time>
+                                        <span>Celebrated 25 years in business with “The Art Day Project” – a partnership.</span>
+                                    </li>
+                                    <li>
+                                        <time datetime="2008-02-14 20:00">2016</time>
+                                        <span>Released the Arctic Collection the Perennial Collection of handknotted luxury area rugs.</span>
+                                    </li>
+                                    <li>
+                                        <time datetime="2008-02-14 20:00">2015</time>
+                                        <span>Installed our first custom floorcovering for a museum at the Aga Khan Museum in Toronto</span>
+                                    </li>
+                                    <li>
+                                        <time datetime="2008-02-14 20:00">2014</time>
+                                        <span>Designed our first wallcovering for all these healthcare sector at the Toronto Centre.</span>
+                                    </li>
+                                    <li>
+                                        <time datetime="2008-02-14 20:00">2013</time>
+                                        <span>Celebrated 25 years in business with “The Art Day Project” – a partnership.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!--// Main Section \\-->
             <div class="wm-main-section wm-courses-popular-full">
                 <div class="container">
@@ -221,7 +295,7 @@
             <!--// Main Section \\-->
 
             <!--// Main Section \\-->
-            <div class="wm-main-section wm-latestevents-full">
+            <!-- <div class="wm-main-section wm-latestevents-full">
                 <div class="container">
                     <div class="row">
                     <div class="col-md-4">
@@ -338,58 +412,11 @@
 
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!--// Main Section \\-->
 
-            <div class="wm-main-section wm-ourhistory-full" id="history-img">
-                <span class="wm-light-transparent" style="background-color: #4FA0AB;"></span>
-                <div class="container">
-                    <div class="row">
-                    <div class="col-md-5">
-                            <div class="wm-history-list">
-                                <h2>Our History</h2>
-                                <ul>
-                                    <li>
-                                        <time datetime="2008-02-14 20:00">2016</time>
-                                        <span>Released the Arctic Collection the Perennial Collection of handknotted luxury area rugs.</span>
-                                    </li>
-                                    <li>
-                                        <time datetime="2008-02-14 20:00">2015</time>
-                                        <span>Installed our first custom floorcovering for a museum at the Aga Khan Museum in Toronto</span>
-                                    </li>
-                                    <li>
-                                        <time datetime="2008-02-14 20:00">2014</time>
-                                        <span>Designed our first wallcovering for all these healthcare sector at the Toronto Centre.</span>
-                                    </li>
-                                    <li>
-                                        <time datetime="2008-02-14 20:00">2013</time>
-                                        <span>Celebrated 25 years in business with “The Art Day Project” – a partnership.</span>
-                                    </li>
-                                    <li>
-                                        <time datetime="2008-02-14 20:00">2016</time>
-                                        <span>Released the Arctic Collection the Perennial Collection of handknotted luxury area rugs.</span>
-                                    </li>
-                                    <li>
-                                        <time datetime="2008-02-14 20:00">2015</time>
-                                        <span>Installed our first custom floorcovering for a museum at the Aga Khan Museum in Toronto</span>
-                                    </li>
-                                    <li>
-                                        <time datetime="2008-02-14 20:00">2014</time>
-                                        <span>Designed our first wallcovering for all these healthcare sector at the Toronto Centre.</span>
-                                    </li>
-                                    <li>
-                                        <time datetime="2008-02-14 20:00">2013</time>
-                                        <span>Celebrated 25 years in business with “The Art Day Project” – a partnership.</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!--// Main Section \\-->
-            <div class="wm-main-section wm-testimonial-full">
+            <!-- <div class="wm-main-section wm-testimonial-full">
                 <div class="container">
                     <div class="row">
                         
@@ -429,7 +456,7 @@
 
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!--// Main Section \\-->
 
             <!--// Main Section \\-->
@@ -495,81 +522,6 @@
             <!--// Main Section \\-->
 
             <!--// Main Section \\-->
-            <div class="wm-main-section wm-news-grid-full">
-                <div class="container">
-                    <div class="row">
-                        
-                        <div class="col-md-12">
-                            <div class="wm-fancy-title"> <h2>Blog <span>News</span></h2> <p>We bring you all the useful information of the University's Community</p> </div>
-                            <div class="wm-news wm-news-grid">
-                                <ul class="row">
-                                    <li class="col-md-4">
-                                        <figure>
-                                            <a href="#"><img src="extra-images/news-grid-1.png" alt=""></a>
-                                            <figcaption class="wm-bgcolor">
-                                                <img src="extra-images/news-grid-thumb-1.png" alt="">
-                                                <h6>Posted by: <a href="#">Sam K. Harrington</a></h6>
-                                            </figcaption>
-                                        </figure>
-                                        <div class="wm-newsgrid-text">
-                                            <ul class="wm-post-options">
-                                                <li>7/4/2016</li>
-                                                <li><a href="#"><i class="fa fa-comments-o"></i> 12 comments</a></li>
-                                                <li><a href="#"><i class="wmicon-folder2"></i> admission</a></li>
-                                            </ul>
-                                            <h5><a href="#" class="wm-color">Seven UK business schools make the Top 10</a></h5>
-                                            <p>The largest-ever QS Distance Online MBA Rankings have been released by higher and business education analysts QS.</p>
-                                            <a class="wm-banner-btn" href="#">read article</a>
-                                        </div>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <figure>
-                                            <a href="#"><img src="extra-images/news-grid-2.png" alt=""></a>
-                                            <figcaption class="wm-bgcolor">
-                                                <img src="extra-images/news-grid-thumb-2.png" alt="">
-                                                <h6>Posted by: <a href="#">Wanda R. Teixeira</a></h6>
-                                            </figcaption>
-                                        </figure>
-                                        <div class="wm-newsgrid-text">
-                                            <ul class="wm-post-options">
-                                                <li>6/4/2016</li>
-                                                <li><a href="#"><i class="fa fa-comments-o"></i> 21 comments</a></li>
-                                                <li><a href="#"><i class="wmicon-folder2"></i> business</a></li>
-                                            </ul>
-                                            <h5><a href="#" class="wm-color">The University Business School centre of excellence</a></h5>
-                                            <p>The University has announced the launch of its first free online course as part.  These individuals or groups can more effectively.</p>
-                                            <a class="wm-banner-btn" href="#">read article</a>
-                                        </div>
-                                    </li>
-                                    <li class="col-md-4">
-                                        <figure>
-                                            <a href="#"><img src="extra-images/news-grid-3.png" alt=""></a>
-                                            <figcaption class="wm-bgcolor">
-                                                <img src="extra-images/news-grid-thumb-3.png" alt="">
-                                                <h6>Posted by: <a href="#">Marvin P. Sanchez</a></h6>
-                                            </figcaption>
-                                        </figure>
-                                        <div class="wm-newsgrid-text">
-                                            <ul class="wm-post-options">
-                                                <li>5/4/2016</li>
-                                                <li><a href="#"><i class="fa fa-comments-o"></i> 18 comments</a></li>
-                                                <li><a href="#"><i class="wmicon-folder2"></i> students</a></li>
-                                            </ul>
-                                            <h5><a href="#" class="wm-color">Our research could slash energy bills in Milton</a></h5>
-                                            <p>The University is developing the UK’s first community based website that will allow people in Milton Keynes.</p>
-                                            <a class="wm-banner-btn" href="#">read article</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!--// Main Section \\-->
-
-            <!--// Main Section \\-->
             <!-- <div class="wm-main-section">
                 <div class="container">
                     <div class="row">
@@ -611,6 +563,16 @@
         font-family: 'Inter', sans-serif;
         color: #4FA0AB;
         font-weight: bold;
+    }
+    #notice-title{
+        font-family: 'Inter', sans-serif;
+    }
+    .wm-banner-btn{
+        border-color: #4FA0AB;
+        color: #4FA0AB;
+    }
+    .wm-banner-btn:hover{
+        background-color: #4FA0AB;
     }
     #title-white{
         font-family: 'Inter', sans-serif;
