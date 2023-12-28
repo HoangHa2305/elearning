@@ -35,4 +35,10 @@ class GroupProjectController extends Controller
             return redirect()->back()->withErrors('Thêm nhóm đồ án thất bại');
         }
     }
+
+    public function destroy(string $id)
+    {
+        $result = GroupProject::findOrFail($id);
+        $result->delete();
+    }
 }
