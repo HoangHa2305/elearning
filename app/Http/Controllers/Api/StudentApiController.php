@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
 use App\Models\Attendance;
+use App\Models\Credit;
 use App\Models\ForgotPassword;
 use App\Models\Group;
 use App\Models\Score;
@@ -370,12 +371,18 @@ class StudentApiController extends Controller
         $projects = Typeproject::join('group_project','group_project.id_type','=','type_project.id')
                     ->join('reports','reports.id_group','=','group_project.id')
                     ->join('teacher','group_project.id_teacher','=','teacher.id')
+                    ->join('score','type_project.id','=','score.id_type')
                     ->select('reports.title AS title',
                             'group_project.title AS group_title',
                             'teacher.level AS level',
                             'teacher.name AS name',
                             'teacher.phone AS phone',
                             'teacher.email AS email',
+                            'reports.topic AS topic',
+                            'reports.confirm AS confirm',
+                            'reports.report AS report',
+                            'reports.status AS status',
+                            'score.diligence_score AS diligence_score',
                             'type_project.date_start AS date_start',
                             'type_project.time_start AS time_start',
                             'type_project.date_end AS date_end',
@@ -386,7 +393,7 @@ class StudentApiController extends Controller
                     ->get();
         foreach($projects as $project){
             $data['title'] = $project->group_title;
-            $data['topic'] = $project->title;
+            $data['title'] = $project->title;
             if($project->level=='Tiến sĩ'){
                 $data['name'] = 'TS. '.$project->name;
             }elseif($project->level=='Thạc sĩ'){
@@ -394,6 +401,27 @@ class StudentApiController extends Controller
             }
             $data['phone'] = $project->phone;
             $data['email'] = $project->email;
+            if(!empty($project->topic)){
+                $data['topic'] = 1;
+            }else{
+                $data['topic'] = 0;
+            }
+            if($project->confirm==1){
+                $data['confirm'] = 1;
+            }else{
+                $data['confirm'] = 0;
+            }
+            if(!empty($project->report)){
+                $data['report'] = 1;
+            }else{
+                $data['report'] = 0;
+            }
+            if($project->status==1){
+                $data['status'] = 1;
+                $data['diligence_score'] = $project->diligence_score;
+            }else{
+                $data['status'] = 0;
+            }
             $data['start'] = $project->date_start.' '.$project->time_start;
             $data['end'] = $project->date_end.' '.$project->time_end;
         }
@@ -530,8 +558,11 @@ class StudentApiController extends Controller
 
     public function getGroup(Request $request)
     {
-        $branch_id = $request->branch_id;
         $semester_id = $request->semester_id;
+        $student_id = $request->student_id;
+        $student = Student::findOrFail($student_id);
+        $branch_id = $student->branch_id;
+        $yeartrain_id = $student->yeartrain_id;
 
         $data = [];
 
@@ -544,6 +575,286 @@ class StudentApiController extends Controller
 
             $data[] = $result;
         }
-        return response()->json(['group' => $data]);        
+
+        $result = [];
+        $credits = Credit::where('student_id',$student_id)->where('semester_id',$semester_id)->where('section_id','!=',null)->get();
+        foreach($credits as $credit){
+            $monday = json_decode($credit->section->monday);
+            $tuesday = json_decode($credit->section->tuesday);
+            $wednesday = json_decode($credit->section->wednesday);
+            $thursday = json_decode($credit->section->thursday);
+            $friday = json_decode($credit->section->friday);
+            $saturday = json_decode($credit->section->saturday);
+            $sunday = json_decode($credit->section->sunday);
+            $output = '';
+            
+            if($monday){
+                $output .= "Mon_".$monday[0].'-'.$monday[count($monday)-1];
+            }
+            if($tuesday){
+                $output .= "Tue_".$tuesday[0].'-'.$tuesday[count($tuesday)-1];
+            }
+            if($wednesday){
+                $output .= "Wed_".$wednesday[0].'-'.$wednesday[count($wednesday)-1];
+            }
+            if($thursday){
+                $output .= "Thu_".$thursday[0].'-'.$thursday[count($thursday)-1];
+            }
+            if($friday){
+                $output .= "Fri_".$friday[0].'-'.$friday[count($friday)-1];
+            }
+            if($saturday){
+                $output .= "Sat_".$saturday[0].'-'.$saturday[count($saturday)-1];
+            }
+            if($sunday){
+                $output .= "Sun_".$sunday[0].'-'.$sunday[count($sunday)-1];
+            }
+
+            if($credit->section->teacher->level == 'Tiến sĩ'){
+                $teacher = "TS. ".$credit->section->teacher->name;  
+            }elseif($credit->section->teacher->level == 'Thạc sĩ'){
+                $teacher = "ThS. ".$credit->section->teacher->name; 
+            }
+
+            $results[] = [
+                'id' => $credit->id,
+                'code' => $credit->section->code,
+                'name' => $credit->section->name,
+                'credit' => $credit->section->subject->credits,
+                'teacher' => $teacher,
+                'desc' => $output,
+                'week' => $credit->section->week,
+            ];
+        }
+        $types = Credit::join('type_project','credits.type_id','=','type_project.id')
+                        ->join('subject','type_project.id_subject','=','subject.id')
+                        ->select('type_project.title AS title',
+                                'credits.type_id AS type_id',
+                                'credits.id AS id',
+                                'subject.code AS code',
+                                'subject.teacher AS teacher',
+                                'subject.credits AS credit') 
+                        ->where('credits.student_id',$student_id)
+                        ->where('credits.semester_id',$semester_id)
+                        ->where('credits.type_id','!=',null)
+                        ->get();
+        foreach($types as $type){
+            $teachers = json_decode($type->teacher);
+            foreach($teachers as $teacher){
+                $teacher_id = intval($teacher);
+                $name = Teacher::findOrFail($teacher_id);
+            }
+            $results[] = [
+                'title' => $type->title,
+                'code' => $type->code,
+                'id' => $type->id,
+                'type_id' => $type->type_id,
+                'teacher' => $name->name,
+                'credit' => $type->credit
+            ];
+        }
+
+        $result_project = [];
+        $projects = Subject::join('type_project','subject.id','=','type_project.id_subject')
+                    ->select('type_project.title AS name',
+                            'type_project.id AS id',
+                            'subject.code AS code',
+                            'subject.credits AS credit')
+                    ->where('subject.semester_id',$semester_id)
+                    ->where('subject.yeartrain_id',$yeartrain_id)
+                    ->where('subject.group',1)
+                    ->get();
+        foreach($projects as $project){
+            $data_project['id'] = $project->id; 
+            $data_project['name'] = $project->name;
+            $data_project['code'] = $project->code;
+            $data_project['credit'] = $project->credit;
+            $data_project['active'] = 0;
+            foreach($types as $type){
+                if($project->id == $type->type_id){
+                    $data_project['active'] = 1;
+                }
+            }
+            $result_project[] = $data_project;
+        }
+        return response()->json(['group' => $data,'project' => $result_project,'result' => $results]);        
+    }
+
+    public function getSubjectByGroup(Request $request)
+    {
+        $id = $request->id;
+        $student_id = $request->student_id;
+        $semester_id = $request->semester_id;
+        $credits = Credit::where('student_id',$student_id)->where('section_id','!=',null)->where('semester_id',$semester_id)->get();
+            
+            $sections = Section::where('id_group',$id)->get();
+            $result = [];
+            foreach($sections as $section){
+                $monday = json_decode($section['monday']);
+                $tuesday = json_decode($section['tuesday']);
+                $wednesday = json_decode($section['wednesday']);
+                $thursday = json_decode($section['thursday']);
+                $friday = json_decode($section['friday']);
+                $saturday = json_decode($section['saturday']);
+                $sunday = json_decode($section['sunday']);
+                $output = '';
+                $alert = 0;
+                foreach($credits as $credit){
+                    if($credit->section->subject->id == $section->subject->id){
+                        $alert = 1;
+                    }
+                }
+                
+                if($monday){
+                    $output .= "Mon_".$monday[0].'-'.$monday[count($monday)-1];
+                }
+                if($tuesday){
+                    $output .= "Tue_".$tuesday[0].'-'.$tuesday[count($tuesday)-1];
+                }
+                if($wednesday){
+                    $output .= "Wed_".$wednesday[0].'-'.$wednesday[count($wednesday)-1];
+                }
+                if($thursday){
+                    $output .= "Thu_".$thursday[0].'-'.$thursday[count($thursday)-1];
+                }
+                if($friday){
+                    $output .= "Fri_".$friday[0].'-'.$friday[count($friday)-1];
+                }
+                if($saturday){
+                    $output .= "Sat_".$saturday[0].'-'.$saturday[count($saturday)-1];
+                }
+                if($sunday){
+                    $output .= "Sun_".$sunday[0].'-'.$sunday[count($sunday)-1];
+                }
+                if($section->teacher->level == 'Tiến sĩ'){
+                    $teacher = "TS. ".$section->teacher->name;  
+                }elseif($section->teacher->level == 'Thạc sĩ'){
+                    $teacher = "ThS. ".$section->teacher->name; 
+                }
+                $result[] = [
+                    'id' => $section->id,
+                    'name' => $section->name,
+                    'credits' => $section->subject->credits,
+                    'register' => $section->register,
+                    'count' => $section->count,
+                    'week' => $section->week,
+                    'teacher' => $teacher,
+                    'desc' => $output,
+                    'alert' => $alert
+                ];
+            }
+        
+        return $result;
+    }
+
+    public function registerCredits(Request $request)
+    {
+        $id = $request->id;
+        $student_id = $request->student_id;
+        $semester_id = $request->semester_id;
+        $time = date("h:i:s d-m-Y");
+
+        $credit = new Credit();
+        $credit->student_id = $student_id;
+        $credit->semester_id = $semester_id;
+        $credit->section_id = $id;
+        $credit->time = $time;
+
+        if($credit->save()){
+            Section::where('id',$id)->increment('register');
+
+            $section = Section::findOrFail($id);
+            $score = new Score();
+            $score->id_student = $student_id;
+            $score->id_section = $id;
+            $score->id_semester = $section->subject->semester_id;
+            $score->session = 1;
+            $score->active = 0;
+            if($score->save()){
+                return response()->json(['success' => 200]); 
+            };
+        }
+    }
+
+    public function registerAllGroup(Request $request)
+    {
+        $student_id = $request->student_id;
+        $semester_id = $request->semester_id;
+        $group_id = $request->group_id;
+        $time = date("h:i:s d-m-Y");
+
+        $sections = Section::where('id_group',$group_id)->get();
+
+        foreach($sections as $section){
+            $credit = new Credit();
+            $credit->student_id = $student_id;
+            $credit->semester_id = $semester_id;
+            $credit->section_id = $section;
+            $credit->time = $time;
+            if($credit->save()){
+                $getSection = Section::findOrFail($section);
+                $score = new Score();
+                $score->id_student = $student_id;
+                $score->id_section = $section;
+                $score->id_semester = $getSection->subject->semester_id;
+                $score->session = 1;
+                $score->active = 0;
+                $score->save();
+            }
+        }
+        return response()->json(['success' => 200]); 
+    }
+
+    public function destroyCredit(Request $request)
+    {
+        $student_id = $request->student_id;
+        $semester_id = $request->semester_id;
+        $id = $request->id;
+        $result = Credit::findOrFail($id);
+        if($result){
+            Section::where('id',$result->section_id)->decrement('register');
+            Score::where('id_section',$result->section_id)->where('id_semester',$semester_id)->where('id_student',$student_id)->delete();
+            $result->delete();
+            return response()->json(['success' => 200]);
+        }
+    }
+
+    public function creditProject(Request $request)
+    {
+        $student_id = $request->student_id;
+        $semester_id = $request->semester_id;
+        $id = $request->id;
+        $time = date("h:i:s d-m-Y");
+
+        $credit = new Credit();
+        $credit->student_id = $student_id;
+        $credit->semester_id = $semester_id;
+        $credit->type_id = $id;
+        $credit->time = $time;
+
+        if($credit->save()){
+            $score = new Score();
+            $score->id_student = $student_id;
+            $score->id_type = $id;
+            $score->id_semester = $semester_id;
+            $score->session = 1;
+            $score->active = 0;
+            if($score->save()){
+                return response()->json(['success' => 200]);
+            };
+        }
+    }
+
+    public function destroyProject(Request $request)
+    {
+        $student_id = $request->student_id;
+        $semester_id = $request->semester_id;
+        $id = $request->id;
+        $result = Credit::findOrFail($id);
+        if($result){
+            Score::where('id_type',$result->type_id)->where('id_semester',$semester_id)->where('id_student',$student_id)->delete();
+            $result->delete();
+            return response()->json(['success' => 200]);
+        }
     }
 }
