@@ -58,7 +58,7 @@
                                                         <i class="fa-solid fa-pen-to-square"></i> Sửa
                                                     </a>
                                                     |
-                                                    <a href="#">
+                                                    <a href="{{URL('admin/group/project/delete/'.$group->id.'')}}">
                                                         <i class="fa-solid fa-trash"></i> Xóa
                                                     </a>
                                                 </td>

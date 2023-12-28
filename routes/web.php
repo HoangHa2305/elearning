@@ -129,6 +129,7 @@ Route::prefix('admin')->group(function(){
     Route::get('group/project/{id}',[GroupProjectController::class,'index']);
     Route::get('group/project/{id}/add',[GroupProjectController::class,'create']);
     Route::post('group/project/{id}/add',[GroupProjectController::class,'store']);
+    Route::get('group/project/delete/{id}',[GroupProjectController::class,'destroy']);
     Route::get('project/list/student/{id}',[ReportController::class,'index']);
     Route::get('project/list/student/{id}/add',[ReportController::class,'create']);
     Route::post('project/list/student/{id}/add',[ReportController::class,'store']);
