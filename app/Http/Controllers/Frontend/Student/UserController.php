@@ -137,6 +137,14 @@ class UserController extends Controller
         }
     }
 
+    public function historyTution()
+    {
+        $student_id = session('student_id');
+        $tutions = Tution::where('id_student',$student_id)->get();
+
+        return view('frontend.member.historytution',compact('tutions'));
+    }
+
     public function showTuition()
     {
         $semester_id = session('semester_id');

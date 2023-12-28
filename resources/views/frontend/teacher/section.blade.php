@@ -39,7 +39,7 @@
 										<th>STT</th>
 										<th>Lớp học phần</th>
 										<th>Thời khóa biểu</th>
-										<th>Trạng thái</th>
+										<th>Phòng học</th>
 										<th>Quản lý lớp</th>
 									</thead>
 									<tbody>
@@ -48,10 +48,10 @@
                                             <td></td>
                                             <td>{{$section->name}}</td>
 											<td>Hai / 1->2</td>
-											<td><b>Còn 5 buổi</b></td>
+											<td>{{$section->room}}</td>
 											<td>
 												<a href="{{URL('gv/diem-danh/'.$section->id.'')}}" class="wm-register">Lịch trình</a>
-												<a href="#" class="btn">Gửi mail</a>
+												<a href="{{URL('gv/gui-mail/'.$section->id.'')}}" class="btn">Gửi mail</a>
 											</td>
                                         </tr>
                                         @endforeach

@@ -38,6 +38,7 @@
                                             <th scope="col">Mã lớp học phần</th>
                                             <th scope="col">Tên lớp học phần</th>
                                             <th scope="col">Giảng viên giảng dạy</th>
+                                            <th scope="col">Quản lý điểm</th>
                                             <th scope="col">Trạng thái</th>
                                             <th scope="col">Thao tác</th>
                                         </tr>
@@ -51,6 +52,9 @@
                                             <td>{{$section->code}}</td>
                                             <td>{{$section->name}}</td>
                                             <td>{{$section->teacher->name}}</td>
+                                            <td>
+                                                <a href="{{URL('admin/group/subject/score/'.$section->id.'')}}">Quản lý</a>
+                                            </td>
                                             <td>
                                                 @if($section->active==1)
                                                 <span class="label label-success label-rounded">Hiển thị</span>

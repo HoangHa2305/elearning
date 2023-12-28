@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMailNotify;
 use App\Models\Attendance;
 use App\Models\Score;
 use App\Models\Section;
@@ -11,6 +12,7 @@ use App\Models\Teacher;
 use Hamcrest\Core\IsNot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -38,13 +40,50 @@ class TeacherController extends Controller
         $teacher_id = session('teacher_id');
         $semester_id = session('semester_id');
         $sections = Section::join('subject','section.id_subject','=','subject.id')
-        ->select('section.name AS name',
+        ->select('section.room AS room',
+                'section.name AS name',
                 'section.id AS id')
         ->where('section.id_teacher',$teacher_id)
         ->where('subject.semester_id',$semester_id)
         ->get();
 
         return view('frontend.teacher.section',compact('sections'));
+    }
+
+    public function showSendMail(string $id)
+    {
+        $section = Section::findOrFail($id);
+        return view('frontend.teacher.sendmail',compact('section'));
+    }
+
+    public function postSendMail(Request $request)
+    {
+        $reason = $request->reason;
+        $date = $request->date;
+        $section_id = $request->section_id;
+
+        $section = Section::findOrFail($section_id);
+        if($section->teacher->level=='Thạc sĩ'){
+            $teacher = 'Ths '.$section->teacher->name;
+        }elseif($section->teacher->level=='Tiến sĩ'){
+            $teacher = 'TS '.$section->teacher->name;
+        }else{
+            $teacher = $section->teacher->name;
+        }
+
+        $data = [
+            'subject' => '[Hệ thống quản lý đào tạo] Báo nghỉ học phần '.$section->name.' ngày '.$date,
+            'teacher' => $teacher,
+            'section' => $section->name,
+            'date' => $date,
+            'reason' => $reason
+        ];
+
+        $scores = Score::where('id_section',$section_id)->get();
+        foreach($scores as $score){
+            Mail::to($score->student->email)->send(new SendMailNotify($data));
+        }
+        return redirect()->back();
     }
 
     public function showAttendance(string $id)
